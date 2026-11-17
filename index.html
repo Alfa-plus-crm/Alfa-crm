@@ -1,30 +1,7 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
-<style id="alfa-plus-design-system">
-:root{--fb:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",sans-serif;--fd:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;--radius-card:22px;--glass:rgba(255,255,255,.055)}
-body{font-family:var(--fb);letter-spacing:-.012em;-webkit-font-smoothing:antialiased}
-.side{background:color-mix(in srgb,var(--bg2) 88%,transparent);backdrop-filter:saturate(160%) blur(24px);-webkit-backdrop-filter:saturate(160%) blur(24px)}
-.top{background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);position:relative;z-index:30}
-.card{border-radius:var(--radius-card);box-shadow:0 1px 0 rgba(255,255,255,.035) inset,0 8px 26px rgba(0,0,0,.045);transition:border-color .2s,transform .2s,box-shadow .2s}
-.kpi{background:linear-gradient(145deg,color-mix(in srgb,var(--card) 96%,var(--acc) 4%),var(--card))}
-.btn,.ibtn,.me,.nav button,.seg button,.sw{transition:background .18s,border-color .18s,color .18s,transform .18s,box-shadow .18s}
-.btn:active,.ibtn:active,.nav button:active{transform:scale(.98)}
-.btn.pri{box-shadow:0 5px 18px color-mix(in srgb,var(--acc) 28%,transparent)}
-input,select,textarea{accent-color:var(--acc)}
-::selection{background:color-mix(in srgb,var(--acc) 35%,transparent)}
-.cmd-hint{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:1px 5px;margin-left:auto}
-.audit-item{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
-.audit-dot{width:9px;height:9px;border-radius:50%;background:var(--acc);margin-top:5px}
-.cal-list{display:grid;gap:8px}
-.cal-event{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);background:var(--card);border-radius:13px;text-align:left;width:100%}
-.cal-event:hover{border-color:var(--acc);background:var(--accsoft)}
-.cal-event .date{width:48px;flex:none;text-align:center;border-right:1px solid var(--line);padding-right:10px}
-.cal-event .date b{font:600 20px var(--fd);display:block}
-.cal-event .date small{color:var(--mut)}
-.trash-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
-@media print{.side,.top,.ph .acts,.tools,.btn,.ibtn,.scrim{display:none!important}body,.app,.mainwrap,main{height:auto!important;overflow:visible!important;background:#fff!important;color:#111!important}.card,.tw{break-inside:avoid;box-shadow:none!important;border:1px solid #ddd!important}.view{max-width:none!important}main{padding:0!important}}
-@media(max-width:860px){.top{padding-top:max(10px,env(safe-area-inset-top))}.card{border-radius:18px}}
-@media(prefers-reduced-motion:reduce){.card,.btn,.ibtn,.nav button{transition:none!important}}
-</style><title>alfa +</title><meta name="application-version" content="2.1.0"><meta name="viewport-fit-sides" content="cover"></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>alfa+</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Unbounded:wght@600;700&display=swap">
 <style>
 /* Макет: фиксированный сайдбар + верхняя панель + прокручиваемая рабочая область; на телефоне сайдбар становится выдвижным */
 :root{
@@ -317,9 +294,9 @@ tr.click{cursor:pointer}
 <symbol id="i-miss" viewBox="0 0 24 24"><path d="M4 4l16 16M4 14V4h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12m-5-5l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v4M17 3v4M3 10h18M8 14h3M8 17h3M15 14h2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol><symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8M3 3v5h5M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
+</defs></svg>
 <style id="alfa-skin">
-/* alfa + — стеклянная тема: пейзаж, матовые панели, ледяной акцент */
+/* alfa+ — стеклянная тема: пейзаж, матовые панели, ледяной акцент */
 :root{--fw:'Unbounded','Space Grotesk',system-ui,sans-serif;
  --bg:#071014;--bg2:rgba(8,18,22,.5);--card:rgba(13,26,31,.56);--card2:rgba(255,255,255,.07);--line:rgba(190,235,240,.16);--fg:#eaf5f4;--mut:#9fb6b8;--dim:#70898d;
  --acc:#7fe0f5;--acc2:#a6d96a;--accsoft:rgba(127,224,245,.13);--grad:linear-gradient(135deg,#7fe0f5,#a6d96a);
@@ -397,16 +374,94 @@ main{padding:4px 2px 24px}
 @media (max-width:860px){.app{grid-template-columns:1fr;gap:0;padding:8px}.top{margin-bottom:10px}.side{border-radius:0 26px 26px 0;background:var(--pop)}}
 @media (max-width:760px){.auth-pitch{min-height:0;padding:22px;border-right:0;border-bottom:1px solid rgba(255,255,255,.18)}.amark{margin-bottom:10px}}
 </style>
-<style id="alfa-plus-final-polish">
-:root{--fd:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;--fb:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",sans-serif}
-body{font-family:var(--fb);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
-h1,h2,h3,h4,.brand,.company{font-family:var(--fd)}button,input,select,textarea{font-family:var(--fb)}
-.card{border-radius:22px}.top,.side{backdrop-filter:saturate(160%) blur(22px);-webkit-backdrop-filter:saturate(160%) blur(22px)}
-#gs{padding-right:64px}.home-widget-hidden{display:none!important}
-@media(max-width:520px){.cal{gap:3px}.cal .d{border-radius:8px}.trash-row{flex-wrap:wrap}.trash-row .grow{flex-basis:100%}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+<style id="alfa-skin2">
+/* alfa+ v2 — реалистичный фон-горы, больше деталей, плавающие кнопки (десктоп) */
+.scene{position:fixed;inset:0;z-index:-2;overflow:hidden;background:#9fb0b2;transform:translateZ(0)}
+.scene svg{width:100%;height:100%;display:block;filter:var(--sf)}
+.scene .drift{animation:fogdrift 70s ease-in-out infinite alternate}
+@keyframes fogdrift{to{transform:translate3d(110px,0,0)}}
+:root{--sf:brightness(.74) saturate(1.05);--vl:linear-gradient(180deg,rgba(4,10,13,.26),rgba(4,10,13,.5) 55%,rgba(4,10,13,.72));--hs:0 1px 18px rgba(0,0,0,.5)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--sf:none;--vl:linear-gradient(180deg,rgba(236,245,244,.06),rgba(236,245,244,.34) 55%,rgba(236,245,244,.6));--hs:none}}
+:root[data-theme="light"]{--sf:none;--vl:linear-gradient(180deg,rgba(236,245,244,.06),rgba(236,245,244,.34) 55%,rgba(236,245,244,.6));--hs:none}
+body::before{background:var(--vl)}
+.ph h1,.ph p{text-shadow:var(--hs)}
+/* стекло: блик по краю и верхний свет */
+.card{position:relative;background-image:linear-gradient(155deg,rgba(255,255,255,.1),rgba(255,255,255,0) 42%)}
+.card:not(.kpi)::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.04) 36%,rgba(255,255,255,0) 62%,rgba(127,224,245,.2));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.kpi{background-image:radial-gradient(190px 110px at 100% 0,var(--accsoft),transparent),linear-gradient(155deg,rgba(255,255,255,.1),transparent 42%)}
+.kpi .spark{filter:drop-shadow(0 0 6px var(--acc))}
+.side{background-image:linear-gradient(180deg,rgba(255,255,255,.09),transparent 34%)}
+.nav button{font-weight:500}
+.nav button svg{transition:color .2s,filter .2s}
+.nav button:hover svg{color:var(--acc)}
+.search input:focus{box-shadow:0 0 0 3px var(--accsoft)}
+.deal{background:var(--card2);border-radius:16px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tw{border-radius:18px;background:var(--card2)}
+th{background:rgba(255,255,255,.05);text-transform:none;letter-spacing:.02em;font-size:12px}
+tbody tr:hover{background:linear-gradient(90deg,var(--accsoft),transparent)}
+tbody tr:hover td:first-child{box-shadow:inset 2px 0 0 var(--acc)}
+.pill.ok::before,.pill.warn::before,.pill.bad::before,.pill.info::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.btn.pri{position:relative;overflow:hidden}
+.btn.pri::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.5) 50%,transparent 65%);translate:-130% 0;transition:translate .7s ease}
+.btn.pri:hover::after{translate:130% 0}
+/* вход: матовая панель как на референсе, справа почти прозрачное окно */
+.auth{background:linear-gradient(rgba(4,10,12,.04),rgba(4,10,12,.34))}
+.auth-box{border-color:rgba(255,255,255,.3)}
+.auth-pitch{background:linear-gradient(155deg,rgba(255,255,255,.3),rgba(255,255,255,.06) 60%),rgba(40,48,44,.26);-webkit-backdrop-filter:blur(42px) saturate(1.1);backdrop-filter:blur(42px) saturate(1.1);text-shadow:0 1px 14px rgba(0,0,0,.35)}
+.auth-form{background:color-mix(in srgb,var(--card) 76%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* десктоп: кнопки увеличиваются и «плывут» */
+@keyframes bob{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(0,-3px,0) rotate(.6deg)}}
+@keyframes sway{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(3px,-1px,0)}}
+@media (hover:hover) and (pointer:fine) and (min-width:861px){
+.btn,.ibtn,.me,.chip,.sw,.chk,.mh .x,.legal-head button,.seg button,.callbtn,.nav button,.opt{transition:scale .45s cubic-bezier(.2,.9,.25,1.3),translate .45s cubic-bezier(.2,.9,.25,1.3),transform .5s ease,box-shadow .3s,background .2s,border-color .2s,color .2s,filter .2s}
+.btn:hover,.ibtn:hover,.me:hover,.chip:hover,.mh .x:hover,.legal-head button:hover,.seg button:hover,.callbtn:hover{scale:1.08;translate:0 -3px;animation:bob 3.2s ease-in-out infinite;box-shadow:0 16px 28px -12px rgba(0,0,0,.6)}
+.btn.pri:hover,.callbtn.pri:hover{box-shadow:0 16px 30px -12px rgba(0,0,0,.6),var(--glow)}
+.sw:hover{scale:1.12;animation:bob 3.2s ease-in-out infinite}
+.chk:hover{scale:1.18;animation:bob 3.2s ease-in-out infinite}
+.opt:hover{scale:1.02;translate:0 -2px;animation:bob 3.6s ease-in-out infinite;box-shadow:0 14px 26px -14px rgba(0,0,0,.6)}
+.nav button:hover{scale:1.03;translate:4px 0;animation:sway 3.6s ease-in-out infinite}
+.btn:active,.ibtn:active,.chip:active,.seg button:active{scale:.97;animation:none}
+}
 </style>
 
+<div class="scene" aria-hidden="true"><svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef2f1"/><stop offset=".5" stop-color="#c3cfcf"/><stop offset="1" stop-color="#8fa3a5"/></linearGradient>
+<linearGradient id="ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3c05c"/><stop offset=".5" stop-color="#76853a"/><stop offset="1" stop-color="#3a4620"/></linearGradient>
+<linearGradient id="mr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2cc72"/><stop offset="1" stop-color="#5d6b2d"/></linearGradient>
+<linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#43453d"/><stop offset=".5" stop-color="#20231f"/><stop offset="1" stop-color="#0b0d0c"/></linearGradient>
+<linearGradient id="lk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dcecea"/><stop offset="1" stop-color="#5d8e95"/></linearGradient>
+<linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="rg" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".005 .11" numOctaves="4" seed="9"/><feDiffuseLighting surfaceScale="6" diffuseConstant="1.4" lighting-color="#fff"><feDistantLight azimuth="235" elevation="45"/></feDiffuseLighting></filter>
+<filter id="ash" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".004 .07" numOctaves="5" seed="3"/><feDiffuseLighting surfaceScale="9" diffuseConstant="1.3" lighting-color="#8f9a92"><feDistantLight azimuth="225" elevation="38"/></feDiffuseLighting></filter>
+<filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values=".33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1"/></filter>
+<filter id="bl" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="16"/></filter>
+<filter id="b2"><feGaussianBlur stdDeviation="5"/></filter>
+<clipPath id="cm"><path d="M-60 600C40 500 160 400 300 300C410 222 510 140 590 78C628 50 654 74 690 112C750 176 850 246 950 322C1030 382 1090 450 1130 600Z"/><path d="M780 620C860 480 980 380 1110 336C1210 304 1290 272 1390 296C1470 316 1540 370 1680 396L1680 640Z"/><path d="M-60 690C80 590 230 530 380 500C500 478 600 520 720 580C760 600 780 640 780 700Z"/></clipPath>
+<clipPath id="cg"><path d="M-60 640C200 600 420 640 660 690C920 746 1220 676 1660 590L1660 1100L-60 1100Z"/></clipPath>
+</defs>
+<rect width="1600" height="1000" fill="url(#sk)"/>
+<path d="M0 360L110 300L230 330L350 250L470 300L560 220L700 300L830 240L960 300L1100 220L1240 290L1370 230L1480 280L1600 250V560H0Z" fill="#a9b9ba" opacity=".6" filter="url(#b2)"/>
+<g clip-path="url(#cm)">
+<path d="M-60 600C40 500 160 400 300 300C410 222 510 140 590 78C628 50 654 74 690 112C750 176 850 246 950 322C1030 382 1090 450 1130 600Z" fill="url(#ms)"/>
+<path d="M780 620C860 480 980 380 1110 336C1210 304 1290 272 1390 296C1470 316 1540 370 1680 396L1680 640Z" fill="url(#mr)"/>
+<path d="M-60 690C80 590 230 530 380 500C500 478 600 520 720 580C760 600 780 640 780 700Z" fill="#4a5826"/>
+<path d="M590 78C560 150 500 215 400 292C330 345 250 400 170 470L330 560L470 420L560 300Z" fill="#1c2a12" opacity=".38"/>
+<path d="M600 90C650 150 740 220 830 290L760 360L640 250Z" fill="#dfe784" opacity=".24"/>
+<path d="M590 78C600 200 560 330 470 470M620 90C690 200 790 290 900 420M590 78C520 190 380 300 220 430M1110 336C1180 400 1250 470 1300 560" stroke="#212d12" stroke-opacity=".4" stroke-width="3" fill="none"/>
+<g transform="rotate(-57 600 300)"><rect x="-500" y="-400" width="2300" height="1500" filter="url(#rg)" style="mix-blend-mode:multiply"/></g>
+</g>
+<ellipse cx="800" cy="620" rx="1000" ry="60" fill="#dfe8e7" opacity=".55" filter="url(#bl)"/>
+<g clip-path="url(#cg)">
+<path d="M-60 640C200 600 420 640 660 690C920 746 1220 676 1660 590L1660 1100L-60 1100Z" fill="url(#gd)"/>
+<g transform="rotate(-16 800 800)"><rect x="-400" y="300" width="2400" height="1000" filter="url(#ash)" style="mix-blend-mode:overlay"/></g>
+</g>
+<path d="M900 700C980 664 1130 654 1250 674C1350 692 1400 722 1320 748C1210 786 1010 780 930 752Z" fill="url(#lk)" opacity=".82"/>
+<path d="M940 712C1040 690 1180 686 1290 704" stroke="#fff" stroke-opacity=".5" stroke-width="2" fill="none" filter="url(#b2)"/>
+<g class="drift"><ellipse cx="400" cy="250" rx="420" ry="46" fill="#fff" opacity=".38" filter="url(#bl)"/><ellipse cx="1200" cy="200" rx="380" ry="40" fill="#fff" opacity=".32" filter="url(#bl)"/><ellipse cx="850" cy="370" rx="520" ry="34" fill="#fff" opacity=".26" filter="url(#bl)"/></g>
+<rect width="1600" height="380" fill="url(#fg)"/>
+<rect width="1600" height="1000" filter="url(#gr)" opacity=".16" style="mix-blend-mode:overlay"/>
+</svg></div>
 <div class="app" id="app" hidden>
  <aside class="side" id="side" aria-label="Главное меню">
   <div class="brand"><div class="logo"><svg viewBox="0 0 24 24"><path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z" fill="none" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 8v8M8 12h8" fill="none" stroke-width="2" stroke-linecap="round"/></svg></div><span class="wm">alfa<i>+</i></span></div>
@@ -419,7 +474,7 @@ h1,h2,h3,h4,.brand,.company{font-family:var(--fd)}button,input,select,textarea{f
   <header class="top">
    <button class="ibtn menu-btn" id="menuBtn" aria-label="Открыть меню"><svg><use href="#i-menu"/></svg></button>
    <div class="company"><span id="coName"></span><small id="coCity"></small></div>
-   <div class="search rel"><svg><use href="#i-search"/></svg><input id="gs" placeholder="Поиск по CRM · Ctrl/⌘ K" autocomplete="off" aria-label="Поиск по CRM"><div class="sres" id="sres" hidden></div></div>
+   <div class="search rel"><svg><use href="#i-search"/></svg><input id="gs" placeholder="Поиск по клиентам, сделкам, задачам…" autocomplete="off" aria-label="Поиск по CRM"><div class="sres" id="sres" hidden></div></div>
    <div class="spacer"></div>
    <div class="rel"><button class="ibtn" id="bellBtn" aria-label="Уведомления"><svg><use href="#i-bell"/></svg><i class="dot" id="bellDot"></i></button><div class="pop" id="bellPop" hidden></div></div>
    <button class="ibtn" id="themeBtn" aria-label="Переключить тему"><svg><use id="themeIc" href="#i-sun"/></svg></button>
@@ -437,7 +492,7 @@ const TODAY=new Date();TODAY.setHours(12,0,0,0);
 const iso=n=>{const d=new Date(TODAY);d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const COLORS=['#8b6cff','#4f8cff','#35c98b','#e8913a','#e0577a','#2bb5c9','#a56cd6','#6c8cff'];
 let nid=100;
-const staff=[],clients=[],deals=[],tasks=[],hist=[],notes=[],dialogs=[],calls=[],products=[],fin=[],autos=[],activity=[],audit=[],trash=[];
+const staff=[],clients=[],deals=[],tasks=[],hist=[],notes=[],dialogs=[],calls=[],products=[],fin=[],autos=[],activity=[];
 const SOURCES=['Сайт','Реклама','Рекомендация','Выставка','Холодный звонок','Соцсети'];
 const CSTAT=['Новый','В работе','Постоянный','Неактивный'];
 const STAGES=[
@@ -527,7 +582,7 @@ let theme='dark';
 try{const t=localStorage.getItem('vexon-theme');if(t)theme=t;else if(matchMedia('(prefers-color-scheme: light)').matches)theme='light'}catch(e){}
 function setTheme(t){theme=t;document.documentElement.dataset.theme=t;$('#themeIc').setAttribute('href',t==='dark'?'#i-sun':'#i-moon');try{localStorage.setItem('vexon-theme',t)}catch(e){}}
 /* Навигация и маршрутизация */
-const NAV=[['home','Главная','home'],['clients','Клиенты','users'],['deals','Сделки','deal'],['tasks','Задачи','tasks'],['calendar','Календарь','calendar'],['analytics','Аналитика','chart'],['messages','Сообщения','msg'],['phone','Телефония','phone'],['products','Товары и склад','box'],['finance','Финансы','wallet'],['automation','Автоматизация','zap'],['staff','Сотрудники','team'],['audit','Журнал действий','history'],['trash','Корзина','trash'],['settings','Настройки','set']];
+const NAV=[['home','Главная','home'],['clients','Клиенты','users'],['deals','Сделки','deal'],['tasks','Задачи','tasks'],['analytics','Аналитика','chart'],['messages','Сообщения','msg'],['phone','Телефония','phone'],['products','Товары и склад','box'],['finance','Финансы','wallet'],['automation','Автоматизация','zap'],['staff','Сотрудники','team'],['settings','Настройки','set']];
 const V={};let cur='home';
 function go(name){if(!V[name])name='home';cur=name;if(location.hash!=='#'+name)history.replaceState(null,'','#'+name);
   $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===name));
@@ -552,10 +607,6 @@ function gsearch(q){q=q.toLowerCase().trim();const box=$('#sres');if(!q){box.hid
   deals.filter(d=>d.title.toLowerCase().includes(q)).slice(0,4).forEach(d=>r.push(['Сделка',d.title,rub(d.sum),()=>openDeal(d.id)]));
   tasks.filter(t=>t.title.toLowerCase().includes(q)).slice(0,3).forEach(t=>r.push(['Задача',t.title,fd(t.due),()=>openTask(t.id)]));
   products.filter(p=>(p.name+p.sku).toLowerCase().includes(q)).slice(0,3).forEach(p=>r.push(['Товар',p.name,p.sku,()=>go('products')]));
-  staff.filter(x=>(x.name+' '+x.role+' '+x.email).toLowerCase().includes(q)).slice(0,3).forEach(x=>r.push(['Сотрудник',x.name,x.role,()=>go('staff')]));
-  fin.filter(x=>(x.t+' '+x.cat+' '+x.st).toLowerCase().includes(q)).slice(0,3).forEach(x=>r.push(['Финансы',x.t,rub(x.sum),()=>go('finance')]));
-  dialogs.filter(x=>(cliOf(x.cid)?.name||'').toLowerCase().includes(q)).slice(0,3).forEach(x=>r.push(['Переписка',cliOf(x.cid)?.name||'Клиент','Открыть сообщения',()=>go('messages')]));
-  calls.filter(x=>(cliOf(x.cid)?.name||'').toLowerCase().includes(q)).slice(0,3).forEach(x=>r.push(['Звонок',cliOf(x.cid)?.name||'Клиент',x.at?fd(x.at.slice(0,10)):'',()=>go('phone')]));
   box.hidden=false;box.innerHTML=r.length?r.map((x,i)=>`<button data-i="${i}"><span class="pill gray">${x[0]}</span>${esc(x[1])}<small>${esc(x[2])}</small></button>`).join(''):'<div class="empty">Ничего не найдено</div>';
   $$('button',box).forEach(b=>b.onclick=()=>{box.hidden=true;$('#gs').value='';r[b.dataset.i][3]()});
 }
@@ -569,27 +620,25 @@ function getNotifs(){const r=[],t0=iso(0),seen=ME.seen||[];
 function drawBell(){const n=getNotifs();$('#bellPop').innerHTML='<h4>Уведомления</h4>'+(n.length?'':'<div class="empty">Новых уведомлений нет</div>')+n.map(x=>`<div class="it"><span class="pill info" style="height:fit-content">•</span><div>${esc(x.t)}<small>${esc(x.ago)}</small></div></div>`).join('')+(n.length?'<div style="padding:6px"><button class="btn sm" data-act="readAll" style="width:100%;justify-content:center">Отметить прочитанными</button></div>':'')}
 A.readAll=()=>{ME.seen=[...(ME.seen||[]),...getNotifs().map(x=>x.k)].slice(-400);notifs.length=0;$('#bellDot').hidden=true;drawBell();toast('Уведомления прочитаны')};
 /* ===== Состояние рабочего пространства аккаунта ===== */
-const blankME=()=>({login:'',name:'',email:'',company:'',industry:'',city:'',cphone:'',phone:'',site:'',inn:'',cemail:'',addr:'',position:'Руководитель',size:'',onboarded:false,ch:{tg:{on:false,v:''},wa:{on:false,v:''},mail:{on:false,v:''}},seen:[],homeWidgets:{kpi:true,charts:true,details:true}});
+const blankME=()=>({login:'',name:'',email:'',company:'',industry:'',city:'',cphone:'',phone:'',site:'',inn:'',cemail:'',addr:'',position:'Руководитель',size:'',onboarded:false,ch:{tg:{on:false,v:''},wa:{on:false,v:''},mail:{on:false,v:''}},seen:[]});
 const ME=blankME();
 const demo=false;
 const SRC0=[...SOURCES],CAT0=[...CATS];
-const LISTS={staff,clients,deals,tasks,hist,notes,dialogs,calls,products,fin,autos,activity,audit,trash,notifs,SOURCES,CATS};
+const LISTS={staff,clients,deals,tasks,hist,notes,dialogs,calls,products,fin,autos,activity,notifs,SOURCES,CATS};
 const owner=()=>({id:1,name:ME.name,role:ME.position||'Руководитель',dept:'Руководство',email:ME.email,phone:ME.phone,plan:0,sales:0,status:'В сети',color:COLORS[0]});
 const setList=(a,v)=>a.splice(0,a.length,...v);
 const resetME=p=>{for(const k in ME)delete ME[k];Object.assign(ME,blankME(),p)};
-function snap(){return JSON.stringify({v:4,me:ME,nid,set:{n:SET.n},lists:LISTS})}
+function snap(){return JSON.stringify({v:2,me:ME,nid,set:{n:SET.n},lists:LISTS})}
 function restore(s){const o=JSON.parse(s);resetME(o.me);nid=o.nid||100;if(o.set&&o.set.n)Object.assign(SET.n,o.set.n);
   for(const k in LISTS)setList(LISTS[k],Array.isArray(o.lists[k])?o.lists[k]:[]);
   if(!SOURCES.length)setList(SOURCES,SRC0);if(!CATS.length)setList(CATS,CAT0);if(!staff.length)staff.push(owner())}
 function emptyWorkspace(){for(const k in LISTS){if(k==='SOURCES')setList(SOURCES,SRC0);else if(k==='CATS')setList(CATS,CAT0);else LISTS[k].length=0}nid=100;staff.push(owner())}
 function recompute(){const y=String(TODAY.getFullYear());
   revenue.fill(0);dealCnt.fill(0);
-  deals.forEach(d=>{if((d.created||'').slice(0,4)===y)dealCnt[+(d.created||'').slice(5,7)-1]++});
-  // Выручка — только реально оплаченные поступления; закрытая сделка создаёт ожидаемый счёт, но не деньги.
-  fin.filter(f=>f.type==='in'&&f.st==='Оплачен').forEach(f=>{const dt=f.paidAt||f.date||'';if(dt.slice(0,4)===y)revenue[+dt.slice(5,7)-1]+=(+f.sum||0)/1e6});
+  deals.forEach(d=>{if(d.created.slice(0,4)===y)dealCnt[+d.created.slice(5,7)-1]++;const c=d.closed||d.created;if(d.stage==='won'&&c.slice(0,4)===y)revenue[+c.slice(5,7)-1]+=d.sum/1e6});
   for(const k in srcData)delete srcData[k];clients.forEach(c=>srcData[c.source]=(srcData[c.source]||0)+1);
   staff.forEach(s=>{s.sales=deals.filter(d=>d.mgr===s.id&&d.stage==='won').reduce((a,d)=>a+d.sum,0)})}
-const log=t=>{const at=Date.now();activity.unshift({mgr:1,t,ago:'только что',at});if(activity.length>40)activity.length=40;audit.unshift({id:++nid,mgr:1,t,at:new Date(at).toISOString()});if(audit.length>500)audit.length=500};
+const log=t=>{activity.unshift({mgr:1,t,ago:'только что',at:Date.now()});if(activity.length>40)activity.length=40};
 const addHist=(cid,type,t)=>{if(cid)hist.push({cid,type,t,d:iso(0)})};
 /* Сценарии автоматизации: реально срабатывают на события */
 function fire(trig,ctx={}){autos.filter(a=>a.on&&a.trig===trig).forEach(a=>{a.runs=(a.runs||0)+1;const c=ctx.cid&&cliOf(ctx.cid);
@@ -612,33 +661,30 @@ V.home=()=>{
   const won=deals.filter(d=>d.stage==='won').length,lost=deals.filter(d=>d.stage==='lost').length,conv=Math.round(won/(won+lost||1)*100);
   const kp=(l,v,d,ic,sp,c)=>`<div class="card kpi"><div class="ic">${ico(ic)}</div><div class="l">${l}</div><div class="v">${v}</div>${demo?`<div class="d ${d[0]=='-'?'down':'up'}">${d[0]=='-'?'▼':'▲'} ${d.replace('-','')} <span class="mut">к прошлому месяцу</span></div>${spark(sp,c)}`:''}</div>`;
   const nextT=tasks.filter(t=>t.status!=='Выполнена').sort((a,b)=>a.due.localeCompare(b.due)).slice(0,5);
-  $('#view').innerHTML=`<div class="ph"><div><h1>${(h=>h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер')(new Date().getHours())}, ${esc((ME.name||'').split(' ')[0])}</h1><p>Сводка по компании на ${new Date(TODAY).toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}</p></div><div class="acts"><button class="btn" data-act="homeWidgets">Виджеты</button><button class="btn" data-act="newTask">${ico('plus')}Задача</button><button class="btn pri" data-act="newDeal">${ico('plus')}Новая сделка</button></div></div>
-  ${!demo&&(!clients.length||!deals.length||!tasks.length)?firstSteps():''}<div class="grid g5" data-home-widget="kpi">
-   ${kp('Фактическая выручка с начала года',mln(total),'12,4%','wallet',revenue.slice(0,MO),'--c1')}
+  $('#view').innerHTML=`<div class="ph"><div><h1>${(h=>h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер')(new Date().getHours())}, ${esc((ME.name||'').split(' ')[0])}</h1><p>Сводка по компании на ${new Date(TODAY).toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}</p></div><div class="acts"><button class="btn" data-act="newTask">${ico('plus')}Задача</button><button class="btn pri" data-act="newDeal">${ico('plus')}Новая сделка</button></div></div>
+  ${!demo&&(!clients.length||!deals.length||!tasks.length)?firstSteps():''}<div class="grid g5">
+   ${kp('Выручка с начала года',mln(total),'12,4%','wallet',revenue.slice(0,MO),'--c1')}
    ${kp('Новых клиентов за 30 дней',newC,'8,1%','users',[3,5,4,6,5,7,newC],'--c2')}
    ${kp('Активных сделок',active,'3,2%','deal',[9,10,9,11,12,11,active],'--c3')}
    ${kp('Открытых задач',openT,'-5,0%','tasks',[14,12,13,11,10,9,openT],'--c4')}
    ${kp('Конверсия продаж',conv+'%','2,3%','chart',[28,30,29,33,35,34,conv],'--c1')}
   </div>
-  <div class="grid g32" style="margin-top:16px" data-home-widget="charts">
-   <div class="card"><h3>Фактические поступления по месяцам, млн ₽<span class="seg" style="margin-left:auto" id="rseg"><button class="on" data-act="rperiod" data-n="${MO}">${MO} мес.</button><button data-act="rperiod" data-n="6">6 мес.</button><button data-act="rperiod" data-n="3">3 мес.</button></span></h3><div id="rchart">${areaChart(revenue.slice(0,MO),months.slice(0,MO),{fmt:v=>(+v.toFixed(1)).toString().replace('.',','),unit:' млн ₽'})}</div></div>
+  <div class="grid g32" style="margin-top:16px">
+   <div class="card"><h3>Выручка по месяцам, млн ₽<span class="seg" style="margin-left:auto" id="rseg"><button class="on" data-act="rperiod" data-n="${MO}">${MO} мес.</button><button data-act="rperiod" data-n="6">6 мес.</button><button data-act="rperiod" data-n="3">3 мес.</button></span></h3><div id="rchart">${areaChart(revenue.slice(0,MO),months.slice(0,MO),{fmt:v=>(+v.toFixed(1)).toString().replace('.',','),unit:' млн ₽'})}</div></div>
    <div class="card"><h3>Ближайшие задачи<button class="btn sm" data-go="tasks">Все</button></h3><div class="list">${nextT.length?'':'<div class="empty">Открытых задач нет</div>'}${nextT.map(t=>`<div class="row"><button class="chk" data-act="tdone" data-id="${t.id}" aria-label="Выполнить"></button><div class="grow"><b>${esc(t.title)}</b><small>${t.due===iso(0)?'Сегодня':fd(t.due)} · ${esc(mgrOf(t.mgr).name)}</small></div>${ppill(t.prio)}</div>`).join('')}</div></div>
   </div>
-  <div class="grid g2" style="margin-top:16px" data-home-widget="details">
-   <div class="card"><h3>Последние сделки<button class="btn sm" data-go="deals">Воронка</button></h3><div class="tw"><table><tbody>${deals.length?'':'<tr><td><div class="empty">Сделок пока нет</div></td></tr>'}${[...deals].sort((a,b)=>b.created.localeCompare(a.created)).slice(0,6).map(d=>{const s=STAGES.find(x=>x.id===d.stage);return `<tr class="click" data-act="deal" data-id="${d.id}"><td style="white-space:normal;min-width:160px">${esc(d.title)}<br><small class="mut">${esc(cliOf(d.cid)?.company||'Без компании')}</small></td><td>${rub(d.sum)}</td><td><span class="pill" style="color:${s.c};background:color-mix(in srgb,${s.c} 16%,transparent)">${s.name}</span></td></tr>`}).join('')}</tbody></table></div></div>
+  <div class="grid g2" style="margin-top:16px">
+   <div class="card"><h3>Последние сделки<button class="btn sm" data-go="deals">Воронка</button></h3><div class="tw"><table><tbody>${deals.length?'':'<tr><td><div class="empty">Сделок пока нет</div></td></tr>'}${[...deals].sort((a,b)=>b.created.localeCompare(a.created)).slice(0,6).map(d=>{const s=STAGES.find(x=>x.id===d.stage);return `<tr class="click" data-act="deal" data-id="${d.id}"><td style="white-space:normal;min-width:160px">${esc(d.title)}<br><small class="mut">${esc(cliOf(d.cid).company)}</small></td><td>${rub(d.sum)}</td><td><span class="pill" style="color:${s.c};background:color-mix(in srgb,${s.c} 16%,transparent)">${s.name}</span></td></tr>`}).join('')}</tbody></table></div></div>
    <div class="card"><h3>Действия сотрудников</h3><div class="list">${activity.length?'':'<div class="empty">Здесь появятся действия команды</div>'}${activity.map(a=>`<div class="row">${av(a.mgr)}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400"><b style="display:inline">${esc(mgrOf(a.mgr).name.split(' ')[0])}</b> ${a.t}</b><small>${a.ago}</small></div></div>`).join('')}</div></div>
   </div>`;
 };
-function applyHomeWidgets(){const prefs=ME.homeWidgets||{kpi:true,charts:true,details:true};document.querySelectorAll('[data-home-widget]').forEach(el=>{el.classList.toggle('home-widget-hidden',prefs[el.dataset.homeWidget]===false)})}
-const _alfaHomeRender=V.home;V.home=()=>{_alfaHomeRender();applyHomeWidgets()};
-A.homeWidgets=()=>{const p=ME.homeWidgets||{kpi:true,charts:true,details:true};modal({title:'Виджеты главной',body:`<div class="list"><label class="row"><span class="grow"><b>Ключевые показатели</b><small>Выручка, клиенты, сделки, задачи и конверсия</small></span><input type="checkbox" id="hw_kpi" ${p.kpi!==false?'checked':''}></label><label class="row"><span class="grow"><b>График и ближайшие задачи</b><small>Поступления по месяцам и список задач</small></span><input type="checkbox" id="hw_charts" ${p.charts!==false?'checked':''}></label><label class="row"><span class="grow"><b>Сделки и активность</b><small>Последние сделки и действия сотрудников</small></span><input type="checkbox" id="hw_details" ${p.details!==false?'checked':''}></label></div>`,foot:[{label:'Отмена',fn:closeModal},{label:'Сохранить',cls:'pri',fn:()=>{ME.homeWidgets={kpi:$('#hw_kpi').checked,charts:$('#hw_charts').checked,details:$('#hw_details').checked};closeModal();persist();V.home();toast('Виджеты сохранены')}}]})};
 A.rperiod=b=>{const n=Math.min(+b.dataset.n,MO);$$('#rseg button').forEach(x=>x.classList.toggle('on',x===b));$('#rchart').innerHTML=areaChart(revenue.slice(MO-n,MO),months.slice(MO-n,MO),{fmt:v=>(+v.toFixed(1)).toString().replace('.',','),unit:' млн ₽'})};
 A.tdone=b=>{const t=tasks.find(x=>x.id==b.dataset.id);t.status='Выполнена';log(`выполнил(а) задачу «${t.title}»`);toast('Задача выполнена');drawNav();V[cur]()};
 A.deal=b=>openDeal(+b.dataset.id);
 /* ===== Клиенты ===== */
 const CF={q:'',status:'',source:'',mgr:''};
 V.clients=()=>{
-  $('#view').innerHTML=`<div class="ph"><div><h1>Клиенты</h1><p id="ccount"></p></div><div class="acts"><button class="btn" data-act="print">PDF / печать</button><button class="btn" data-act="csvClients">Экспорт CSV</button><button class="btn pri" data-act="newClient">${ico('plus')}Добавить клиента</button></div></div>
+  $('#view').innerHTML=`<div class="ph"><div><h1>Клиенты</h1><p id="ccount"></p></div><div class="acts"><button class="btn pri" data-act="newClient">${ico('plus')}Добавить клиента</button></div></div>
   <div class="tools"><input class="grow" id="cq" placeholder="Поиск по имени, телефону, почте, компании" value="${esc(CF.q)}" aria-label="Поиск клиентов">
    <select id="cs" aria-label="Статус"><option value="">Все статусы</option>${CSTAT.map(s=>`<option ${CF.status===s?'selected':''}>${s}</option>`).join('')}</select>
    <select id="cso" aria-label="Источник"><option value="">Все источники</option>${SOURCES.map(s=>`<option ${CF.source===s?'selected':''}>${s}</option>`).join('')}</select>
@@ -657,7 +703,7 @@ A.client=b=>openClient(+b.dataset.id);
 A.newClient=()=>clientForm();
 A.editClient=b=>clientForm(+b.dataset.id);
 A.delClient=b=>{const id=+b.dataset.id;confirmBox(`Удалить клиента «${esc(cliOf(id).name)}» вместе со связанными сделками?`,()=>delClient(id))};
-function delClient(id){const c=cliOf(id);if(!c)return;const payload={client:JSON.parse(JSON.stringify(c)),related:{}};for(const key of ['dialogs','calls','hist','notes','deals','tasks']){payload.related[key]=LISTS[key].filter(x=>x.cid===id).map(x=>JSON.parse(JSON.stringify(x)));for(let i=LISTS[key].length-1;i>=0;i--)if(LISTS[key][i].cid===id)LISTS[key].splice(i,1)}const dealIds=payload.related.deals.map(d=>d.id);payload.related.fin=fin.filter(f=>dealIds.includes(f.deal)).map(f=>JSON.parse(JSON.stringify(f)));for(let i=fin.length-1;i>=0;i--)if(dealIds.includes(fin[i].deal))fin.splice(i,1);clients.splice(clients.indexOf(c),1);trash.unshift({id:++nid,type:'client_bundle',label:'Клиент: '+(c.name||''),deletedAt:new Date().toISOString(),payload});log(`переместил(а) клиента «${c.name}» в корзину`);scheduleClientSync();toast('Клиент перемещён в корзину');closeModal();V[cur]() }
+function delClient(id){const i=clients.findIndex(c=>c.id===id);if(i<0)return;clients.splice(i,1);[dialogs,calls,hist,notes].forEach(a=>{for(let k=a.length-1;k>=0;k--)if(a[k].cid===id)a.splice(k,1)});tasks.forEach(t=>{if(t.cid===id)t.cid=null});for(let k=deals.length-1;k>=0;k--)if(deals[k].cid===id)deals.splice(k,1);scheduleClientSync();toast('Клиент удалён');closeModal();V[cur]()}
 function clientForm(id){
   const c=id?cliOf(id):{name:'',phone:'',email:'',company:'',source:'Сайт',mgr:2,status:'Новый'};
   modal({title:id?'Редактирование клиента':'Новый клиент',body:`<form class="form" id="cf">${fld('f_name','Имя и фамилия',c.name,{full:1,ph:'Иван Петров'})}${fld('f_phone','Телефон',c.phone,{ph:'+7 ___ ___-__-__'})}${fld('f_email','Электронная почта',c.email,{type:'email'})}${fld('f_company','Компания',c.company)}${fld('f_source','Источник обращения',c.source,{type:'select',opts:SOURCES})}${fld('f_mgr','Ответственный менеджер',c.mgr,{type:'select',opts:mgrOpts()})}${fld('f_status','Статус',c.status,{type:'select',opts:CSTAT})}</form>`,
@@ -687,7 +733,7 @@ function openClient(id,tab='info'){
 /* ===== Сделки ===== */
 V.deals=()=>{
   const tot=deals.filter(d=>!['won','lost'].includes(d.stage)).reduce((a,d)=>a+d.sum,0);
-  $('#view').innerHTML=`<div class="ph"><div><h1>Сделки</h1><p>В работе на ${mln(tot)}. Перетаскивайте карточки между этапами.</p></div><div class="acts"><button class="btn" data-act="print">PDF / печать</button><button class="btn" data-act="csvDeals">Экспорт CSV</button><button class="btn pri" data-act="newDeal">${ico('plus')}Новая сделка</button></div></div><div class="kan" id="kan"></div>`;
+  $('#view').innerHTML=`<div class="ph"><div><h1>Сделки</h1><p>В работе на ${mln(tot)}. Перетаскивайте карточки между этапами.</p></div><div class="acts"><button class="btn pri" data-act="newDeal">${ico('plus')}Новая сделка</button></div></div><div class="kan" id="kan"></div>`;
   drawKan();
 };
 function drawKan(){
@@ -703,7 +749,7 @@ function dealForm(id,cid){
   const d=id?deals.find(x=>x.id===id):{title:'',cid:cid||clients[0]?.id,sum:'',mgr:2,stage:'new'};
   if(!clients.length){toast('Сначала добавьте клиента');clientForm();return}
   modal({title:id?'Сделка':'Новая сделка',body:`<form class="form">${fld('d_title','Название сделки',d.title,{full:1,ph:'Например: Поставка оборудования'})}${fld('d_cid','Клиент',d.cid,{type:'select',opts:clients.map(c=>[c.id,c.name+' — '+c.company])})}${fld('d_sum','Сумма, ₽',d.sum,{type:'number'})}${fld('d_mgr','Ответственный',d.mgr,{type:'select',opts:mgrOpts()})}${fld('d_stage','Этап',d.stage,{type:'select',opts:STAGES.map(s=>[s.id,s.name])})}</form>`,
-   foot:[...(id?[{label:'Удалить',cls:'dng',fn:()=>confirmBox('Удалить эту сделку?',()=>{trashItem('deals',d,'Сделка');closeModal();toast('Сделка перемещена в корзину');V[cur]()})}]:[]),{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Создать',cls:'pri',fn:()=>{
+   foot:[...(id?[{label:'Удалить',cls:'dng',fn:()=>confirmBox('Удалить эту сделку?',()=>{deals.splice(deals.indexOf(d),1);closeModal();toast('Сделка удалена');V[cur]()})}]:[]),{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Создать',cls:'pri',fn:()=>{
      if(!val('d_title')){toast('Укажите название сделки');return}
      const o={title:val('d_title'),cid:+val('d_cid'),sum:+val('d_sum')||0,mgr:+val('d_mgr'),stage:val('d_stage')};
      if(id){const st=o.stage;o.stage=d.stage;Object.assign(d,o);setStage(d,st)}
@@ -722,7 +768,7 @@ function setStage(d,st){const was=d.stage,c=cliOf(d.cid);d.stage=st;if(st===was)
 /* ===== Задачи ===== */
 const TV={mode:'list',st:'',mgr:'',off:0};
 V.tasks=()=>{
-  $('#view').innerHTML=`<div class="ph"><div><h1>Задачи</h1><p id="tcount"></p></div><div class="acts"><button class="btn" data-act="print">PDF / печать</button><button class="btn" data-act="csvTasks">Экспорт CSV</button><button class="btn pri" data-act="newTask">${ico('plus')}Создать задачу</button></div></div>
+  $('#view').innerHTML=`<div class="ph"><div><h1>Задачи</h1><p id="tcount"></p></div><div class="acts"><button class="btn pri" data-act="newTask">${ico('plus')}Создать задачу</button></div></div>
   <div class="tools"><div class="seg"><button data-act="tmode" data-m="list" class="${TV.mode==='list'?'on':''}">Список</button><button data-act="tmode" data-m="cal" class="${TV.mode==='cal'?'on':''}">Календарь</button></div>
    <select id="ts" aria-label="Статус"><option value="">Все статусы</option>${TSTAT.map(s=>`<option ${TV.st===s?'selected':''}>${s}</option>`).join('')}</select>
    <select id="tm" aria-label="Исполнитель"><option value="">Все исполнители</option>${staff.map(m=>`<option value="${m.id}" ${TV.mgr==m.id?'selected':''}>${m.name}</option>`).join('')}</select></div><div id="tbody"></div>`;
@@ -752,7 +798,7 @@ function taskForm(id){
   const t=id?tasks.find(x=>x.id===id):{title:'',desc:'',mgr:2,due:iso(1),prio:'Средний',status:'К выполнению',cid:'',comments:[]};
   const cm=()=>t.comments.map(c=>`<div class="row">${av(c.a,1)}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400">${esc(c.t)}</b><small>${esc(mgrOf(c.a).name)} · ${fd(c.d)}</small></div></div>`).join('')||'<div class="mut">Комментариев пока нет</div>';
   modal({title:id?'Задача':'Новая задача',body:`<form class="form">${fld('t_title','Название',t.title,{full:1})}${fld('t_desc','Описание',t.desc,{type:'textarea',full:1})}${fld('t_mgr','Исполнитель',t.mgr,{type:'select',opts:staff.map(s=>[s.id,s.name])})}${fld('t_due','Срок',t.due,{type:'date'})}${fld('t_prio','Приоритет',t.prio,{type:'select',opts:PRIO})}${fld('t_st','Статус',t.status,{type:'select',opts:TSTAT})}${fld('t_cid','Клиент',t.cid||'',{type:'select',full:1,opts:[['','— не выбран —'],...clients.map(c=>[c.id,c.name+' — '+c.company])]})}</form>${id?`<h4 style="margin:20px 0 8px">Комментарии</h4><div id="tcm" class="list">${cm()}</div><div class="tools" style="margin:12px 0 0"><input class="grow" id="t_c" placeholder="Написать комментарий…"><button class="btn" id="t_cadd" type="button">Отправить</button></div>`:''}`,
-   foot:[...(id?[{label:'Удалить',cls:'dng',fn:()=>confirmBox('Удалить задачу?',()=>{trashItem('tasks',t,'Задача');closeModal();toast('Задача перемещена в корзину');drawNav();V[cur]()})}]:[]),{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Создать',cls:'pri',fn:()=>{
+   foot:[...(id?[{label:'Удалить',cls:'dng',fn:()=>confirmBox('Удалить задачу?',()=>{tasks.splice(tasks.indexOf(t),1);closeModal();toast('Задача удалена');drawNav();V[cur]()})}]:[]),{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Создать',cls:'pri',fn:()=>{
      if(!val('t_title')){toast('Укажите название задачи');return}
      const o={title:val('t_title'),desc:val('t_desc'),mgr:+val('t_mgr'),due:val('t_due')||iso(1),prio:val('t_prio'),status:val('t_st'),cid:val('t_cid')?+val('t_cid'):null};
      if(id)Object.assign(t,o);else{o.id=++nid;o.comments=[];tasks.push(o);log(`создал(а) задачу «${o.title}»`)}
@@ -775,9 +821,9 @@ V.analytics=()=>{
    <div class="card kpi"><div class="l">Выручка за период</div><div class="v">${mln(totalRev)}</div></div>
    <div class="card kpi"><div class="l">Сделок создано</div><div class="v">${totalDeals}</div></div>
    <div class="card kpi"><div class="l">Средний чек</div><div class="v">${mln(avg)}</div></div>
-   <div class="card kpi"><div class="l">Конверсия в успешное закрытие</div><div class="v">${conv}%</div></div></div>
+   <div class="card kpi"><div class="l">Конверсия в оплату</div><div class="v">${conv}%</div></div></div>
   <div class="grid g2">
-   <div class="card"><h3>Фактические поступления по месяцам, млн ₽</h3>${barChart([{v:rev}],lb,{fmt:v=>(+v.toFixed(1)).toString().replace('.',',')})}</div>
+   <div class="card"><h3>Выручка по месяцам, млн ₽</h3>${barChart([{v:rev}],lb,{fmt:v=>(+v.toFixed(1)).toString().replace('.',',')})}</div>
    <div class="card"><h3>Количество сделок</h3>${areaChart(cnt,lb,{color:'--c2',unit:' сделок'})}</div>
    <div class="card"><h3>Конверсия воронки</h3><div class="funnel">${counts.map((c,i)=>{const p=Math.round(c/base*100);return `<div><span>${names[i]}</span><div class="b" style="width:${Math.max(p,8)}%;opacity:${1-i*.1}">${c} · ${p}%</div></div>`}).join('')}</div></div>
    <div class="card"><h3>Источники привлечения</h3>${donut(Object.entries(srcData),0,{center:'клиентов'})}</div>
@@ -843,7 +889,7 @@ A.toInteg=()=>{SET.tab='integr';go('settings')};
 const PFl={q:'',cat:''};
 V.products=()=>{
   const val_=products.reduce((a,p)=>a+p.price*p.qty,0),low=products.filter(p=>p.qty<20).length;
-  $('#view').innerHTML=`<div class="ph"><div><h1>Товары и склад</h1><p>Остатки и цены номенклатуры</p></div><div class="acts"><button class="btn" data-act="print">PDF / печать</button><button class="btn" data-act="csvProducts">Экспорт CSV</button><button class="btn pri" data-act="newProd">${ico('plus')}Добавить товар</button></div></div>
+  $('#view').innerHTML=`<div class="ph"><div><h1>Товары и склад</h1><p>Остатки и цены номенклатуры</p></div><div class="acts"><button class="btn pri" data-act="newProd">${ico('plus')}Добавить товар</button></div></div>
   <div class="grid g4" style="margin-bottom:16px"><div class="card kpi"><div class="l">Позиций</div><div class="v">${products.length}</div></div><div class="card kpi"><div class="l">Стоимость остатков</div><div class="v">${mln(val_)}</div></div><div class="card kpi"><div class="l">Заканчиваются</div><div class="v ${low?'down':''}">${low}</div></div></div>
   <div class="tools"><input class="grow" id="pq" placeholder="Название или артикул" value="${esc(PFl.q)}" aria-label="Поиск товаров"><select id="pc" aria-label="Категория"><option value="">Все категории</option>${CATS.map(c=>`<option ${PFl.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
   <div class="tw"><table><thead><tr><th>Название</th><th>Артикул</th><th>Категория</th><th>Цена</th><th>Количество</th><th>Наличие</th><th></th></tr></thead><tbody id="ptb"></tbody></table></div>`;
@@ -852,30 +898,30 @@ V.products=()=>{
 function drawProd(){const q=PFl.q.toLowerCase(),l=products.filter(p=>(!q||(p.name+p.sku).toLowerCase().includes(q))&&(!PFl.cat||p.cat===PFl.cat));
   $('#ptb').innerHTML=l.map(p=>`<tr><td>${esc(p.name)}</td><td class="mut">${esc(p.sku)}</td><td>${esc(p.cat)}</td><td>${rub(p.price)}</td><td>${new Intl.NumberFormat('ru-RU').format(p.qty)} шт.</td><td><span class="pill ${p.qty===0?'bad':p.qty<20?'warn':'ok'}">${p.qty===0?'Нет в наличии':p.qty<20?'Мало':'В наличии'}</span></td><td><span class="cell"><button class="ibtn" style="width:32px;height:32px" data-act="editProd" data-id="${p.id}" aria-label="Изменить">${ico('edit')}</button><button class="ibtn" style="width:32px;height:32px" data-act="delProd" data-id="${p.id}" aria-label="Удалить">${ico('trash')}</button></span></td></tr>`).join('')||'<tr><td colspan="7"><div class="empty">Товары не найдены</div></td></tr>'}
 A.newProd=()=>prodForm();A.editProd=b=>prodForm(+b.dataset.id);
-A.delProd=b=>{const p=products.find(x=>x.id==b.dataset.id);confirmBox(`Удалить товар «${esc(p.name)}»?`,()=>{trashItem('products',p,'Товар');toast('Товар перемещён в корзину');V.products()})};
+A.delProd=b=>{const p=products.find(x=>x.id==b.dataset.id);confirmBox(`Удалить товар «${esc(p.name)}»?`,()=>{products.splice(products.indexOf(p),1);toast('Товар удалён');V.products()})};
 function prodForm(id){const p=id?products.find(x=>x.id===id):{name:'',sku:'',cat:CATS[0],price:'',qty:''};
   modal({title:id?'Редактирование товара':'Новый товар',body:`<form class="form">${fld('p_name','Название',p.name,{full:1})}${fld('p_sku','Артикул',p.sku,{ph:'EL-0000'})}${fld('p_cat','Категория',p.cat,{type:'select',opts:CATS})}${fld('p_price','Цена, ₽',p.price,{type:'number'})}${fld('p_qty','Количество, шт.',p.qty,{type:'number'})}</form>`,
    foot:[{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Добавить',cls:'pri',fn:()=>{if(!val('p_name')){toast('Укажите название');return}
     const o={name:val('p_name'),sku:val('p_sku')||'NEW-'+(nid+1),cat:val('p_cat'),price:+val('p_price')||0,qty:+val('p_qty')||0};
-    if(id)Object.assign(p,o);else{o.id=++nid;products.unshift(o)}log(`${id?'обновил(а)':'добавил(а)'} товар «${o.name}»`);closeModal();toast('Сохранено');V.products()}}]})}
+    if(id)Object.assign(p,o);else{o.id=++nid;products.unshift(o)}closeModal();toast('Сохранено');V.products()}}]})}
 /* ===== Финансы ===== */
 let FF='all';
 V.finance=()=>{
   const inc=fin.filter(f=>f.type==='in'&&f.st==='Оплачен').reduce((a,f)=>a+f.sum,0),out=fin.filter(f=>f.type==='out'&&f.st==='Оплачен').reduce((a,f)=>a+f.sum,0),wait=fin.filter(f=>f.type==='in'&&f.st!=='Оплачен').reduce((a,f)=>a+f.sum,0);
   const s0=Math.max(0,MO-6),lb=months.slice(s0,MO);let incS=revenue.slice(s0,MO),ex=[2.9,3.1,3.3,3.2,3.9,3.7],expD=[['Закупка',318],['Зарплата',520],['Аренда',210],['Налоги',274],['Маркетинг',95]];
-  if(!demo){const byM=t=>Array.from({length:MO-s0},(_,i)=>s0+i).map(m=>fin.filter(f=>f.type===t&&f.st==='Оплачен'&&((f.paidAt||f.date||'').slice(0,4)===String(TODAY.getFullYear()))&&+(f.paidAt||f.date||'').slice(5,7)-1===m).reduce((a,f)=>a+f.sum,0)/1e6);incS=byM('in');ex=byM('out');const g={};fin.filter(f=>f.type==='out'&&f.st==='Оплачен').forEach(f=>g[f.cat]=(g[f.cat]||0)+f.sum/1000);expD=Object.entries(g).map(([k,v])=>[k,Math.round(v)])}
-  $('#view').innerHTML=`<div class="ph"><div><h1>Финансы</h1><p>Поступления и расходы компании</p></div><div class="acts"><button class="btn" data-act="print">PDF / печать</button><button class="btn" data-act="csvFinance">Экспорт CSV</button><button class="btn pri" data-act="newFin">${ico('plus')}Добавить операцию</button></div></div>
+  if(!demo){const byM=t=>Array.from({length:MO-s0},(_,i)=>s0+i).map(m=>fin.filter(f=>f.type===t&&f.st==='Оплачен'&&+f.date.slice(5,7)-1===m).reduce((a,f)=>a+f.sum,0)/1e6);incS=byM('in');ex=byM('out');const g={};fin.filter(f=>f.type==='out'&&f.st==='Оплачен').forEach(f=>g[f.cat]=(g[f.cat]||0)+f.sum/1000);expD=Object.entries(g).map(([k,v])=>[k,Math.round(v)])}
+  $('#view').innerHTML=`<div class="ph"><div><h1>Финансы</h1><p>Поступления и расходы компании</p></div><div class="acts"><button class="btn pri" data-act="newFin">${ico('plus')}Добавить операцию</button></div></div>
   <div class="grid g4" style="margin-bottom:16px"><div class="card kpi"><div class="l">Поступления</div><div class="v up">${mln(inc)}</div></div><div class="card kpi"><div class="l">Расходы</div><div class="v down">${mln(out)}</div></div><div class="card kpi"><div class="l">Прибыль за период</div><div class="v">${mln(inc-out)}</div></div><div class="card kpi"><div class="l">Ожидаемые оплаты</div><div class="v">${mln(wait)}</div></div></div>
   <div class="grid g32"><div class="card"><h3>Доходы и расходы, млн ₽</h3>${barChart([{n:'Доходы',v:incS},{n:'Расходы',v:ex}],lb,{fmt:v=>(+v.toFixed(1)).toString().replace('.',','),colors:['--c3','--c5']})}<div class="legend"><span><i style="background:var(--c3)"></i>Доходы</span><span><i style="background:var(--c5)"></i>Расходы</span></div></div>
   <div class="card"><h3>Структура расходов</h3>${donut(expD,0,{center:'тыс. ₽'})}</div></div>
   <div class="tools" style="margin-top:16px"><div class="seg">${[['all','Все'],['in','Доходы'],['out','Расходы']].map(x=>`<button data-act="ff" data-f="${x[0]}" class="${FF===x[0]?'on':''}">${x[1]}</button>`).join('')}</div></div>
   <div class="tw"><table><thead><tr><th>Дата</th><th>Операция</th><th>Категория</th><th>Сумма</th><th>Статус</th><th></th></tr></thead><tbody>${[...fin].sort((a,b)=>b.date.localeCompare(a.date)).filter(f=>FF==='all'||f.type===FF).map(f=>`<tr><td>${fd(f.date)}</td><td>${esc(f.t)}</td><td>${esc(f.cat)}</td><td class="${f.type==='in'?'up':'down'}">${f.type==='in'?'+':'−'}${rub(f.sum)}</td><td><span class="pill ${f.st==='Оплачен'?'ok':'warn'}">${f.st}</span></td><td><span class="cell"><button class="btn sm" data-act="finPay" data-id="${f.id}">${f.st==='Оплачен'?'Вернуть в ожидание':'Отметить оплаченным'}</button><button class="ibtn" style="width:32px;height:32px" data-act="finDel" data-id="${f.id}" aria-label="Удалить">${ico('trash')}</button></span></td></tr>`).join('')||'<tr><td colspan="6"><div class="empty">Операций пока нет. Закрытые сделки попадают сюда автоматически.</div></td></tr>'}</tbody></table></div>`;
 };
-A.finPay=b=>{const f=fin.find(x=>x.id==b.dataset.id);f.st=f.st==='Оплачен'?'Ожидается':'Оплачен';if(f.st==='Оплачен')f.paidAt=iso(0);else delete f.paidAt;log(`${f.st==='Оплачен'?'подтвердил оплату':'вернул в ожидание'}: «${f.t}»`);recompute();V.finance()};
-A.finDel=b=>{const f=fin.find(x=>x.id==b.dataset.id);confirmBox('Удалить операцию «'+esc(f.t)+'»?',()=>{trashItem('fin',f,'Финансовая операция');V.finance()})};
+A.finPay=b=>{const f=fin.find(x=>x.id==b.dataset.id);f.st=f.st==='Оплачен'?'Ожидается':'Оплачен';V.finance()};
+A.finDel=b=>{const f=fin.find(x=>x.id==b.dataset.id);confirmBox('Удалить операцию «'+esc(f.t)+'»?',()=>{fin.splice(fin.indexOf(f),1);V.finance()})};
 A.ff=b=>{FF=b.dataset.f;V.finance()};
 A.newFin=()=>modal({title:'Новая операция',body:`<form class="form">${fld('x_t','Описание','',{full:1,ph:'Например: Оплата счёта №2050'})}${fld('x_type','Тип','in',{type:'select',opts:[['in','Доход'],['out','Расход']]})}${fld('x_sum','Сумма, ₽','',{type:'number'})}${fld('x_cat','Категория','Оплата по сделке',{type:'select',opts:['Оплата по сделке','Закупка','Зарплата','Аренда','Налоги','Маркетинг']})}${fld('x_st','Статус','Оплачен',{type:'select',opts:['Оплачен','Ожидается']})}</form>`,
-  foot:[{label:'Отмена',fn:closeModal},{label:'Добавить',cls:'pri',fn:()=>{if(!val('x_t')||!(+val('x_sum')>0)){toast('Заполните описание и сумму');return}fin.push({id:++nid,date:iso(0),...(val('x_st')==='Оплачен'?{paidAt:iso(0)}:{}),type:val('x_type'),cat:val('x_cat'),t:val('x_t'),sum:+val('x_sum'),st:val('x_st')});log(`добавил(а) финансовую операцию «${val('x_t')}»`);recompute();closeModal();toast('Операция добавлена');V.finance()}}]});
+  foot:[{label:'Отмена',fn:closeModal},{label:'Добавить',cls:'pri',fn:()=>{if(!val('x_t')||!(+val('x_sum')>0)){toast('Заполните описание и сумму');return}fin.push({id:++nid,date:iso(0),type:val('x_type'),cat:val('x_cat'),t:val('x_t'),sum:+val('x_sum'),st:val('x_st')});closeModal();toast('Операция добавлена');V.finance()}}]});
 /* ===== Автоматизация ===== */
 const TRIGS=['Создан клиент','Создана сделка','Смена этапа сделки','Пропущенный звонок','Новое сообщение'];
 const ACTS=['Создать задачу','Уведомить руководителя','Изменить статус клиента','Назначить менеджера'];
@@ -886,24 +932,24 @@ V.automation=()=>{
    <div class="tools" style="margin:14px 0 0"><span class="pill ${a.on?'ok':'gray'}">${a.on?'Включён':'Выключен'}</span><span class="mut">Запусков: ${a.runs}</span><button class="btn sm dng" style="margin-left:auto" data-act="autoDel" data-id="${a.id}">${ico('trash')}Удалить</button></div></div>`).join('')}</div>`;
 };
 A.autoSw=b=>{const a=autos.find(x=>x.id==b.dataset.id);a.on=!a.on;toast(a.on?'Сценарий включён':'Сценарий выключен');V.automation()};
-A.autoDel=b=>{const a=autos.find(x=>x.id==b.dataset.id);confirmBox(`Удалить сценарий «${esc(a.name)}»?`,()=>{trashItem('autos',a,'Сценарий автоматизации');V.automation()})};
+A.autoDel=b=>{const a=autos.find(x=>x.id==b.dataset.id);confirmBox(`Удалить сценарий «${esc(a.name)}»?`,()=>{autos.splice(autos.indexOf(a),1);V.automation()})};
 A.newAuto=()=>modal({title:'Новый сценарий',body:`<form class="form">${fld('a_n','Название','',{full:1,ph:'Например: Задача после первой оплаты'})}${fld('a_t','Если (событие)',TRIGS[0],{type:'select',opts:TRIGS,full:1})}${fld('a_a1','Тогда (действие 1)',ACTS[0],{type:'select',opts:ACTS})}${fld('a_a2','Затем (действие 2)','',{type:'select',opts:[['','— нет —'],...ACTS]})}</form>`,
-  foot:[{label:'Отмена',fn:closeModal},{label:'Создать',cls:'pri',fn:()=>{if(!val('a_n')){toast('Укажите название');return}autos.unshift({id:++nid,name:val('a_n'),on:true,trig:val('a_t'),acts:[val('a_a1'),val('a_a2')].filter(Boolean),runs:0});log(`создал(а) сценарий «${val('a_n')}»`);closeModal();toast('Сценарий создан');V.automation()}}]});
+  foot:[{label:'Отмена',fn:closeModal},{label:'Создать',cls:'pri',fn:()=>{if(!val('a_n')){toast('Укажите название');return}autos.unshift({id:++nid,name:val('a_n'),on:true,trig:val('a_t'),acts:[val('a_a1'),val('a_a2')].filter(Boolean),runs:0});closeModal();toast('Сценарий создан');V.automation()}}]});
 /* ===== Сотрудники ===== */
 V.staff=()=>{
-  $('#view').innerHTML=`<div class="ph"><div><h1>Сотрудники</h1><p>${staff.length} в команде</p></div><div class="acts"><button class="btn" data-act="csvStaff">Экспорт CSV</button><button class="btn pri" data-act="newStaff">${ico('plus')}Добавить сотрудника</button></div></div>
+  $('#view').innerHTML=`<div class="ph"><div><h1>Сотрудники</h1><p>${staff.length} в команде</p></div><div class="acts"><button class="btn pri" data-act="newStaff">${ico('plus')}Добавить сотрудника</button></div></div>
   <div class="grid g4" style="grid-template-columns:repeat(auto-fill,minmax(270px,1fr))">${staff.map(s=>{const p=s.plan?Math.round(s.sales/s.plan*100):0;return `<div class="card"><div class="cell" style="margin-bottom:12px">${av(s.id)}<div><b>${esc(s.name)}</b><div class="mut" style="font-size:12px">${esc(s.role)}</div></div><span class="pill ${s.status==='В сети'?'ok':s.status==='Отсутствует'?'warn':'gray'}" style="margin-left:auto">${s.status}</span></div>
    <div class="mut" style="font-size:12px;line-height:1.7">${esc(s.dept)}<br>${esc(s.email)}<br>${esc(s.phone)}</div>
    ${s.plan?`<div style="margin-top:12px;font-size:12px" class="mut">План: ${mln(s.sales)} из ${mln(s.plan)} · <b class="${p>=100?'up':''}">${p}%</b><div class="bar"><i style="width:${Math.min(p,100)}%"></i></div></div>`:''}
    <div class="tools" style="margin:12px 0 0"><button class="btn sm" data-act="editStaff" data-id="${s.id}">${ico('edit')}Изменить</button>${s.id!==1?`<button class="btn sm dng" data-act="delStaff" data-id="${s.id}">${ico('trash')}</button>`:''}</div></div>`}).join('')}</div>`;
 };
 A.newStaff=()=>staffForm();A.editStaff=b=>staffForm(+b.dataset.id);
-A.delStaff=b=>{const s=staff.find(x=>x.id==b.dataset.id);confirmBox(`Удалить сотрудника «${esc(s.name)}»?`,()=>{trashItem('staff',s,'Сотрудник');toast('Сотрудник перемещён в корзину');V.staff()})};
+A.delStaff=b=>{const s=staff.find(x=>x.id==b.dataset.id);confirmBox(`Удалить сотрудника «${esc(s.name)}»?`,()=>{staff.splice(staff.indexOf(s),1);toast('Сотрудник удалён');V.staff()})};
 function staffForm(id){const s=id?staff.find(x=>x.id===id):{name:'',role:'',dept:'Продажи',email:'',phone:'',status:'В сети',plan:0,sales:0};
   modal({title:id?'Сотрудник':'Новый сотрудник',body:`<form class="form">${fld('s_n','Имя и фамилия',s.name,{full:1})}${fld('s_r','Должность',s.role)}${fld('s_d','Отдел',s.dept,{type:'select',opts:['Руководство','Продажи','Финансы','Склад','Маркетинг']})}${fld('s_e','Почта',s.email,{type:'email'})}${fld('s_p','Телефон',s.phone)}${fld('s_pl','План продаж, ₽',s.plan,{type:'number'})}${fld('s_st','Статус',s.status,{type:'select',opts:['В сети','Отсутствует','Не в сети']})}</form>`,
    foot:[{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Добавить',cls:'pri',fn:()=>{if(!val('s_n')){toast('Укажите имя');return}
     const o={name:val('s_n'),role:val('s_r')||'Сотрудник',dept:val('s_d'),email:val('s_e'),phone:val('s_p'),plan:+val('s_pl')||0,status:val('s_st')};
-    if(id)Object.assign(s,o);else{o.id=++nid;o.sales=0;o.color=COLORS[nid%8];staff.push(o)}log(`${id?'обновил(а)':'добавил(а)'} сотрудника «${o.name}»`);closeModal();toast('Сохранено');V.staff()}}]})}
+    if(id)Object.assign(s,o);else{o.id=++nid;o.sales=0;o.color=COLORS[nid%8];staff.push(o)}closeModal();toast('Сохранено');V.staff()}}]})}
 /* ===== Настройки ===== */
 const SET={tab:'company',n:{newDeal:true,task:true,miss:true,mail:false}};
 V.settings=()=>{
@@ -912,10 +958,10 @@ V.settings=()=>{
   const P={
    company:`<div class="form">${fld('c_n','Название компании',ME.company,{full:1})}${fld('c_ind','Сфера деятельности',ME.industry||INDS[0],{type:'select',opts:INDS})}${fld('c_i','ИНН',ME.inn)}${fld('c_c','Город',ME.city)}${fld('c_ph','Телефон компании',ME.cphone)}${fld('c_m','Почта компании',ME.cemail)}${fld('c_s','Сайт',ME.site)}${fld('c_a','Адрес',ME.addr,{full:1})}</div><div style="margin-top:16px"><button class="btn pri" data-act="saveSet">Сохранить</button></div><h4 style="margin:24px 0 8px">Источники клиентов и категории</h4><div class="form">${fld('c_src','Источники (через запятую)',SOURCES.join(', '),{full:1})}${fld('c_cat','Категории товаров (через запятую)',CATS.join(', '),{full:1})}</div><div style="margin-top:16px"><button class="btn pri" data-act="saveLists">Сохранить списки</button></div>`,
    profile:`<div class="form">${fld('u_l','Электронная почта',ME.login,{dis:1})}${fld('u_n','Имя и фамилия',ME.name)}${fld('u_r','Должность',ME.position)}${fld('u_e','Почта',ME.email,{type:'email'})}${fld('u_p','Телефон',ME.phone)}</div><div style="margin-top:16px"><button class="btn pri" data-act="saveSet">Сохранить</button> <button class="btn" data-act="chPw">Сменить пароль</button></div>`,
-   integr:`<div>${['tg','wa','mail'].map(k=>{const c=ME.ch[k];return `<div class="chrow"><span class="chb" style="background:${CH[k].c};width:30px;height:30px;font-size:14px">${CH[k].l}</span><div style="min-width:0"><b>${CHINFO[k].n}</b> <span class="pill ${c.on?'ok':'gray'}">${c.on?'Подключено':'Не подключено'}</span><div class="mut" style="font-size:12px;margin-top:2px">${c.on?esc(c.v):CHINFO[k].hint}</div>${c.on?'':`<input id="ch_${k}" placeholder="${CHINFO[k].ph}" style="margin-top:8px" aria-label="${CHINFO[k].lb}">`}</div>${c.on?`<button class="btn sm dng" data-act="chOff" data-k="${k}">Отключить</button>`:`<button class="btn sm pri" data-act="chOn" data-k="${k}">Подключить</button>`}</div>`}).join('')}</div><p class="mut">Подключённый канал появляется в разделе «Сообщения»: переписка ведётся в alfa + и сохраняется в карточке клиента. Токены и пароли не сохраняются. Автоматическая отправка и приём сообщений в Telegram и WhatsApp включатся вместе с серверной частью.</p>`,
+   integr:`<div>${['tg','wa','mail'].map(k=>{const c=ME.ch[k];return `<div class="chrow"><span class="chb" style="background:${CH[k].c};width:30px;height:30px;font-size:14px">${CH[k].l}</span><div style="min-width:0"><b>${CHINFO[k].n}</b> <span class="pill ${c.on?'ok':'gray'}">${c.on?'Подключено':'Не подключено'}</span><div class="mut" style="font-size:12px;margin-top:2px">${c.on?esc(c.v):CHINFO[k].hint}</div>${c.on?'':`<input id="ch_${k}" placeholder="${CHINFO[k].ph}" style="margin-top:8px" aria-label="${CHINFO[k].lb}">`}</div>${c.on?`<button class="btn sm dng" data-act="chOff" data-k="${k}">Отключить</button>`:`<button class="btn sm pri" data-act="chOn" data-k="${k}">Подключить</button>`}</div>`}).join('')}</div><p class="mut">Подключённый канал появляется в разделе «Сообщения»: переписка ведётся в alfa+ и сохраняется в карточке клиента. Токены и пароли не сохраняются. Автоматическая отправка и приём сообщений в Telegram и WhatsApp включатся вместе с серверной частью.</p>`,
    notif:`<div class="list">${sw('n','newDeal','Новые сделки','Сообщать о каждой новой заявке')}${sw('n','task','Задачи','Напоминать о сроках и просрочке')}${sw('n','miss','Пропущенные звонки','Мгновенное уведомление менеджеру')}${sw('n','mail','Ежедневный отчёт на почту','Сводка в 9:00')}</div>`,
    look:`<div class="row"><div class="grow"><b>Тема интерфейса</b><small>Сейчас: ${theme==='dark'?'тёмная':'светлая'}</small></div><div class="seg"><button data-act="th" data-t="dark" class="${theme==='dark'?'on':''}">Тёмная</button><button data-act="th" data-t="light" class="${theme==='light'?'on':''}">Светлая</button></div></div>`,
-   data:`<div class="list"><div class="row"><div class="grow"><b>Аккаунт: ${esc(ME.login)}</b><small>Вход защищён Supabase Auth</small></div><button class="btn" data-act="logout">Выйти</button></div><div class="row"><div class="grow"><b>Резервная копия</b><small>Скачайте файл со всеми данными аккаунта</small></div><button class="btn" data-act="backup">${ico('down')}Скачать</button></div><div class="row"><div class="grow"><b>Восстановить из копии</b><small>Заменит текущие данные содержимым файла</small></div><button class="btn" data-act="restoreFile">Выбрать файл</button></div><div class="row"><div class="grow"><b>Очистить все данные</b><small>Удалит клиентов, сделки, задачи, товары и остальное. Аккаунт останется.</small></div><button class="btn dng" data-act="askClear">Очистить</button></div></div><p class="mut"><b>Где хранятся данные.</b> Аккаунт и пароль хранятся в Supabase Auth. Рабочее пространство сохраняется в Supabase в записи crm_workspaces (поле data) и дополнительно кэшируется локально. Доступ между аккаунтами зависит от RLS-политик таблицы; серверные роли сотрудников пока не настроены.</p>`
+   data:`<div class="list"><div class="row"><div class="grow"><b>Аккаунт: ${esc(ME.login)}</b><small>Вход защищён Supabase Auth</small></div><button class="btn" data-act="logout">Выйти</button></div><div class="row"><div class="grow"><b>Резервная копия</b><small>Скачайте файл со всеми данными аккаунта</small></div><button class="btn" data-act="backup">${ico('down')}Скачать</button></div><div class="row"><div class="grow"><b>Восстановить из копии</b><small>Заменит текущие данные содержимым файла</small></div><button class="btn" data-act="restoreFile">Выбрать файл</button></div><div class="row"><div class="grow"><b>Очистить все данные</b><small>Удалит клиентов, сделки, задачи, товары и остальное. Аккаунт останется.</small></div><button class="btn dng" data-act="askClear">Очистить</button></div></div><p class="mut"><b>Где хранятся данные.</b> Аккаунт и пароль хранятся в Supabase Auth. Данные CRM пока сохраняются локально в этом браузере и на этом устройстве. Для синхронизации клиентов, сделок, задач и остальных разделов между устройствами потребуется отдельно подключить таблицы базы данных.</p>`
   };
   $('#view').innerHTML=`<div class="ph"><div><h1>Настройки</h1><p>Параметры компании и аккаунта</p></div></div><div class="card"><div class="tabs">${tabs.map(t=>`<button data-act="stab" data-t="${t[0]}" class="${SET.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}</div><div style="max-width:720px">${P[SET.tab]}</div></div>`;
 };
@@ -960,7 +1006,7 @@ async function saveWorkspaceCloud(silent=false){
   );
   cloudSaveBusy=false;
   if(error){
-    console.error('alfa + cloud workspace save:',error);
+    console.error('alfa+ cloud workspace save:',error);
     if(!silent)toast('Не удалось сохранить CRM в Supabase: '+(error.message||'ошибка'));
     return false;
   }
@@ -980,7 +1026,7 @@ async function loadClientsCloud(){
   cloudReady=false;
   const {data,error}=await sb.from('crm_workspaces').select('data').eq('user_id',CUR).maybeSingle();
   if(error){
-    console.error('alfa + cloud workspace load:',error);
+    console.error('alfa+ cloud workspace load:',error);
     toast('Не удалось загрузить облачные данные. Проверьте соединение и права Supabase.');
     cloudReady=true;
     return;
@@ -1010,7 +1056,7 @@ async function loadClientsCloud(){
 const INDS=['Торговля','Услуги','Производство','IT и разработка','Строительство','Образование','Медицина','Другое'];
 const SIZES=['Только я','2–5','6–15','16–50','Больше 50'];
 const SRC_ALL=['Сайт','Реклама','Рекомендация','Выставка','Холодный звонок','Соцсети','Яндекс Директ','Авито','Telegram-канал','Партнёры','Email-рассылка'];
-const pitch=()=>`<div class="auth-pitch"><div class="amark" role="img" aria-label="alfa +">alfa<i>+</i></div><h2>Все клиенты, сделки и задачи в одном месте</h2><p>CRM, которую вы настраиваете под свой бизнес за несколько минут.</p><ul><li>Воронка продаж и учёт клиентов</li><li>Задачи, звонки и переписка</li><li>Склад, финансы и аналитика, которая считается сама</li><li>Автоматизация рутины</li></ul></div>`;
+const pitch=()=>`<div class="auth-pitch"><div class="amark" role="img" aria-label="alfa+">alfa<i>+</i></div><h2>Все клиенты, сделки и задачи в одном месте</h2><p>CRM, которую вы настраиваете под свой бизнес за несколько минут.</p><ul><li>Воронка продаж и учёт клиентов</li><li>Задачи, звонки и переписка</li><li>Склад, финансы и аналитика, которая считается сама</li><li>Автоматизация рутины</li></ul></div>`;
 
 /* Подключение каналов связи */
 const CHINFO={tg:{n:'Telegram',lb:'Токен бота от @BotFather',ph:'123456789:AAH…',hint:'Создайте бота у @BotFather и вставьте токен'},wa:{n:'WhatsApp',lb:'Номер WhatsApp Business',ph:'+7 900 000-00-00',hint:'Номер, на который клиенты будут писать'},mail:{n:'Почта',lb:'Рабочая почта для переписки',ph:'sales@company.ru',hint:'Адрес, с которого вы общаетесь с клиентами'}};
@@ -1021,12 +1067,12 @@ function connectCh(k,v){v=(v||'').trim();
   log(`подключил(а) канал «${CHINFO[k].n}»`);return ''}
 const chOn=k=>!!ME.ch?.[k]?.on;
 const chList=()=>['tg','wa','mail'].filter(chOn);
-/* Правовые документы alfa +. Перед публикацией заполните сведения об операторе и инфраструктуре. */
+/* Правовые документы alfa+. Перед публикацией заполните сведения об операторе и инфраструктуре. */
 const LEGAL_VERSION='2026-11-12';
 const LEGAL_DOCS={
  privacy:{title:'Политика конфиденциальности и обработки персональных данных',html:`
  <p><b>Дата редакции:</b> 12 ноября 2026 года.</p><p><b>Оператор:</b> [указать полное ФИО физического лица или наименование ИП/организации, адрес и контактный e-mail]. До заполнения этих сведений документ не готов к публикации.</p>
- <h3>1. Общие положения</h3><p>Настоящая Политика описывает обработку персональных данных при использовании сервиса alfa + CRM (далее — Сервис). Оператор обрабатывает данные в соответствии с применимым законодательством РФ, включая Федеральный закон № 152-ФЗ «О персональных данных».</p><p>Политика относится к данным посетителей и зарегистрированных пользователей. Если пользователь вносит в CRM данные своих клиентов, сотрудников или иных лиц, пользователь самостоятельно определяет законное основание такой обработки и обязан информировать этих лиц. Оператор alfa + обрабатывает такие сведения в рамках предоставления Сервиса и на условиях отдельного поручения/договора обработки, который должен быть оформлен до промышленного запуска.</p>
+ <h3>1. Общие положения</h3><p>Настоящая Политика описывает обработку персональных данных при использовании сервиса alfa+ CRM (далее — Сервис). Оператор обрабатывает данные в соответствии с применимым законодательством РФ, включая Федеральный закон № 152-ФЗ «О персональных данных».</p><p>Политика относится к данным посетителей и зарегистрированных пользователей. Если пользователь вносит в CRM данные своих клиентов, сотрудников или иных лиц, пользователь самостоятельно определяет законное основание такой обработки и обязан информировать этих лиц. Оператор alfa+ обрабатывает такие сведения в рамках предоставления Сервиса и на условиях отдельного поручения/договора обработки, который должен быть оформлен до промышленного запуска.</p>
  <h3>2. Какие данные обрабатываются</h3><ul><li>Для регистрации и входа: имя, фамилия, номер телефона, адрес электронной почты, идентификатор аккаунта и технические данные аутентификации. Пароль передаётся сервису аутентификации и не должен сохраняться Оператором в открытом виде.</li><li>Для работы CRM: данные, которые пользователь самостоятельно вносит в рабочее пространство, включая сведения о клиентах, сделках, задачах, сотрудниках, товарах и коммуникациях. Пользователь должен вносить только данные, необходимые для его деловой цели.</li><li>Технические сведения: сведения о сессии, настройках интерфейса, событиях безопасности и журналов, если они формируются используемыми компонентами. Браузер также обращается к внешним ресурсам, используемым в коде (Google Fonts и CDN jsDelivr для библиотеки Supabase); их поставщики могут получать технические данные запроса, например IP-адрес и сведения о браузере.</li></ul><p>Не запрашиваются намеренно специальные категории персональных данных (например, сведения о здоровье, политических взглядах или интимной жизни), биометрические данные, паспортные данные и платёжные реквизиты. Не размещайте такие сведения в CRM, если для этого нет отдельного законного основания и согласованного процесса.</p>
  <h3>3. Цели и основания обработки</h3><ul><li>создание аккаунта, аутентификация и обеспечение доступа к Сервису;</li><li>предоставление функций CRM, сохранение рабочего пространства и синхронизация данных;</li><li>обеспечение безопасности, предотвращение злоупотреблений, диагностика ошибок и поддержка;</li><li>исполнение договора с пользователем и соблюдение обязательных требований закона.</li></ul><p>Основания: заключение и исполнение договора, обязанности по закону, а для тех операций, где это требуется, отдельное согласие субъекта персональных данных.</p>
  <h3>4. Действия с данными и минимизация</h3><p>Оператор может осуществлять сбор, запись, систематизацию, накопление, хранение, уточнение, использование, передачу уполномоченным обработчикам, блокирование и удаление данных. Состав данных ограничивается целями Сервиса. Пользователю не следует вносить избыточные сведения.</p>
@@ -1035,9 +1081,9 @@ const LEGAL_DOCS={
  <h3>7. Права субъекта</h3><p>Субъект вправе запросить сведения об обработке, потребовать уточнения, блокирования или удаления данных, а также отозвать согласие, если обработка основана на согласии. Запрос направляется на [указать рабочий e-mail Оператора]. Отзыв согласия не влияет на законность обработки до его получения и не исключает обработку на иных законных основаниях.</p>
  <h3>8. Защита данных</h3><p>Оператор обязан принимать необходимые правовые, организационные и технические меры защиты. Фактические меры, ответственные лица, порядок реагирования на инциденты и уровень защищённости должны быть определены и документированы отдельно. Наличие этой Политики само по себе не подтверждает выполнение таких мер.</p>
  <h3>9. Контакты и изменения</h3><p>Контакт Оператора: [указать e-mail и почтовый адрес]. Политика может обновляться; актуальная редакция публикуется на странице Сервиса с датой изменения.</p>`},
- terms:{title:'Условия использования alfa + CRM',html:`
+ terms:{title:'Условия использования alfa+ CRM',html:`
  <p><b>Дата редакции:</b> 12 ноября 2026 года. <b>Правообладатель/исполнитель:</b> [указать полное ФИО или наименование, адрес и контакты].</p>
- <h3>1. Предмет</h3><p>alfa + CRM — программный сервис для организации работы с клиентами, сделками, задачами и иными бизнес-данными. Условия регулируют доступ к Сервису и его использование.</p>
+ <h3>1. Предмет</h3><p>alfa+ CRM — программный сервис для организации работы с клиентами, сделками, задачами и иными бизнес-данными. Условия регулируют доступ к Сервису и его использование.</p>
  <h3>2. Аккаунт</h3><p>Пользователь обязан предоставлять достоверные регистрационные данные, обеспечивать конфиденциальность учётных данных и незамедлительно сообщать о подозрении на несанкционированный доступ. Пользователь отвечает за действия, совершённые через его аккаунт, если иное не установлено законом.</p>
  <h3>3. Допустимое использование</h3><p>Запрещается использовать Сервис для нарушения закона, прав третьих лиц, рассылки спама, загрузки вредоносного кода, попыток обхода защиты или несанкционированного доступа. Пользователь обязуется иметь законное основание для внесения и обработки персональных данных третьих лиц.</p>
  <h3>4. Данные пользователя</h3><p>Пользователь сохраняет права на загружаемые им данные и отвечает за их законность, точность, наличие необходимых уведомлений и согласий. Пользователь должен вносить только данные, необходимые для конкретной деловой цели, и не загружать специальные категории или биометрические данные без отдельной правовой оценки.</p>
@@ -1049,7 +1095,7 @@ const LEGAL_DOCS={
  <h3>10. Заключительные положения</h3><p>До публикации Оператор должен заполнить сведения о себе, определить тарифы и порядок оплаты (если применимо), а также проверить согласованность Условий с фактической работой Сервиса.</p>`},
  cookies:{title:'Политика использования Cookie и локального хранилища',html:`
  <p><b>Дата редакции:</b> 12 ноября 2026 года. Оператор: [указать сведения Оператора и контакт].</p>
- <h3>1. Что используется сейчас</h3><p>По текущему коду alfa + не подключены рекламные cookie-файлы и сторонние системы веб-аналитики. Для работы интерфейса и входа используются необходимые технологии браузера: localStorage/session storage и механизмы хранения сессии библиотеки Supabase. В localStorage могут храниться выбранная тема интерфейса и локальная копия рабочего пространства (в том числе данные, которые пользователь внёс в CRM); библиотека авторизации может сохранять токен сессии. Это не обязательно cookie-файлы, но относится к технологиям хранения данных на устройстве.</p>
+ <h3>1. Что используется сейчас</h3><p>По текущему коду alfa+ не подключены рекламные cookie-файлы и сторонние системы веб-аналитики. Для работы интерфейса и входа используются необходимые технологии браузера: localStorage/session storage и механизмы хранения сессии библиотеки Supabase. В localStorage могут храниться выбранная тема интерфейса и локальная копия рабочего пространства (в том числе данные, которые пользователь внёс в CRM); библиотека авторизации может сохранять токен сессии. Это не обязательно cookie-файлы, но относится к технологиям хранения данных на устройстве.</p>
  <h3>2. Цели</h3><p>Эти технологии необходимы для входа в аккаунт, сохранения настроек, поддержания сессии и работы CRM. При отключении необходимого хранения некоторые функции Сервиса могут не работать.</p>
  <h3>3. Необязательные технологии</h3><p>На дату редакции необязательные аналитические и рекламные cookie не заявлены и не должны устанавливаться без отдельного информирования и получения требуемого согласия. Внешние Google Fonts и CDN jsDelivr загружаются как сторонние ресурсы; передача технических данных при их загрузке должна быть отдельно оценена Оператором, в том числе с учётом требований локализации и трансграничной передачи. Если в будущем будут добавлены аналитика, реклама, пиксели или иные необязательные технологии, Политика и интерфейс выбора должны быть обновлены до их включения.</p>
  <h3>4. Управление</h3><p>Пользователь может ограничить хранение в настройках браузера. Удаление локального хранилища может привести к выходу из аккаунта, сбросу темы или потере несинхронизированных локальных изменений. Согласие на необязательные cookie не запрашивается, пока такие технологии не используются.</p>
@@ -1057,7 +1103,7 @@ const LEGAL_DOCS={
  pd:{title:'Согласие на обработку персональных данных',html:`
  <p><b>Оператор:</b> [указать полное ФИО/наименование, адрес и контактный e-mail]. <b>Версия:</b> 12.11.2026.</p>
  <p>Я, субъект персональных данных, свободно, своей волей и в своём интересе даю Оператору согласие на обработку следующих данных: имя, фамилия, номер телефона, адрес электронной почты, идентификатор аккаунта и технические сведения, необходимые для аутентификации и безопасности. Пароль обрабатывается сервисом аутентификации в защищённом виде; Оператор не должен получать или хранить его в открытом виде.</p>
- <p><b>Цели:</b> регистрация и идентификация пользователя, создание и защита аккаунта, предоставление доступа к функциям alfa + CRM, сохранение рабочего пространства, синхронизация данных, техническая поддержка и обеспечение безопасности.</p>
+ <p><b>Цели:</b> регистрация и идентификация пользователя, создание и защита аккаунта, предоставление доступа к функциям alfa+ CRM, сохранение рабочего пространства, синхронизация данных, техническая поддержка и обеспечение безопасности.</p>
  <p><b>Операции:</b> сбор, запись, систематизация, накопление, хранение, уточнение, использование, передача уполномоченным обработчикам в объёме, необходимом для работы Сервиса, блокирование и удаление.</p>
  <p><b>Срок:</b> до достижения целей обработки или прекращения использования аккаунта, если более длительное хранение не требуется законом; конкретные сроки удаления и резервного копирования должны быть установлены Оператором.</p>
  <p>Согласие может быть отозвано обращением на [указать e-mail Оператора]. Отзыв может повлечь невозможность дальнейшего предоставления функций, для которых данные необходимы. Оператор вправе продолжить обработку при наличии иного законного основания.</p>
@@ -1069,7 +1115,7 @@ function showCookieNotice(){
  const auth=document.getElementById('auth');if(cookieSeen||!auth||auth.hidden){document.getElementById('cookieBanner')?.remove();return}
  if(document.getElementById('cookieBanner'))return;
  const b=document.createElement('section');b.className='cookie-banner';b.id='cookieBanner';b.setAttribute('role','region');b.setAttribute('aria-label','Уведомление об использовании cookie');
- b.innerHTML='<div><b>Мы используем cookie-файлы</b><p>alfa + использует необходимые cookie и похожие технологии хранения, чтобы обеспечивать вход в аккаунт, сохранять настройки и поддерживать работу CRM. Рекламные и необязательные аналитические cookie сейчас не используются. Нажимая «Принять», вы подтверждаете, что ознакомились с уведомлением. <button type="button" class="link" data-legal="cookies">Политика Cookie</button></p></div><div class="cookie-actions"><button type="button" class="btn pri" id="cookieAccept">Принять</button></div>';
+ b.innerHTML='<div><b>Мы используем cookie-файлы</b><p>alfa+ использует необходимые cookie и похожие технологии хранения, чтобы обеспечивать вход в аккаунт, сохранять настройки и поддерживать работу CRM. Рекламные и необязательные аналитические cookie сейчас не используются. Нажимая «Принять», вы подтверждаете, что ознакомились с уведомлением. <button type="button" class="link" data-legal="cookies">Политика Cookie</button></p></div><div class="cookie-actions"><button type="button" class="btn pri" id="cookieAccept">Принять</button></div>';
  document.body.appendChild(b);document.getElementById('cookieAccept').onclick=()=>{try{localStorage.setItem(key,JSON.stringify({acknowledged:true,at:new Date().toISOString(),version:LEGAL_VERSION}))}catch(e){}b.remove()};
 }
 function initLegalUi(){
@@ -1086,7 +1132,7 @@ function authMessage(e){
 }
 function showAuth(mode='login',notice=''){
   $('#app').hidden=true;const a=$('#auth');a.hidden=false;a.className='auth';const reg=mode==='reg';
-  a.innerHTML=`<div class="auth-box">${pitch()}<form class="auth-form" id="af" novalidate><h2>${reg?'Создайте аккаунт':'Вход в alfa +'}</h2><p class="mut" style="margin:0">${reg?'Для регистрации нужны только имя, фамилия, телефон, почта и пароль.':'Введите электронную почту и пароль от вашего аккаунта.'}</p>${reg?fld('r_first','Имя','',{ph:'Иван'})+fld('r_last','Фамилия','',{ph:'Иванов'})+fld('r_phone','Телефон','',{type:'tel',ph:'+7 900 000-00-00'}):''}${fld('r_email','Электронная почта','',{type:'email',ph:'name@example.com'})}${fld('r_pass','Пароль','',{type:'password',ph:reg?'Не короче 6 символов':''})}${reg?fld('r_pass2','Повторите пароль','',{type:'password'})+`<label class="legal-check"><input id="r_terms" type="checkbox" required><span>Принимаю <a href="#" data-legal="terms">Условия использования</a> и подтверждаю ознакомление с <a href="#" data-legal="privacy">Политикой конфиденциальности</a>.</span></label><label class="legal-check"><input id="r_pd" type="checkbox" required><span>Даю отдельное согласие на обработку моих персональных данных в целях регистрации и предоставления доступа к CRM согласно <a href="#" data-legal="pd">Согласию на обработку персональных данных</a>.</span></label>`:''}<div class="err" id="aerr" role="alert">${esc(notice)}</div><button class="btn pri" style="justify-content:center">${reg?'Создать аккаунт':'Войти'}</button><div class="mut" style="text-align:center">${reg?'Уже есть аккаунт? <button type="button" class="link" id="asw">Войти</button>':'Нет аккаунта? <button type="button" class="link" id="asw">Зарегистрироваться</button>'}</div><div class="legal-links"><button type="button" data-legal="privacy">Политика конфиденциальности</button><button type="button" data-legal="terms">Условия использования</button><button type="button" data-legal="cookies">Политика Cookie</button></div></form></div>`;
+  a.innerHTML=`<div class="auth-box">${pitch()}<form class="auth-form" id="af" novalidate><h2>${reg?'Создайте аккаунт':'Вход в alfa+'}</h2><p class="mut" style="margin:0">${reg?'Для регистрации нужны только имя, фамилия, телефон, почта и пароль.':'Введите электронную почту и пароль от вашего аккаунта.'}</p>${reg?fld('r_first','Имя','',{ph:'Иван'})+fld('r_last','Фамилия','',{ph:'Иванов'})+fld('r_phone','Телефон','',{type:'tel',ph:'+7 900 000-00-00'}):''}${fld('r_email','Электронная почта','',{type:'email',ph:'name@example.com'})}${fld('r_pass','Пароль','',{type:'password',ph:reg?'Не короче 6 символов':''})}${reg?fld('r_pass2','Повторите пароль','',{type:'password'})+`<label class="legal-check"><input id="r_terms" type="checkbox" required><span>Принимаю <a href="#" data-legal="terms">Условия использования</a> и подтверждаю ознакомление с <a href="#" data-legal="privacy">Политикой конфиденциальности</a>.</span></label><label class="legal-check"><input id="r_pd" type="checkbox" required><span>Даю отдельное согласие на обработку моих персональных данных в целях регистрации и предоставления доступа к CRM согласно <a href="#" data-legal="pd">Согласию на обработку персональных данных</a>.</span></label>`:''}<div class="err" id="aerr" role="alert">${esc(notice)}</div><button class="btn pri" style="justify-content:center">${reg?'Создать аккаунт':'Войти'}</button><div class="mut" style="text-align:center">${reg?'Уже есть аккаунт? <button type="button" class="link" id="asw">Войти</button>':'Нет аккаунта? <button type="button" class="link" id="asw">Зарегистрироваться</button>'}</div><div class="legal-links"><button type="button" data-legal="privacy">Политика конфиденциальности</button><button type="button" data-legal="terms">Условия использования</button><button type="button" data-legal="cookies">Политика Cookie</button></div></form></div>`;
   showCookieNotice();
   $('#asw').onclick=()=>showAuth(reg?'login':'reg');
   $('#af').onsubmit=async e=>{e.preventDefault();const btn=$('#af').querySelector('button[type="submit"],button:not([type])');const err=t=>{$('#aerr').textContent=t};
@@ -1152,7 +1198,7 @@ function finishOB(){
   ME.onboarded=true;flush();if(cloudReady)scheduleWorkspaceSync();startApp();toast('Готово! Добавьте первого клиента');
 }
 /* Резервная копия */
-A.backup=()=>{try{downloadBlob(`alfa-plus-${iso(0)}.json`,snap(),'application/json;charset=utf-8');toast('Резервная копия сохранена')}catch(e){toast('Не удалось создать резервную копию')}};
+A.backup=async()=>{const d=await claude.use('downloads');if(!d){toast('Скачивание недоступно в этом окне');return}try{await d.save({filename:`alfa-${ME.login}-${iso(0)}.json`,data:snap()});toast('Резервная копия сохранена')}catch(e){toast('Сохранение отменено')}};
 A.restoreFile=()=>$('#rfile').click();
 /* Запуск */
 async function init(){
@@ -1162,46 +1208,13 @@ async function init(){
   $('#bellBtn').onclick=e=>{e.stopPropagation();drawBell();const p=$('#bellPop');p.hidden=!p.hidden};
   $('#meBtn').onclick=e=>{e.stopPropagation();const p=$('#mePop');p.hidden=!p.hidden};
   $('#gs').oninput=e=>gsearch(e.target.value);$('#gs').onfocus=e=>gsearch(e.target.value);
-  $('#rfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.lists)throw 0;const lg=ME.login,em=ME.email;restore(r.result);resetME({...ME,login:lg,onboarded:true});flush();paintShell();drawNav();toast('Данные восстановлены');go('home')}catch(x){toast('Файл не похож на резервную копию alfa +')}};r.readAsText(f);e.target.value=''};
+  $('#rfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.lists)throw 0;const lg=ME.login,em=ME.email;restore(r.result);resetME({...ME,login:lg,onboarded:true});flush();paintShell();drawNav();toast('Данные восстановлены');go('home')}catch(x){toast('Файл не похож на резервную копию alfa+')}};r.readAsText(f);e.target.value=''};
   window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&h!==cur&&!$('#app').hidden)go(h)});
   ['home','analytics','staff','finance'].forEach(k=>{const f=V[k];V[k]=()=>{recompute();f()}});
   window.addEventListener('pagehide',flush);
   setTheme(theme);
   try{const {data,error}=await sb.auth.getSession();if(error)throw error;if(data.session?.user)openSession(data.session.user);else showAuth('login')}catch(e){showAuth('login','Не удалось подключиться к Supabase: '+authMessage(e))}
 }
-
-/* ===== alfa +: календарь, журнал аудита, корзина, экспорт ===== */
-function downloadBlob(name,data,type='text/plain;charset=utf-8'){const blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200)}
-function csvEscape(v){const s=String(v??'');return '"'+s.replace(/"/g,'""')+'"'}
-function exportCSV(name,headers,rows){const csv='\uFEFF'+[headers,...rows].map(r=>r.map(csvEscape).join(';')).join('\r\n');downloadBlob(`alfa-plus-${name}-${iso(0)}.csv`,csv,'text/csv;charset=utf-8')}
-A.csvClients=()=>exportCSV('clients',['ID','Имя','Телефон','Email','Компания','Источник','Статус','Менеджер','Добавлен'],clients.map(c=>[c.id,c.name,c.phone,c.email,c.company,c.source,c.status,mgrOf(c.mgr).name,c.added]));
-A.csvDeals=()=>exportCSV('deals',['ID','Название','Клиент','Сумма','Этап','Менеджер','Создана','Закрыта'],deals.map(d=>[d.id,d.title,cliOf(d.cid)?.name||'',d.sum,STAGES.find(x=>x.id===d.stage)?.name||d.stage,mgrOf(d.mgr).name,d.created,d.closed||'']));
-A.csvTasks=()=>exportCSV('tasks',['ID','Задача','Описание','Исполнитель','Срок','Приоритет','Статус','Клиент'],tasks.map(t=>[t.id,t.title,t.desc,mgrOf(t.mgr).name,t.due,t.prio,t.status,cliOf(t.cid)?.name||'']));
-A.csvProducts=()=>exportCSV('products',['ID','Название','Артикул','Категория','Цена','Количество'],products.map(p=>[p.id,p.name,p.sku,p.cat,p.price,p.qty]));
-A.csvFinance=()=>exportCSV('finance',['ID','Дата операции','Дата оплаты','Описание','Тип','Категория','Сумма','Статус'],fin.map(f=>[f.id,f.date,f.paidAt||'',f.t,f.type,f.cat,f.sum,f.st]));
-A.print=()=>window.print();
-function trashItem(type,obj,label){const arr=LISTS[type];if(!arr||!obj)return;const idx=arr.indexOf(obj);if(idx<0)return;trash.unshift({id:++nid,type,label:label+': '+(obj.title||obj.name||obj.t||obj.id),deletedAt:new Date().toISOString(),payload:JSON.parse(JSON.stringify(obj))});arr.splice(idx,1);log(`переместил(а) в корзину: ${label}`)}
-function restoreTrashItem(item){if(item.type==='client_bundle'){const p=item.payload;if(p.client&&!clients.some(x=>x.id===p.client.id))clients.push(p.client);Object.entries(p.related||{}).forEach(([k,rows])=>{if(LISTS[k])rows.forEach(x=>{if(x.id==null||!LISTS[k].some(y=>y.id===x.id))LISTS[k].push(x)})})}else if(LISTS[item.type]){const arr=LISTS[item.type];if(!arr.some(x=>x.id===item.payload.id))arr.push(item.payload)}trash.splice(trash.indexOf(item),1);log(`восстановил(а): ${item.label}`);persist()}
-A.trashRestore=b=>{const x=trash.find(t=>t.id==b.dataset.id);if(x){restoreTrashItem(x);toast('Элемент восстановлен');V.trash()}};
-A.trashDelete=b=>{const x=trash.find(t=>t.id==b.dataset.id);if(!x)return;confirmBox('Удалить элемент из корзины навсегда? Это действие нельзя отменить.',()=>{trash.splice(trash.indexOf(x),1);log(`окончательно удалил(а): ${x.label}`);persist();V.trash()})};
-A.trashClear=()=>confirmBox('Окончательно удалить все элементы из корзины?',()=>{trash.length=0;log('очистил(а) корзину');persist();V.trash()},'Удалить навсегда');
-V.trash=()=>{$('#view').innerHTML=`<div class="ph"><div><h1>Корзина</h1><p>Удалённые элементы можно восстановить, пока они находятся здесь</p></div><div class="acts">${trash.length?'<button class="btn dng" data-act="trashClear">Очистить корзину</button>':''}</div></div><div class="card">${trash.length?trash.slice().sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt)).map(x=>`<div class="trash-row"><div class="grow"><b>${esc(x.label)}</b><small class="mut" style="display:block">${esc(x.type)} · ${new Date(x.deletedAt).toLocaleString('ru-RU')}</small></div><button class="btn sm" data-act="trashRestore" data-id="${x.id}">Восстановить</button><button class="btn sm dng" data-act="trashDelete" data-id="${x.id}">Удалить навсегда</button></div>`).join(''):'<div class="empty">Корзина пуста</div>'}</div>`};
-V.audit=()=>{$('#view').innerHTML=`<div class="ph"><div><h1>Журнал действий</h1><p>История действий, зафиксированных в этом рабочем пространстве · последние 500 записей</p></div><div class="acts"><button class="btn" data-act="csvAudit">Экспорт CSV</button></div></div><div class="card">${audit.length?audit.slice().sort((a,b)=>b.at.localeCompare(a.at)).map(x=>`<div class="audit-item"><i class="audit-dot"></i><div><b>${esc(x.t)}</b><small class="mut" style="display:block">${esc(mgrOf(x.mgr).name||'Пользователь')}</small></div><small class="mut">${new Date(x.at).toLocaleString('ru-RU')}</small></div>`).join(''):'<div class="empty">Журнал начнёт заполняться после действий в CRM</div>'}</div>`};
-A.csvStaff=()=>exportCSV('staff',['ID','Имя','Должность','Отдел','Email','Телефон','Статус','План','Продажи'],staff.map(x=>[x.id,x.name,x.role,x.dept,x.email,x.phone,x.status,x.plan,x.sales]));
-A.csvAudit=()=>exportCSV('audit',['ID','Дата','Пользователь','Действие'],audit.map(x=>[x.id,x.at,mgrOf(x.mgr).name,x.t]));
-const CAL={mode:'month',offset:0};
-function calendarBase(){const d=new Date(TODAY);if(CAL.mode==='month'){d.setDate(1);d.setMonth(d.getMonth()+CAL.offset)}else if(CAL.mode==='week'){d.setDate(d.getDate()-((d.getDay()+6)%7)+CAL.offset*7)}else d.setDate(d.getDate()+CAL.offset);return d}
-function dayKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function calTasksFor(ds){return tasks.filter(t=>t.due===ds).sort((a,b)=>a.prio==='Высокий'?-1:b.prio==='Высокий'?1:a.title.localeCompare(b.title))}
-V.calendar=()=>{const base=calendarBase(),title=CAL.mode==='month'?base.toLocaleDateString('ru-RU',{month:'long',year:'numeric'}):CAL.mode==='week'?`${base.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})} — ${new Date(base.getTime()+6*86400000).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'})}`:base.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});let body='';
-if(CAL.mode==='month'){const lead=(base.getDay()+6)%7,days=new Date(base.getFullYear(),base.getMonth()+1,0).getDate(),cells=Math.ceil((lead+days)/7)*7;body='<div class="cal">'+['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>`<div class="h">${x}</div>`).join('');for(let i=0;i<cells;i++){const n=i-lead+1,ok=n>=1&&n<=days,ds=ok?dayKey(new Date(base.getFullYear(),base.getMonth(),n)):'';body+=`<div class="d ${ok?'':'o'} ${ds===iso(0)?'t':''}"><span>${ok?n:''}</span>${ok?calTasksFor(ds).slice(0,3).map(t=>`<button class="ev ${t.prio==='Высокий'?'hi':''}" data-act="task" data-id="${t.id}">${esc(t.title)}</button>`).join('')+(calTasksFor(ds).length>3?`<small class="mut">+${calTasksFor(ds).length-3}</small>`:''):''}</div>`}body+='</div>'}
-else{const count=CAL.mode==='week'?7:1;body='<div class="cal-list">';for(let i=0;i<count;i++){const d=new Date(base);d.setDate(d.getDate()+i);const ds=dayKey(d),items=calTasksFor(ds);body+=`<section class="card"><h3>${d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}<span class="pill gray">${items.length} задач</span></h3>${items.length?items.map(t=>`<button class="cal-event" data-act="task" data-id="${t.id}"><span class="date"><b>${d.getDate()}</b><small>${d.toLocaleDateString('ru-RU',{month:'short'})}</small></span><span class="grow"><b>${esc(t.title)}</b><small class="mut" style="display:block">${esc(mgrOf(t.mgr).name)} · ${t.status} · ${t.prio}</small></span><span class="pill ${t.status==='Выполнена'?'ok':'info'}">${t.status}</span></button>`).join(''):'<div class="mut">Нет задач на этот день</div>'}</section>`}body+='</div>'}
-$('#view').innerHTML=`<div class="ph"><div><h1>Календарь</h1><p>Планирование задач по дням, неделям и месяцам</p></div><div class="acts"><button class="btn pri" data-act="newTask">${ico('plus')}Новая задача</button></div></div><div class="tools"><button class="btn sm" data-act="calMove" data-d="-1">‹</button><b style="min-width:220px;text-align:center">${title}</b><button class="btn sm" data-act="calMove" data-d="1">›</button><button class="btn sm" data-act="calToday">Сегодня</button><div class="spacer"></div><div class="seg">${[['day','День'],['week','Неделя'],['month','Месяц']].map(([m,l])=>`<button data-act="calMode" data-m="${m}" class="${CAL.mode===m?'on':''}">${l}</button>`).join('')}</div></div>${body}`};
-A.calMode=b=>{CAL.mode=b.dataset.m;CAL.offset=0;V.calendar()};A.calMove=b=>{CAL.offset+=+b.dataset.d;V.calendar()};A.calToday=()=>{CAL.offset=0;V.calendar()};
-// Keyboard shortcut: focus the existing cross-module search without interfering with text inputs.
-const oldKeydownHandler=null;
-document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();const q=$('#gs');if(q){q.focus();q.select()}}if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='p'){e.preventDefault();window.print()}});
-
 init();
 </script>
 
