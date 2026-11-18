@@ -1059,9 +1059,89 @@ th.r,td.r{text-align:right}
 </style>
 
 <style id="alfa-button-hover-effects">
-/* Микроанимации интерактивных кнопок alfa+ */
-button,
-[role="button"] {
+/* Анимация применяется к кнопкам внутри CRM и её диалоговых окон.
+   Экран входа и остальные элементы проекта не затрагиваются. */
+#app button:not(:disabled):not([aria-disabled="true"]),
+#app [role="button"]:not([aria-disabled="true"]),
+#layer button:not(:disabled):not([aria-disabled="true"]),
+#layer [role="button"]:not([aria-disabled="true"]) {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform .2s cubic-bezier(.2,.8,.2,1),
+    box-shadow .22s ease,
+    background-color .22s ease,
+    border-color .22s ease,
+    color .22s ease,
+    filter .22s ease !important;
+}
+#app button:not(:disabled):not([aria-disabled="true"]):hover,
+#app [role="button"]:not([aria-disabled="true"]):hover,
+#layer button:not(:disabled):not([aria-disabled="true"]):hover,
+#layer [role="button"]:not([aria-disabled="true"]):hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.045);
+  box-shadow: 0 6px 16px rgba(0,0,0,.11);
+}
+#app .btn.pri:not(:disabled):hover,
+#layer .btn.pri:not(:disabled):hover {
+  box-shadow: 0 8px 22px rgba(70,110,255,.24);
+}
+#app button:not(:disabled):not([aria-disabled="true"]):active,
+#app [role="button"]:not([aria-disabled="true"]):active,
+#layer button:not(:disabled):not([aria-disabled="true"]):active,
+#layer [role="button"]:not([aria-disabled="true"]):active {
+  transform: translateY(0) scale(.97) !important;
+  filter: brightness(.98);
+  box-shadow: none;
+  transition-duration: .08s !important;
+}
+#app button:disabled,
+#app button[aria-disabled="true"],
+#app [role="button"][aria-disabled="true"],
+#layer button:disabled,
+#layer button[aria-disabled="true"],
+#layer [role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+  box-shadow: none;
+}
+#app button svg,
+#app [role="button"] svg,
+#layer button svg,
+#layer [role="button"] svg {
+  transition: transform .2s ease;
+}
+#app button:not(:disabled):hover svg,
+#app [role="button"]:not([aria-disabled="true"]):hover svg,
+#layer button:not(:disabled):hover svg,
+#layer [role="button"]:not([aria-disabled="true"]):hover svg {
+  transform: scale(1.08);
+}
+#app button:focus-visible,
+#app [role="button"]:focus-visible,
+#layer button:focus-visible,
+#layer [role="button"]:focus-visible {
+  outline: 2px solid var(--acc, #668cff);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  #app button, #app [role="button"], #app button svg,
+  #layer button, #layer [role="button"], #layer button svg {
+    transition: none !important;
+  }
+  #app button:hover, #app [role="button"]:hover,
+  #layer button:hover, #layer [role="button"]:hover {
+    transform: none !important;
+  }
+}
+</style>
+
+
+<style id="alfa-login-button-hover-effects">
+/* Возвращены микроанимации кнопок на странице входа и регистрации. */
+#auth button:not(:disabled):not([aria-disabled="true"]),
+#auth [role="button"]:not([aria-disabled="true"]) {
   -webkit-tap-highlight-color: transparent;
   transition:
     transform .18s cubic-bezier(.2,.8,.2,1),
@@ -1072,53 +1152,40 @@ button,
     opacity .2s ease,
     filter .2s ease;
 }
-button:not(:disabled):not([aria-disabled="true"]):hover,
-[role="button"]:not([aria-disabled="true"]):hover {
+#auth button:not(:disabled):not([aria-disabled="true"]):hover,
+#auth [role="button"]:not([aria-disabled="true"]):hover {
   transform: translateY(-2px);
   filter: brightness(1.045);
 }
-button:not(:disabled):not([aria-disabled="true"]):active,
-[role="button"]:not([aria-disabled="true"]):active {
+#auth button:not(:disabled):not([aria-disabled="true"]):active,
+#auth [role="button"]:not([aria-disabled="true"]):active {
   transform: translateY(0) scale(.97);
   filter: brightness(.98);
   transition-duration: .08s;
 }
-button:disabled,
-button[aria-disabled="true"],
-[role="button"][aria-disabled="true"] {
-  cursor: not-allowed;
-  filter: none;
-  transform: none;
-}
-.btn:not(:disabled):not([aria-disabled="true"]):hover,
-.ibtn:not(:disabled):not([aria-disabled="true"]):hover,
-.pri:not(:disabled):not([aria-disabled="true"]):hover {
+#auth button:not(:disabled):hover,
+#auth [role="button"]:not([aria-disabled="true"]):hover {
   box-shadow: 0 7px 18px rgba(0,0,0,.12);
 }
-.btn.pri:not(:disabled):hover {
-  box-shadow: 0 8px 22px rgba(70,110,255,.24);
-}
-button svg,
-[role="button"] svg {
+#auth button svg,
+#auth [role="button"] svg {
   transition: transform .2s ease;
 }
-button:not(:disabled):hover svg,
-[role="button"]:not([aria-disabled="true"]):hover svg {
+#auth button:not(:disabled):hover svg,
+#auth [role="button"]:not([aria-disabled="true"]):hover svg {
   transform: scale(1.08);
 }
-button:focus-visible,
-[role="button"]:focus-visible {
+#auth button:focus-visible,
+#auth [role="button"]:focus-visible {
   outline: 2px solid var(--accent, #668cff);
   outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
-  button, [role="button"], button svg, [role="button"] svg {
+  #auth button, #auth [role="button"], #auth button svg, #auth [role="button"] svg {
     transition: none !important;
   }
-  button:not(:disabled):hover,
-  [role="button"]:not([aria-disabled="true"]):hover,
-  button:not(:disabled):active,
-  [role="button"]:not([aria-disabled="true"]):active {
+  #auth button:hover, #auth [role="button"]:hover,
+  #auth button:active, #auth [role="button"]:active {
     transform: none;
   }
 }
