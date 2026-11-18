@@ -1191,6 +1191,59 @@ th.r,td.r{text-align:right}
 }
 </style>
 
+
+<style id="alfa-sidebar-button-hover-effects">
+/* Дополнительная выразительная анимация кнопок боковой панели. */
+#app .side .nav button {
+  transition:
+    transform .2s cubic-bezier(.2,.8,.2,1),
+    background-color .22s ease,
+    color .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease !important;
+  transform-origin: left center;
+}
+#app .side .nav button:hover {
+  transform: translate3d(3px,-1px,0) !important;
+  background: var(--accsoft) !important;
+  color: var(--fg) !important;
+  box-shadow: 0 5px 14px rgba(0,0,0,.09) !important;
+  filter: brightness(1.045);
+}
+#app .side .nav button:active {
+  transform: translate3d(1px,0,0) scale(.98) !important;
+  box-shadow: none !important;
+  transition-duration: .08s !important;
+}
+#app .side .nav button svg {
+  transition: transform .2s cubic-bezier(.2,.8,.2,1), color .2s ease !important;
+}
+#app .side .nav button:hover svg {
+  transform: scale(1.12) !important;
+}
+#app .side .nav button.on {
+  box-shadow: inset 3px 0 0 var(--acc) !important;
+}
+#app .side .legal-side button {
+  transition: transform .2s ease, color .2s ease, background-color .2s ease !important;
+}
+#app .side .legal-side button:hover {
+  transform: translateX(3px) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #app .side .nav button,
+  #app .side .nav button svg,
+  #app .side .legal-side button {
+    transition: none !important;
+  }
+  #app .side .nav button:hover,
+  #app .side .nav button:active,
+  #app .side .legal-side button:hover {
+    transform: none !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>
