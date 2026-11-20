@@ -2300,7 +2300,7 @@ async function loadBusiness(id,o={}){
   profBase=profBuild();
   ensureMyStaffRecord();
   if(ADOPT_LOCAL){const s=ADOPT_LOCAL;ADOPT_LOCAL=null;adoptSnapshot(s)}
-  cloudReady=true;flush();startPoll();scheduleWorkspaceSync();
+  await loadOverrides();cloudReady=true;flush();startPoll();scheduleWorkspaceSync();
 }
 /* Перенос локальной копии прежней версии (если облачной записи не было) */
 function adoptSnapshot(s){
@@ -2334,7 +2334,7 @@ async function pollRemote(){
     const list=await fetchBizList();BIZLIST=list;
     const me=list.find(b=>b.business_id===BIZ);
     if(!me||me.status!=='active'){pollBusy=false;accessLost(me?'blocked':'removed');return}
-    if(me.role!==MYROLE||me.name!==BIZNAME){
+    loadOverrides();if(me.role!==MYROLE||me.name!==BIZNAME){
       const roleChanged=me.role!==MYROLE;
       try{await saveWorkspaceCloud(true)}catch(e){}
       await loadBusiness(BIZ);repaintSoft();if(roleChanged)toast('Ваша роль изменена: '+accessName(MYROLE));pollBusy=false;return}
@@ -2722,7 +2722,13 @@ const PERMS={
 };
 /* Текущий пользователь: карточка сотрудника, привязанная к его аккаунту; роль берётся с сервера, а не из карточки */
 const actor=()=>{const r=staff.find(s=>s.uid&&s.uid===CUR)||staff.find(s=>s.id===1)||staff[0]||{id:1};return {...r,access:BIZ?MYROLE:(r.access||'owner')}};
-const can=(perm,who=actor())=>(PERMS[perm]||[]).includes(who.access||(who.id===1?'owner':'manager'));
+/* Детальные права по ТЗ. Роль даёт набор по умолчанию, личные переключатели (member_permissions) его перекрывают. Источник истины — сервер (миграция 004) */
+(()=>{const A4=['owner','admin','head','manager','staff'],M4=A4.slice(0,4),H=A4.slice(0,3),AD=A4.slice(0,2),O=['owner'];
+ const N={'deals.view_own':A4,'deals.view_all':H,'deals.create':M4,'deals.delete':H,'deals.assign':H,'deals.status':M4,'clients.view_own':A4,'clients.create':M4,'clients.reassign':H,'staff.view':H,'staff.create':AD,'staff.delete':AD,'staff.roles':AD,'staff.perms':O,'analytics.own':A4,'analytics.team':H,'analytics.all':AD,'settings.access':AD,'settings.system':AD,'settings.roles':O};
+ for(const k in N)if(!(k in PERMS))PERMS[k]=N[k]})();
+let POV={};
+const can=(perm,who=actor())=>{const a=who.access||(who.id===1?'owner':'manager');if(a==='owner')return true;const o=POV[who.uid||CUR];return o&&perm in o?!!o[perm]:(PERMS[perm]||[]).includes(a)};
+async function loadOverrides(){try{const r=await sb.rpc('my_permission_overrides',{p_business:BIZ});if(r.error)return;const o={};(r.data||[]).forEach(x=>{o[x.perm]=x.allowed});POV={[CUR]:o}}catch(e){}}
 const accessName=a=>(ROLES[a]||ROLES.manager).n;
 
 /* ---------- Корзина (мягкое удаление, восстановление) ---------- */
@@ -4277,6 +4283,7 @@ V.staff=()=>{
 function stDraw(){
   const b=$('#stBody');
   if(ST.tab==='roles'){
+    if(BIZ&&(can('staff.perms')||can('staff.roles'))){prDraw();return}
     const roles=Object.keys(ROLES);
     b.innerHTML=`<div class="card"><div class="tw"><table><thead><tr><th>Право</th>${roles.map(r=>`<th class="r">${esc(ROLES[r].n)}</th>`).join('')}</tr></thead><tbody>${Object.keys(PERMS).map(p=>`<tr><td>${esc(PERM_NAMES[p]||p)}</td>${roles.map(r=>`<td class="r">${PERMS[p].includes(r)?`<span class="up">${ico('check')}</span>`:'<span class="mut">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>
      <div class="grid g2" style="margin-top:16px">${roles.map(r=>`<div class="card"><b>${esc(ROLES[r].n)}</b><p class="mut" style="margin:6px 0 0">${esc(ROLES[r].d)}</p></div>`).join('')}</div>`;
@@ -4291,6 +4298,48 @@ function stDraw(){
    <div class="tools" style="margin:12px 0 0"><button class="btn sm" data-act="stLog" data-id="${s.id}">${ico('log')}Действия</button>${can('staff.manage')?`<button class="btn sm" data-act="editStaff" data-id="${s.id}">${ico('edit')}Изменить</button>${s.id!==1&&!s.uid?`<button class="ibtn" style="width:32px;height:32px" data-act="delStaff" data-id="${s.id}" aria-label="Удалить">${ico('trash')}</button>`:''}`:''}</div></div>`}).join('')}</div>`;
 }
 A.stTab=b=>{ST.tab=b.dataset.t;V.staff()};
+/* ---------- Роли и права: сотрудники, роли и личные переключатели разрешений ---------- */
+const PGRP=[['Заявки (сделки)',[['deals.view_own','Просмотр своих'],['deals.view_all','Просмотр всех'],['deals.create','Создание'],['deals.edit','Редактирование'],['deals.delete','Удаление'],['deals.assign','Назначение ответственных'],['deals.status','Изменение статусов']]],
+ ['Клиенты',[['clients.view_own','Просмотр своих'],['clients.view','Просмотр всех'],['clients.create','Создание'],['clients.edit','Редактирование'],['clients.delete','Удаление'],['clients.reassign','Переназначение'],['export','Экспорт базы']]],
+ ['Сотрудники',[['staff.view','Просмотр списка'],['staff.create','Создание'],['staff.manage','Редактирование'],['staff.delete','Удаление'],['staff.roles','Назначение ролей'],['staff.perms','Управление правами других']]],
+ ['Аналитика',[['analytics.own','Личная статистика'],['analytics.team','Статистика команды'],['analytics.all','Общая статистика CRM']]],
+ ['Настройки',[['settings.access','Доступ к настройкам'],['settings.system','Системные параметры'],['settings.roles','Роли и права'],['audit.view','Журнал действий']]]];
+const PR_SQL="-- 004: личные права сотрудников поверх ролей. Допущения (сверить с 003): business_id uuid; business_members(business_id,user_id,role,status); role_permissions(role,perm).\ncreate table if not exists member_permissions(business_id uuid not null,user_id uuid not null,perm text not null,allowed boolean not null,updated_by uuid,updated_at timestamptz default now(),primary key(business_id,user_id,perm));\ncreate table if not exists permission_changes(id bigserial primary key,business_id uuid,actor uuid,target uuid,perm text,old_allowed boolean,new_allowed boolean,at timestamptz default now());\nalter table member_permissions enable row level security; alter table permission_changes enable row level security; -- доступ только через функции ниже\n\ncreate or replace function _role_of(b uuid,u uuid) returns text language sql stable security definer set search_path=public as\n$$ select role from business_members where business_id=b and user_id=u and status='active' $$;\n\n-- итоговое право: owner всегда да; иначе личное значение, иначе право роли\ncreate or replace function effective_perm(b uuid,u uuid,p text) returns boolean language sql stable security definer set search_path=public as\n$$ select case when _role_of(b,u) is null then false when _role_of(b,u)='owner' then true\n  else coalesce((select allowed from member_permissions where business_id=b and user_id=u and perm=p),\n   exists(select 1 from role_permissions rp where rp.role=_role_of(b,u) and rp.perm=p)) end $$;\n\ncreate or replace function my_permission_overrides(p_business uuid) returns table(perm text,allowed boolean) language sql stable security definer set search_path=public as\n$$ select perm,allowed from member_permissions where business_id=p_business and user_id=auth.uid() $$;\n\ncreate or replace function list_member_permissions(p_business uuid) returns table(user_id uuid,perm text,allowed boolean) language plpgsql stable security definer set search_path=public as\n$$ begin if _role_of(p_business,auth.uid()) is null then raise exception 'forbidden'; end if;\n return query select m.user_id,m.perm,m.allowed from member_permissions m where m.business_id=p_business; end $$;\n\ncreate or replace function _perm_guard(b uuid,t uuid) returns void language plpgsql security definer set search_path=public as\n$$ declare me text:=_role_of(b,auth.uid()); tr text:=_role_of(b,t); begin\n if me is null or tr is null or not effective_perm(b,auth.uid(),'staff.perms') then raise exception 'forbidden'; end if;\n if t=auth.uid() then raise exception 'forbidden: нельзя менять собственные права'; end if;\n if tr='owner' or (me<>'owner' and tr='admin') then raise exception 'forbidden'; end if; end $$;\n\ncreate or replace function set_member_permission(p_business uuid,p_user uuid,p_perm text,p_allowed boolean) returns void language plpgsql security definer set search_path=public as\n$$ declare old boolean; begin\n perform _perm_guard(p_business,p_user);\n if p_allowed is true and not effective_perm(p_business,auth.uid(),p_perm) then raise exception 'forbidden: нельзя выдать право, которого нет у вас'; end if;\n select allowed into old from member_permissions where business_id=p_business and user_id=p_user and perm=p_perm;\n if p_allowed is null then delete from member_permissions where business_id=p_business and user_id=p_user and perm=p_perm;\n else insert into member_permissions(business_id,user_id,perm,allowed,updated_by) values(p_business,p_user,p_perm,p_allowed,auth.uid())\n  on conflict(business_id,user_id,perm) do update set allowed=excluded.allowed,updated_by=auth.uid(),updated_at=now(); end if;\n insert into permission_changes(business_id,actor,target,perm,old_allowed,new_allowed) values(p_business,auth.uid(),p_user,p_perm,old,p_allowed); end $$;\n\ncreate or replace function reset_member_permissions(p_business uuid,p_user uuid) returns void language plpgsql security definer set search_path=public as\n$$ begin perform _perm_guard(p_business,p_user);\n delete from member_permissions where business_id=p_business and user_id=p_user;\n insert into permission_changes(business_id,actor,target,perm) values(p_business,auth.uid(),p_user,'*reset'); end $$;\n\n-- защита последнего владельца: нельзя удалить, понизить или заблокировать\ncreate or replace function _keep_last_owner() returns trigger language plpgsql as\n$$ begin if old.role='owner' and old.status='active' and (tg_op='DELETE' or new.role<>'owner' or new.status<>'active')\n  and not exists(select 1 from business_members where business_id=old.business_id and role='owner' and status='active' and user_id<>old.user_id)\n then raise exception 'Нельзя удалить или заблокировать последнего владельца'; end if; return coalesce(new,old); end $$;\ndrop trigger if exists keep_last_owner on business_members;\ncreate trigger keep_last_owner before update or delete on business_members for each row execute function _keep_last_owner();\ngrant execute on function my_permission_overrides,list_member_permissions,set_member_permission,reset_member_permissions,effective_perm to authenticated;\n";
+A.prSql=async()=>{try{await navigator.clipboard.writeText(PR_SQL);toast('SQL скопирован')}catch(e){toast('Не удалось скопировать')}};
+const PR={rows:[],ov:{}};
+const prRoleOf=u=>(PR.rows.find(x=>x.user_id===u)||{}).role;
+const prEff=(u,p)=>{const o=PR.ov[u];return o&&p in o?o[p]:(PERMS[p]||[]).includes(prRoleOf(u))};
+const prEdit=r=>can('staff.perms')&&!r.is_me&&r.role!=='owner'&&!(MYROLE!=='owner'&&r.role==='admin');
+async function prLoad(){
+  const [t,o]=await Promise.all([sb.rpc('list_team',{p_business:BIZ}),sb.rpc('list_member_permissions',{p_business:BIZ})]);
+  if(!$('#stBody'))return;
+  if(t.error||o.error){$('#stBody').innerHTML=o.error&&!t.error?`<div class="card"><h3>Один раз включите личные права на сервере</h3><p class="mut">Нажмите «Скопировать SQL», откройте Supabase → SQL Editor, вставьте код и нажмите Run. Затем обновите страницу. Остальная CRM работает и без этого.</p><button class="btn pri" data-act="prSql">Скопировать SQL</button></div>`:`<div class="card">${emptyState('alert','Не удалось загрузить',errText(t.error))}</div>`;return}
+  PR.rows=t.data||[];PR.ov={};(o.data||[]).forEach(x=>{(PR.ov[x.user_id]=PR.ov[x.user_id]||{})[x.perm]=x.allowed});prTable();
+}
+function prDraw(){$('#stBody').innerHTML=skeleton(4,52);prLoad()}
+function prTable(){
+  $('#stBody').innerHTML=`<div class="tw"><table><thead><tr><th>Сотрудник</th><th>Роль</th><th>Разрешения</th><th></th></tr></thead><tbody>${PR.rows.map((r,i)=>{
+    const nm=r.full_name||r.email||'—',all=PGRP.flatMap(g=>g[1]),on=all.filter(p=>prEff(r.user_id,p[0])).length,ov=Object.keys(PR.ov[r.user_id]||{}).length;
+    const rc=can('staff.roles')&&tmManageable(r)?`<select class="pr-role" data-uid="${r.user_id}" aria-label="Роль: ${esc(nm)}">${tmAssignable().map(k=>`<option value="${k}" ${k===r.role?'selected':''}>${esc(ROLES[k].n)}</option>`).join('')}</select>`:`<span class="pill ${r.role==='owner'?'':'gray'}">${esc(ROLES[r.role]?ROLES[r.role].n:r.role)}</span>`;
+    return `<tr><td><span class="cell"><span class="av s" style="background:${COLORS[i%8]}">${esc(ini(nm))}</span><span><b>${esc(nm)}</b>${r.is_me?' <span class="mut">(вы)</span>':''}<div class="mut" style="font-size:12px">${esc(r.email||'')}</div></span></span></td><td>${rc}</td><td>${r.role==='owner'?'<span class="pill ok">Полный доступ</span>':`${on} из ${all.length}${ov?` <span class="pill info">личных: ${ov}</span>`:''}`}</td><td class="r">${r.role==='owner'?'':`<button class="btn sm" data-act="prOpen" data-uid="${r.user_id}">${prEdit(r)?'Настроить права':'Посмотреть права'}</button>`}</td></tr>`}).join('')}</tbody></table></div>
+   <p class="nt-note">Роль задаёт права по умолчанию, личные переключатели перекрывают их. Права проверяет сервер. Нельзя изменить свои права, права владельца и (кроме владельца) администратора; выдать можно только то, что есть у вас самого.</p>`;
+  $$('.pr-role').forEach(s=>{s.onchange=async()=>{const r=await sb.rpc('set_member_role',{p_business:BIZ,p_user:s.dataset.uid,p_role:s.value});if(r.error)toast(errText(r.error));else toast('Роль изменена');prLoad()}});
+}
+function prBody(u){
+  const r=PR.rows.find(x=>x.user_id===u),ed=prEdit(r);
+  return `<p class="mut" style="margin:0 0 12px">${esc(r.full_name||r.email)} · роль «${esc(ROLES[r.role]?ROLES[r.role].n:r.role)}»${ed?'':' · только просмотр'}</p>`+PGRP.map(g=>`<h4 style="margin:16px 0 6px">${g[0]}</h4><div class="list">${g[1].map(([p,l])=>{const on=prEff(u,p),own=PR.ov[u]&&p in PR.ov[u];
+    return `<div class="row"><div class="grow"><b>${l}</b>${own?'<small>изменено лично</small>':''}</div><button class="sw ${on?'on':''}" ${ed?'':'disabled'} data-act="prSw" data-uid="${u}" data-p="${p}" role="switch" aria-checked="${on}" aria-label="${l}"></button></div>`}).join('')}</div>`).join('')
+   +(ed&&PR.ov[u]?`<div style="margin-top:16px"><button class="btn" data-act="prReset" data-uid="${u}">Сбросить к правам роли</button></div>`:'');
+}
+A.prOpen=b=>{PR.cur=b.dataset.uid;modal({title:'Права сотрудника',body:`<div id="prBody">${prBody(PR.cur)}</div>`,wide:true})};
+A.prSw=async b=>{
+  const u=b.dataset.uid,p=b.dataset.p,v=!prEff(u,p),def=(PERMS[p]||[]).includes(prRoleOf(u));
+  const r=await sb.rpc('set_member_permission',{p_business:BIZ,p_user:u,p_perm:p,p_allowed:v===def?null:v});
+  if(r.error)return toast(errText(r.error));
+  const o=PR.ov[u]=PR.ov[u]||{};if(v===def)delete o[p];else o[p]=v;if(!Object.keys(o).length)delete PR.ov[u];
+  $('#prBody').innerHTML=prBody(u);prTable();
+};
+A.prReset=async b=>{const u=b.dataset.uid,r=await sb.rpc('reset_member_permissions',{p_business:BIZ,p_user:u});if(r.error)return toast(errText(r.error));delete PR.ov[u];$('#prBody').innerHTML=prBody(u);prTable();toast('Права сброшены к роли')};
 A.stLog=b=>{AC.mgr=String(b.dataset.id);AC.per='all';go('activity')};
 A.newStaff=()=>staffForm();
 A.editStaff=b=>staffForm(+b.dataset.id);
