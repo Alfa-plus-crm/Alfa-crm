@@ -76,6 +76,7 @@ button{cursor:pointer}
 .dot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--bad);border:2px solid var(--card)}
 .me{display:flex;align-items:center;gap:10px;padding:3px 10px 3px 3px;border:1px solid var(--line);background:var(--card);border-radius:99px}
 .me span{font-size:13px;white-space:nowrap}
+.me .me-role{font-size:11px;color:var(--mut);padding:1px 8px;border-radius:99px;background:var(--card2)}.me .me-role:empty{display:none}
 .av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--fd);color:#fff;flex:none}
 .av.s{width:24px;height:24px;font-size:10px}
 .pop{position:absolute;right:0;top:46px;width:340px;max-width:calc(100vw - 32px);background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);z-index:50;padding:8px}
@@ -1378,7 +1379,7 @@ body {
    <button class="ibtn" id="aiBtn" data-go="ai" aria-label="Alfa AI"><svg><use href="#i-spark"/></svg></button>
    <div class="rel"><button class="ibtn" id="bellBtn" aria-label="Уведомления"><svg><use href="#i-bell"/></svg><i class="dot" id="bellDot"></i></button><div class="pop" id="bellPop" hidden></div></div>
    <button class="ibtn" id="themeBtn" aria-label="Переключить тему"><svg><use id="themeIc" href="#i-sun"/></svg></button>
-   <div class="rel"><button class="me" id="meBtn" aria-label="Профиль"><div class="av" id="meAv"></div><span id="meName"></span></button><div class="pop" id="mePop" hidden style="width:240px"></div></div>
+   <div class="rel"><button class="me" id="meBtn" aria-label="Профиль"><div class="av" id="meAv"></div><span id="meName"></span><span id="meRole" class="me-role"></span></button><div class="pop" id="mePop" hidden style="width:240px"></div></div>
   </header>
   <main id="main" tabindex="-1"></main>
   <nav class="tabbar" id="tabbar" aria-label="Быстрая навигация"></nav>
@@ -1529,7 +1530,7 @@ const ME=blankME();
 const demo=false;
 const SRC0=[...SOURCES],CAT0=[...CATS];
 const LISTS={staff,clients,deals,tasks,hist,notes,dialogs,calls,products,fin,autos,activity,notifs,SOURCES,CATS};
-const owner=()=>({id:1,name:ME.name,role:ME.position||'Руководитель',dept:'Руководство',email:ME.email,phone:ME.phone,plan:0,sales:0,status:'В сети',color:COLORS[0]});
+const owner=()=>({id:1,name:ME.name,role:ME.position||'Руководитель',dept:'Руководство',email:ME.email,phone:ME.phone,plan:0,sales:0,status:'В сети',color:COLORS[0],uid:CUR||undefined,access:MYROLE||'owner'});
 const setList=(a,v)=>a.splice(0,a.length,...v);
 const resetME=p=>{for(const k in ME)delete ME[k];Object.assign(ME,blankME(),p)};
 function snap(){return JSON.stringify({v:2,me:ME,nid,set:{n:SET.n},lists:LISTS})}
@@ -1542,7 +1543,8 @@ function recompute(){const y=String(TODAY.getFullYear());
   deals.forEach(d=>{if(d.created.slice(0,4)===y)dealCnt[+d.created.slice(5,7)-1]++;const c=d.closed||d.created;if(d.stage==='won'&&c.slice(0,4)===y)revenue[+c.slice(5,7)-1]+=d.sum/1e6});
   for(const k in srcData)delete srcData[k];clients.forEach(c=>srcData[c.source]=(srcData[c.source]||0)+1);
   staff.forEach(s=>{s.sales=deals.filter(d=>d.mgr===s.id&&d.stage==='won').reduce((a,d)=>a+d.sum,0)})}
-const log=(t,m)=>{activity.unshift({mgr:1,t,at:Date.now(),...(m||{})});if(activity.length>500)activity.length=500};
+/* Журнал действий ведёт сервер (таблица activity_log): кто, что и когда изменил, считается на стороне базы. Локальная запись больше не нужна. */
+const log=(t,m)=>{};
 const addHist=(cid,type,t)=>{if(cid)hist.push({cid,type,t,d:iso(0)})};
 /* Сценарии автоматизации: реально срабатывают на события */
 function fire(trig,ctx={}){autos.filter(a=>a.on&&a.trig===trig).forEach(a=>{a.runs=(a.runs||0)+1;const c=ctx.cid&&cliOf(ctx.cid);
@@ -1553,9 +1555,12 @@ function fire(trig,ctx={}){autos.filter(a=>a.on&&a.trig===trig).forEach(a=>{a.ru
    else if(x==='Назначить менеджера'&&c&&!staff.find(s=>s.id===c.mgr))c.mgr=1});
   log(`сработал сценарий «${a.name}»`)})}
 function paintShell(){
-  $('#coName').textContent=ME.company||'Моя компания';$('#coCity').textContent=ME.city?'· '+ME.city:'';
-  $('#meAv').textContent=ini(ME.name||'?');$('#meName').textContent=ME.name;
-  $('#mePop').innerHTML=`<div class="it"><div><b>${esc(ME.name)}</b><small>${esc(ME.email)}</small></div></div><button class="btn sm" data-go="settings" style="width:100%;justify-content:center;margin-bottom:6px">Настройки</button><button class="btn sm dng" data-act="logout" style="width:100%;justify-content:center">Выйти</button>`;
+  $('#coName').textContent=BIZNAME||ME.company||'Моя компания';$('#coCity').textContent=ME.city?'· '+ME.city:'';
+  $('#meAv').textContent=ini(ME.name||'?');$('#meName').textContent=ME.name;$('#meRole').textContent=BIZ?accessName(MYROLE):'';
+  const act=BIZLIST.filter(b=>b.status==='active'),bs='width:100%;text-align:left;background:none;border:0;color:inherit;cursor:pointer;font:inherit';
+  $('#mePop').innerHTML=`<div class="it"><div><b>${esc(ME.name)}</b><small>${esc(ME.email||ME.login||'')}</small>${BIZ?`<small><span class="pill">${esc(accessName(MYROLE))}</span> · ${esc(BIZNAME)}</small>`:''}</div></div>`
+   +(act.length>1?`<h4>Компании</h4>${act.map(b=>`<button class="it" style="${bs}" data-act="switchBiz" data-id="${b.business_id}"><div style="flex:1;min-width:0"><b>${esc(b.name)}</b><small>${esc(accessName(b.role))}</small></div>${b.business_id===BIZ?'<span class="pill ok" style="height:fit-content">текущая</span>':''}</button>`).join('')}`:'')
+   +`<button class="btn sm" data-go="settings" style="width:100%;justify-content:center;margin-bottom:6px">Настройки</button><button class="btn sm" data-act="newBiz" style="width:100%;justify-content:center;margin-bottom:6px">+ Создать компанию</button><button class="btn sm dng" data-act="logout" style="width:100%;justify-content:center">Выйти</button>`;
   $('#bellDot').hidden=!getNotifs().length;
 }
 /* ===== Главная ===== */
@@ -1579,7 +1584,7 @@ V.home=()=>{
   </div>
   <div class="grid g2" style="margin-top:16px">
    <div class="card"><h3>Последние сделки<button class="btn sm" data-go="deals">Воронка</button></h3><div class="tw"><table><tbody>${deals.length?'':'<tr><td><div class="empty">Сделок пока нет</div></td></tr>'}${[...deals].sort((a,b)=>b.created.localeCompare(a.created)).slice(0,6).map(d=>{const s=STAGES.find(x=>x.id===d.stage);return `<tr class="click" data-act="deal" data-id="${d.id}"><td style="white-space:normal;min-width:160px">${esc(d.title)}<br><small class="mut">${esc(cliOf(d.cid).company)}</small></td><td>${rub(d.sum)}</td><td><span class="pill" style="color:${s.c};background:color-mix(in srgb,${s.c} 16%,transparent)">${s.name}</span></td></tr>`}).join('')}</tbody></table></div></div>
-   <div class="card"><h3>Действия сотрудников</h3><div class="list">${activity.length?'':'<div class="empty">Здесь появятся действия команды</div>'}${activity.map(a=>`<div class="row">${av(a.mgr)}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400"><b style="display:inline">${esc(mgrOf(a.mgr).name.split(' ')[0])}</b> ${a.t}</b><small>${a.ago}</small></div></div>`).join('')}</div></div>
+   <div class="card"><h3>Действия сотрудников</h3><div class="list">${activity.length?'':'<div class="empty">Здесь появятся действия команды</div>'}${activity.map(a=>`<div class="row">${a.mgr?av(a.mgr):''}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400"><b style="display:inline">${esc((mgrOf(a.mgr).name==='—'&&a.who?a.who:mgrOf(a.mgr).name).split(' ')[0])}</b> ${a.t}</b><small>${a.ago}</small></div></div>`).join('')}</div></div>
   </div>`;
 };
 A.rperiod=b=>{const n=Math.min(+b.dataset.n,MO);$$('#rseg button').forEach(x=>x.classList.toggle('on',x===b));$('#rchart').innerHTML=areaChart(revenue.slice(MO-n,MO),months.slice(MO-n,MO),{fmt:v=>(+v.toFixed(1)).toString().replace('.',','),unit:' млн ₽'})};
@@ -1890,48 +1895,125 @@ const SUPABASE_ANON_KEY='sb_publishable_zeizsAlAla89gikbRd85ag_rQ_5j7XW';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const mem={};
 const store={get(k){try{const v=localStorage.getItem(k);if(v!==null)return v}catch(e){}return mem[k]??null},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}},del(k){delete mem[k];try{localStorage.removeItem(k)}catch(e){}}};
-let CUR=null,pt,clientSyncTimer=null,cloudWorkspaceData={};
-let cloudReady=false,cloudSaveBusy=false,cloudSaveQueued=false;
-const flush=()=>{if(CUR)store.set('vexon-ws:'+CUR,snap())};
+let CUR=null,pt,clientSyncTimer=null;
+let cloudReady=false,cloudSaveBusy=false,cloudSaveQueued=false,cloudConflict=false,cloudVersion=null;
+/* ===== Командное рабочее пространство =====
+   Данные компании лежат на сервере в таблице workspace_sections (business_id + раздел) и общие для всех
+   её сотрудников. Права проверяет сервер: RLS на чтение и функция save_section на запись. Код ниже
+   только загружает разделы, отправляет изменённые и подтягивает правки коллег. localStorage — лишь
+   офлайн-копия последнего состояния. */
+let BIZ=null,BIZNAME='',MYROLE='staff',BIZLIST=[],ACL={},secVer={},secBase={},profBase='';
+let pollT=null,pollBusy=false,pendingRender=false,ADOPT_LOCAL=null,saveErrAt=0;
+const ERRMAP={forbidden_trash:'Удалять записи из корзины могут только руководитель и выше',forbidden:'Недостаточно прав для этого действия',not_authenticated:'Войдите в аккаунт заново',
+  invite_invalid:'Ссылка-приглашение недействительна',invite_cancelled:'Приглашение отменено',invite_used:'Приглашение уже использовано',invite_expired:'Срок действия приглашения истёк — попросите отправить новое',
+  invite_email_mismatch:'Приглашение выписано на другую почту. Войдите под адресом, на который оно отправлено',email_not_confirmed:'Сначала подтвердите почту по ссылке из письма',
+  member_blocked:'Ваш доступ в этой компании заблокирован',already_member:'Этот сотрудник уже в команде',invite_exists:'Для этой почты уже есть действующее приглашение',invalid_email:'Проверьте адрес почты',
+  invalid_role:'Недопустимая роль',use_transfer:'Права владельца передаются отдельной кнопкой «Передать права»',admin_only_owner:'Назначать и менять администраторов может только владелец',
+  cannot_modify_self:'Нельзя изменить собственную учётную запись',cannot_modify_owner:'Владельца изменить нельзя',member_not_found:'Сотрудник не найден',owner_cannot_leave:'Владелец не может покинуть компанию, не передав права',
+  business_limit:'Достигнут лимит компаний на один аккаунт',too_many_invites:'Слишком много ожидающих приглашений',invite_closed:'Приглашение уже закрыто',name_required:'Укажите название',
+  already_migrated:'Данные уже перенесены',no_legacy:'Данных прежней версии не найдено',too_large:'Раздел слишком большой для сохранения'};
+const errText=e=>{const m=(e&&e.message)||String(e||'');for(const k in ERRMAP)if(m.includes(k))return ERRMAP[k];return m||'Ошибка запроса'};
+const errKnown=e=>{const m=(e&&e.message)||'';return Object.keys(ERRMAP).some(k=>m.includes(k))};
+
+const SEC_COMPANY_KEYS=['company','industry','city','cphone','site','inn','cemail','addr','size','onboarded','ch'];
+const SEC_LISTS={clients:['clients','hist','notes','files'],messages:['dialogs','calls'],deals:['deals'],tasks:['tasks'],finance:['fin'],stock:['products','moves','suppliers'],staff:['staff'],automation:['autos','templates']};
+const SEC_ALL=['company','clients','messages','deals','tasks','finance','stock','staff','automation','trash','trash_admin'];
+const TRASH_ADMIN_KINDS=['fin','staff'];
+const canon=v=>JSON.stringify(v,(k,x)=>{if(x&&typeof x==='object'&&!Array.isArray(x)){const o={};Object.keys(x).sort().forEach(kk=>{o[kk]=x[kk]});return o}return x});
+const isObj=x=>!!x&&typeof x==='object'&&!Array.isArray(x);
+function secBuild(sec){
+  if(sec==='company'){const me={};SEC_COMPANY_KEYS.forEach(k=>{if(k in ME)me[k]=ME[k]});return {me,SOURCES:[...SOURCES],CATS:[...CATS]}}
+  if(sec==='trash')return {trash:trash.filter(t=>!TRASH_ADMIN_KINDS.includes(t.kind))};
+  if(sec==='trash_admin')return {trash:trash.filter(t=>TRASH_ADMIN_KINDS.includes(t.kind))};
+  const o={};SEC_LISTS[sec].forEach(k=>{o[k]=LISTS[k]});return o}
+function secApply(sec,d){
+  d=isObj(d)?d:{};
+  if(sec==='company'){const m=isObj(d.me)?d.me:{};SEC_COMPANY_KEYS.forEach(k=>{if(k in m)ME[k]=m[k]});if(Array.isArray(d.SOURCES)&&d.SOURCES.length)setList(SOURCES,d.SOURCES);if(Array.isArray(d.CATS)&&d.CATS.length)setList(CATS,d.CATS);return}
+  if(sec==='trash'||sec==='trash_admin'){const adm=sec==='trash_admin',keep=trash.filter(t=>TRASH_ADMIN_KINDS.includes(t.kind)!==adm);
+    setList(trash,[...keep,...(Array.isArray(d.trash)?d.trash:[])].sort((a,b)=>(b.at||0)-(a.at||0)));return}
+  SEC_LISTS[sec].forEach(k=>setList(LISTS[k],Array.isArray(d[k])?d[k]:[]))}
+function clearLists(){for(const k in LISTS){if(k==='SOURCES')setList(SOURCES,SRC0);else if(k==='CATS')setList(CATS,CAT0);else LISTS[k].length=0}}
+/* Права: тот же источник истины, что у сервера (таблицы role_permissions и workspace_acl) */
+const permOK=p=>(PERMS[p]||[]).includes(MYROLE);
+const secCanView=s=>{const a=ACL[s];return !!a&&(a.view_perm?permOK(a.view_perm):true)};
+const secCanEdit=s=>{const a=ACL[s];return !!a&&secCanView(s)&&(a.edit_perm?permOK(a.edit_perm):true)};
+/* Уникальные id: у каждого пользователя свой диапазон, поэтому одновременно созданные записи не пересекаются */
+function seedNid(){
+  let h=0;for(const ch of String(CUR))h=(h*31+ch.charCodeAt(0))>>>0;
+  const lo=(1+h%999999)*1e6,hi=lo+1e6-1;let mx=lo+100;
+  const scan=v=>{if(Array.isArray(v))v.forEach(scan);else if(v&&typeof v==='object'){if(typeof v.id==='number'&&v.id>=lo&&v.id<=hi&&v.id>mx)mx=v.id;for(const k in v)if(v[k]&&typeof v[k]==='object')scan(v[k])}};
+  scan(LISTS);return mx}
+
+/* Трёхстороннее слияние (база — то, что мы загрузили; наши правки; версия коллег): записи сопоставляются по id */
+function mergeArr(b,o,t){
+  const all=[...b,...o,...t];
+  if(all.length&&all.every(x=>isObj(x)&&x.id!=null)){
+    const mk=a=>{const m=new Map();a.forEach(x=>m.set(x.id,x));return m},bm=mk(b),om=mk(o),tm=mk(t),ids=[],seen=new Set();
+    [...t,...o].forEach(x=>{if(!seen.has(x.id)){seen.add(x.id);ids.push(x.id)}});
+    const out=[];
+    ids.forEach(id=>{const B=bm.get(id),O=om.get(id),T=tm.get(id),oc=canon(O)!==canon(B),tc=canon(T)!==canon(B);
+      const pick=!oc?T:!tc?O:(O===undefined?T:O);   // оба изменили: побеждает наша правка, но чужое изменение не теряем при нашем удалении
+      if(pick!==undefined)out.push(pick)});
+    return out}
+  /* записи без id (история, заметки, списки строк): учитываем добавления и удаления как набор */
+  const cnt=a=>{const m=new Map();a.forEach(x=>{const k=canon(x);m.set(k,(m.get(k)||0)+1)});return m},bc=cnt(b),oc=cnt(o),seenO=new Map(),adds=[],rm=new Map();
+  o.forEach(x=>{const k=canon(x),n=(seenO.get(k)||0)+1;seenO.set(k,n);if(n>(bc.get(k)||0))adds.push(x)});
+  bc.forEach((n,k)=>{const d=n-(oc.get(k)||0);if(d>0)rm.set(k,d)});
+  const out=[];t.forEach(x=>{const k=canon(x),r=rm.get(k)||0;if(r>0)rm.set(k,r-1);else out.push(x)});
+  return out.concat(adds)}
+function mergeObj(b,o,t){const out={};new Set([...Object.keys(b),...Object.keys(o),...Object.keys(t)]).forEach(k=>{const pick=canon(o[k])!==canon(b[k])?o[k]:t[k];if(pick!==undefined)out[k]=pick});return out}
+function mergeSection(b,o,t){const out={};new Set([...Object.keys(b),...Object.keys(o),...Object.keys(t)]).forEach(k=>{const B=b[k],O=o[k],T=t[k];
+  if(Array.isArray(O)||Array.isArray(T))out[k]=mergeArr(Array.isArray(B)?B:[],Array.isArray(O)?O:[],Array.isArray(T)?T:[]);
+  else if(isObj(O)||isObj(T))out[k]=mergeObj(isObj(B)?B:{},isObj(O)?O:{},isObj(T)?T:{});
+  else out[k]=canon(O)!==canon(B)?O:T});return out}
+
+const ckey=()=>'vexon-ws:'+CUR+':'+BIZ;
+const flush=()=>{if(CUR&&BIZ)store.set(ckey(),snap())};
 const persist=()=>{
   if(!CUR)return;
   clearTimeout(pt);
   pt=setTimeout(()=>{flush();if(cloudReady)scheduleWorkspaceSync()},250);
 };
-let cloudVersion=null,cloudConflict=false;
+/* Сохранение одного раздела: отправляем с ожидаемой версией; при конфликте сливаем с чужими правками и повторяем */
+async function saveSection(sec){
+  for(let attempt=0;attempt<4;attempt++){
+    const data=secBuild(sec);
+    if(sec==='trash'&&!permOK('trash.restore')){const have=new Set(data.trash.map(x=>x.id));((secBase[sec]?JSON.parse(secBase[sec]).trash:[])||[]).forEach(x=>{if(!have.has(x.id))data.trash.push(x)})}
+    const str=canon(data);
+    if(str===secBase[sec])return true;
+    const r=await sb.rpc('save_section',{p_business:BIZ,p_section:sec,p_data:JSON.parse(JSON.stringify(data)),p_expected:secVer[sec]||0});
+    if(r.error){
+      if(/forbidden/.test(r.error.message||'')){secBase[sec]=str;setTimeout(pollRemote,0);return false}   // права изменились: роль подтянет опрос
+      throw r.error}
+    const res=r.data||{};
+    if(res.status==='ok'){secVer[sec]=res.version;secBase[sec]=str;return true}
+    if(res.status==='conflict'){
+      if(!res.data){secVer[sec]=res.version||0;continue}
+      const ours=secBuild(sec),base=secBase[sec]?JSON.parse(secBase[sec]):{};
+      secApply(sec,res.data);if(typeof afterLoad==='function')afterLoad();
+      const theirs=secBuild(sec);
+      secApply(sec,mergeSection(base,JSON.parse(JSON.stringify(ours)),JSON.parse(JSON.stringify(theirs))));
+      secVer[sec]=res.version;secBase[sec]=canon(theirs);pendingRender=true;continue}
+    throw new Error('Неожиданный ответ сервера')}
+  cloudConflict=true;showCloudConflict();return false}
+const profBuild=()=>canon({name:(ME.name||'').trim(),phone:ME.phone||'',position:ME.position||'',settings:{n:SET.n,seen:(ME.seen||[]).slice(-400),ntToast:ME.ntToast,contactEmail:ME.email||''}});
+async function saveProfile(){
+  const s=profBuild();if(s===profBase)return;const p=JSON.parse(s);
+  const r=await sb.rpc('update_my_profile',{p_name:p.name||ME.login||'Пользователь',p_phone:p.phone,p_position:p.position,p_settings:p.settings});
+  if(r.error)throw r.error;profBase=s}
 async function saveWorkspaceCloud(silent=false){
-  if(!CUR||!cloudReady||cloudConflict)return false;
+  if(!CUR||!BIZ||!cloudReady||cloudConflict)return false;
   if(cloudSaveBusy){cloudSaveQueued=true;return true}
-  cloudSaveBusy=true;
-  const snapshot=JSON.parse(snap());
-  const payload={...cloudWorkspaceData,workspace:snapshot,clients:clients.map(c=>({...c}))};
-  const now=new Date().toISOString();
-  let error=null,saved=null;
-  try{
-    if(cloudVersion){
-      // обновляем только если запись в облаке не менялась с момента нашей загрузки
-      const r=await sb.from('crm_workspaces').update({data:payload,updated_at:now}).eq('user_id',CUR).eq('updated_at',cloudVersion).select('updated_at');
-      error=r.error;saved=r.data;
-      if(!error&&(!saved||!saved.length)){cloudSaveBusy=false;cloudConflict=true;showCloudConflict();return false}
-    }else{
-      const r=await sb.from('crm_workspaces').upsert({user_id:CUR,data:payload,updated_at:now},{onConflict:'user_id'}).select('updated_at');
-      error=r.error;saved=r.data;
-    }
-  }catch(e){error=e}
+  cloudSaveBusy=true;let ok=true;
+  try{for(const sec of SEC_ALL){if(!secCanEdit(sec))continue;if(!await saveSection(sec))ok=false}await saveProfile()}
+  catch(e){ok=false;console.error('alfa+ cloud save:',e);if(!silent&&Date.now()-saveErrAt>20000){saveErrAt=Date.now();toast('Не удалось сохранить: '+errText(e))}}
   cloudSaveBusy=false;
-  if(error){
-    console.error('alfa+ cloud workspace save:',error);
-    if(!silent)toast('Не удалось сохранить CRM в Supabase: '+(error.message||'ошибка'));
-    return false;
-  }
-  cloudVersion=(saved&&saved[0]&&saved[0].updated_at)||now;
-  cloudWorkspaceData=payload;
+  if(ok){cloudVersion=Date.now()}
   if(cloudSaveQueued){cloudSaveQueued=false;scheduleWorkspaceSync()}
-  return true;
-}
+  return ok}
 function showCloudConflict(){
-  modal({title:'Данные изменены на другом устройстве',body:'<p>Пока эта вкладка была открыта, рабочее пространство изменили в другом месте. Чтобы ничего не потерять, автосохранение приостановлено.</p><p class="mut">Загрузите актуальную облачную версию или, если уверены, что эта версия новее, сохраните её поверх облачной. Резервную копию текущих данных можно скачать в Настройках.</p>',
-    foot:[{label:'Скачать мою копию',fn:()=>A.backup()},{label:'Перезаписать облако',cls:'dng',fn:async()=>{closeModal();cloudConflict=false;const r=await sb.from('crm_workspaces').select('updated_at').eq('user_id',CUR).maybeSingle();cloudVersion=r.data?.updated_at||null;await saveWorkspaceCloud(false);toast('Облако обновлено вашей версией')}},{label:'Загрузить из облака',cls:'pri',fn:async()=>{closeModal();cloudConflict=false;await loadClientsCloud();paintShell();drawNav();V[cur]?.();toast('Загружена облачная версия')}}]});
+  modal({title:'Данные изменились у коллег',body:'<p>Не удалось автоматически объединить ваши правки с правками других сотрудников. Чтобы ничего не потерять, автосохранение приостановлено.</p><p class="mut">Скачайте копию своих данных и загрузите актуальную версию компании.</p>',
+    foot:[{label:'Скачать мою копию',fn:()=>A.backup()},{label:'Загрузить актуальные данные',cls:'pri',fn:async()=>{closeModal();cloudConflict=false;await loadClientsCloud();paintShell();drawNav();V[cur]?.();toast('Загружены актуальные данные компании')}}]});
 }
 function scheduleWorkspaceSync(){
   if(!CUR||!cloudReady)return;
@@ -1940,37 +2022,100 @@ function scheduleWorkspaceSync(){
 }
 // Совместимость с обработчиками клиентов в существующем интерфейсе.
 const scheduleClientSync=scheduleWorkspaceSync;
-async function loadClientsCloud(){
-  if(!CUR)return;
-  cloudReady=false;
-  const {data,error}=await sb.from('crm_workspaces').select('data,updated_at').eq('user_id',CUR).maybeSingle();cloudVersion=data?.updated_at||null;
-  if(error){
-    console.error('alfa+ cloud workspace load:',error);
-    toast('Не удалось загрузить облачные данные. Проверьте соединение и права Supabase. Автосохранение отключено, чтобы не затереть облако.');
-    cloudReady=false;
-    return;
-  }
-  cloudWorkspaceData=data?.data&&typeof data.data==='object'&&!Array.isArray(data.data)?{...data.data}:{};
-  if(cloudWorkspaceData.workspace&&typeof cloudWorkspaceData.workspace==='object'){
-    // Полная облачная копия — источник истины для всех модулей.
-    restore(JSON.stringify(cloudWorkspaceData.workspace));
-  }else if(Array.isArray(cloudWorkspaceData.clients)){
-    // Совместимость со старой версией: берём клиентов из облака,
-    // остальные разделы сохраняем из локальной копии и переносим целиком.
-    setList(clients,cloudWorkspaceData.clients);
-    flush();
-    cloudReady=true;
-    await saveWorkspaceCloud(true);
-    return;
-  }else{
-    // Первая миграция: сохраняем существующие локальные разделы целиком.
-    cloudReady=true;
-    await saveWorkspaceCloud(true);
-    return;
-  }
-  flush();
-  cloudReady=true;
+async function fetchBizList(){const r=await sb.rpc('my_businesses');if(r.error)throw r.error;return r.data||[]}
+/* Карточка текущего пользователя в справочнике сотрудников (для назначения клиентов, сделок и задач) */
+function ensureMyStaffRecord(){
+  if(staff.some(s=>s.uid===CUR)||!secCanEdit('staff'))return;
+  if(MYROLE==='owner'){const o=staff.find(s=>s.id===1&&!s.uid);if(o){o.uid=CUR;o.access='owner';return}}
+  const rec=owner();if(staff.some(s=>s.id===rec.id))rec.id=++nid;staff.push(rec)}
+/* Загрузка компании: права, все доступные разделы и личный профиль */
+async function loadBusiness(id,o={}){
+  cloudReady=false;cloudConflict=false;clearTimeout(clientSyncTimer);
+  const b=BIZLIST.find(x=>x.business_id===id);if(!b)throw new Error('Компания не найдена');
+  const [rp,ac,pr,sc]=await Promise.all([
+    sb.from('role_permissions').select('role,perm'),
+    sb.from('workspace_acl').select('section,label,view_perm,edit_perm'),
+    sb.from('profiles').select('full_name,phone,position,email,settings').eq('user_id',CUR).maybeSingle(),
+    sb.from('workspace_sections').select('section,data,version').eq('business_id',id)]);
+  for(const r of [rp,ac,pr,sc])if(r.error)throw r.error;
+  BIZ=id;BIZNAME=b.name;MYROLE=b.role;
+  const perms={};rp.data.forEach(x=>{(perms[x.perm]=perms[x.perm]||[]).push(x.role)});
+  for(const k of Object.keys(PERMS))delete PERMS[k];Object.assign(PERMS,perms);
+  ACL={};ac.data.forEach(x=>{ACL[x.section]=x});
+  clearLists();secVer={};secBase={};
+  const blank=blankME();SEC_COMPANY_KEYS.forEach(k=>{ME[k]=blank[k]});
+  sc.data.forEach(r=>{if(ACL[r.section]){secApply(r.section,r.data);secVer[r.section]=r.version}});
+  if(!o.keepPersonal&&pr.data){const p=pr.data,st=isObj(p.settings)?p.settings:{};
+    if(p.full_name)ME.name=p.full_name;ME.phone=p.phone||'';ME.position=p.position||'';
+    if(isObj(st.n))Object.assign(SET.n,st.n);ME.seen=Array.isArray(st.seen)?st.seen:[];if(st.ntToast!==undefined)ME.ntToast=st.ntToast;ME.email=st.contactEmail||p.email||ME.login}
+  ME.company=BIZNAME;ME.onboarded=true;ME.user_id=CUR;
+  if(typeof afterLoad==='function')afterLoad();
+  nid=seedNid();
+  SEC_ALL.forEach(s=>{secBase[s]=secVer[s]===undefined?'':canon(secBuild(s))});   // отсутствующий на сервере раздел считается «грязным» и будет создан
+  profBase=profBuild();
+  ensureMyStaffRecord();
+  if(ADOPT_LOCAL){const s=ADOPT_LOCAL;ADOPT_LOCAL=null;adoptSnapshot(s)}
+  cloudReady=true;flush();startPoll();scheduleWorkspaceSync();
 }
+/* Перенос локальной копии прежней версии (если облачной записи не было) */
+function adoptSnapshot(s){
+  const keep={login:ME.login,user_id:CUR,name:ME.name,phone:ME.phone,position:ME.position,email:ME.email,seen:ME.seen};
+  restore(s);Object.assign(ME,keep);ME.company=BIZNAME;ME.onboarded=true;
+  staff.forEach(x=>{if(x.id===1){x.uid=CUR;x.access='owner'}});nid=seedNid();
+  SEC_ALL.forEach(sec=>{secBase[sec]=''});profBase=''}
+async function loadClientsCloud(){
+  if(!CUR||!BIZ)return;
+  cloudReady=false;
+  try{await loadBusiness(BIZ)}
+  catch(e){
+    console.error('alfa+ load:',e);cloudReady=false;
+    const c=store.get(ckey());
+    if(c){try{restore(c);ME.company=BIZNAME||ME.company;nid=seedNid()}catch(x){console.error(x)}}
+    toast('Не удалось загрузить данные компании: '+errText(e)+'. Показана локальная копия, автосохранение отключено, чтобы не затереть общие данные.')}
+}
+/* Подтягиваем правки коллег и изменения прав (каждые 12 с и при возврате на вкладку) */
+function startPoll(){clearInterval(pollT);pollT=setInterval(pollRemote,12000)}
+function stopPoll(){clearInterval(pollT);pollT=null}
+function repaintSoft(){
+  paintShell();drawNav();
+  const ae=document.activeElement,typing=ae&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)&&ae.closest&&ae.closest('#view');
+  if($('#ov')||typing){pendingRender=true;return}
+  pendingRender=false;try{V[cur]&&V[cur]()}catch(e){console.error(e)}}
+async function pollRemote(){
+  if(!CUR||!BIZ||!cloudReady||pollBusy||cloudSaveBusy||document.hidden)return;
+  pollBusy=true;
+  try{
+    if(pendingRender)repaintSoft();
+    const list=await fetchBizList();BIZLIST=list;
+    const me=list.find(b=>b.business_id===BIZ);
+    if(!me||me.status!=='active'){pollBusy=false;accessLost(me?'blocked':'removed');return}
+    if(me.role!==MYROLE||me.name!==BIZNAME){
+      const roleChanged=me.role!==MYROLE;
+      try{await saveWorkspaceCloud(true)}catch(e){}
+      await loadBusiness(BIZ);repaintSoft();if(roleChanged)toast('Ваша роль изменена: '+accessName(MYROLE));pollBusy=false;return}
+    const r=await sb.from('workspace_sections').select('section,version').eq('business_id',BIZ);if(r.error)throw r.error;
+    const remote={};r.data.forEach(x=>{remote[x.section]=x.version});
+    let changed=false;
+    for(const s of SEC_ALL){
+      if(remote[s]===undefined||remote[s]===(secVer[s]||0))continue;
+      if(secCanEdit(s)&&canon(secBuild(s))!==secBase[s]){await saveSection(s);changed=true;continue}   // есть свои правки — сливаем и отправляем
+      const d=await sb.from('workspace_sections').select('data,version').eq('business_id',BIZ).eq('section',s).maybeSingle();
+      if(d.error)throw d.error;if(!d.data)continue;
+      secApply(s,d.data.data);secVer[s]=d.data.version;if(typeof afterLoad==='function')afterLoad();secBase[s]=canon(secBuild(s));changed=true}
+    if(changed){flush();repaintSoft()}
+  }catch(e){console.warn('alfa+ poll:',e)}
+  pollBusy=false}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollRemote()});
+function accessLost(kind){
+  stopPoll();cloudReady=false;const name=BIZNAME;try{store.del(ckey())}catch(e){}
+  clearLists();BIZ=null;
+  showNoAccess(kind==='blocked'?'Доступ заблокирован':'Вас удалили из команды',
+    (kind==='blocked'?'Администратор заблокировал ваш доступ к компании':'Вы больше не состоите в команде компании')+' «'+name+'». Данные компании на этом устройстве удалены.',{others:BIZLIST.filter(b=>b.status==='active')})}
+async function switchBusiness(id){
+  if(id===BIZ&&cloudReady)return;
+  try{if(BIZ&&cloudReady)await saveWorkspaceCloud(true)}catch(e){}
+  stopPoll();BIZ=id;store.set('vexon-biz:'+CUR,id);
+  await startApp();go('home')}
 ['click','input','change','drop'].forEach(ev=>document.addEventListener(ev,persist,true));
 const INDS=['Торговля','Услуги','Производство','IT и разработка','Строительство','Образование','Медицина','Другое'];
 const SIZES=['Только я','2–5','6–15','16–50','Больше 50'];
@@ -2053,6 +2198,7 @@ function showAuth(mode='login',notice=''){if(typeof hideSplash==='function')hide
   $('#app').hidden=true;const a=$('#auth');a.hidden=false;a.className='auth';const reg=mode==='reg';
   a.innerHTML=`<div class="auth-box">${pitch()}<form class="auth-form" id="af" novalidate><h2>${reg?'Создайте аккаунт':'Вход в alfa+'}</h2><p class="mut" style="margin:0">${reg?'Для регистрации нужны только имя, фамилия, телефон, почта и пароль.':'Введите электронную почту и пароль от вашего аккаунта.'}</p>${reg?fld('r_first','Имя','',{ph:'Иван'})+fld('r_last','Фамилия','',{ph:'Иванов'})+fld('r_phone','Телефон','',{type:'tel',ph:'+7 900 000-00-00'}):''}${fld('r_email','Электронная почта','',{type:'email',ph:'name@example.com'})}${fld('r_pass','Пароль','',{type:'password',ph:reg?'Не короче 6 символов':''})}${reg?fld('r_pass2','Повторите пароль','',{type:'password'})+`<label class="legal-check"><input id="r_terms" type="checkbox" required><span>Принимаю <a href="#" data-legal="terms">Условия использования</a> и подтверждаю ознакомление с <a href="#" data-legal="privacy">Политикой конфиденциальности</a>.</span></label><label class="legal-check"><input id="r_pd" type="checkbox" required><span>Даю отдельное согласие на обработку моих персональных данных в целях регистрации и предоставления доступа к CRM согласно <a href="#" data-legal="pd">Согласию на обработку персональных данных</a>.</span></label>`:''}<div class="err" id="aerr" role="alert">${esc(notice)}</div><button class="btn pri" style="justify-content:center">${reg?'Создать аккаунт':'Войти'}</button><div class="mut" style="text-align:center">${reg?'Уже есть аккаунт? <button type="button" class="link" id="asw">Войти</button>':'Нет аккаунта? <button type="button" class="link" id="asw">Зарегистрироваться</button>'}</div><div class="legal-links"><button type="button" data-legal="privacy">Политика конфиденциальности</button><button type="button" data-legal="terms">Условия использования</button><button type="button" data-legal="cookies">Политика Cookie</button></div></form></div>`;
   showCookieNotice();
+  {const it=getInvite();if(it)inviteBanner(it)}
   $('#asw').onclick=()=>showAuth(reg?'login':'reg');
   $('#af').onsubmit=async e=>{e.preventDefault();const btn=$('#af').querySelector('button[type="submit"],button:not([type])');const err=t=>{$('#aerr').textContent=t};
     const email=val('r_email').trim().toLowerCase(),pw=$('#r_pass').value;
@@ -2066,11 +2212,11 @@ function showAuth(mode='login',notice=''){if(typeof hideSplash==='function')hide
       if(!$('#r_pd').checked)return err('Для регистрации необходимо отдельное согласие на обработку персональных данных.');
       const consentAt=new Date().toISOString();
       btn.disabled=true;btn.textContent='Создаём аккаунт…';
-      const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{first_name:first,last_name:last,full_name:nm,phone,terms_accepted:true,terms_version:'2026-11-12',terms_accepted_at:consentAt,privacy_version:'2026-11-12',personal_data_consent:true,personal_data_consent_version:'2026-11-12',personal_data_consent_at:consentAt},emailRedirectTo:location.href.split('#')[0]}});
+      const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{first_name:first,last_name:last,full_name:nm,phone,terms_accepted:true,terms_version:'2026-11-12',terms_accepted_at:consentAt,privacy_version:'2026-11-12',personal_data_consent:true,personal_data_consent_version:'2026-11-12',personal_data_consent_at:consentAt},emailRedirectTo:inviteRedirect()}});
       btn.disabled=false;btn.textContent='Создать аккаунт';
       if(error)return err(authMessage(error));
       if(data.session&&data.user){openSession(data.user,nm,'')}
-      else{showAuth('login','Аккаунт создан. Проверьте почту и перейдите по ссылке подтверждения, затем войдите.');}
+      else{showAuth('login',getInvite()?'Аккаунт создан. Подтвердите почту по ссылке из письма и войдите: вы автоматически присоединитесь к компании.':'Аккаунт создан. Проверьте почту и перейдите по ссылке подтверждения, затем войдите.');}
     }else{
       btn.disabled=true;btn.textContent='Входим…';
       const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
@@ -2079,17 +2225,77 @@ function showAuth(mode='login',notice=''){if(typeof hideSplash==='function')hide
       if(data.user)openSession(data.user);
     }};
 }
+/* Приглашения: токен берём из ссылки ?invite=… и храним до входа/подтверждения почты */
+const INV_KEY='alfa-invite';
+function readInviteFromUrl(){
+  try{const u=new URL(location.href);let t=u.searchParams.get('invite');
+    if(!t&&/^#invite=/.test(location.hash))t=location.hash.slice(8);
+    if(t){t=t.replace(/[^A-Za-z0-9]/g,'').slice(0,128);if(t)store.set(INV_KEY,t);
+      u.searchParams.delete('invite');history.replaceState(null,'',u.pathname+u.search+(/^#invite=/.test(location.hash)?'':location.hash))}}catch(e){}}
+const getInvite=()=>store.get(INV_KEY)||'';
+const clearInvite=()=>store.del(INV_KEY);
+const inviteRedirect=()=>{const t=getInvite(),base=location.href.split(/[?#]/)[0];return t?base+'?invite='+t:base};
+async function inviteBanner(tok){
+  try{const r=await sb.rpc('preview_invite',{p_token:tok}),p=r.data,f=$('#af');if(!f||r.error)return;
+    const box=document.createElement('div');box.className='cm-note';
+    if(p&&p.valid){box.innerHTML=`${ico('shield')}<span>Вас пригласили в компанию «${esc(p.business_name)}» на роль «${esc(accessName(p.role))}». Войдите или зарегистрируйтесь с почтой <b>${esc(p.email)}</b> — доступ откроется автоматически.</span>`;const em=$('#r_email');if(em&&!em.value)em.value=p.email}
+    else box.innerHTML=`${ico('alert')}<span>${esc(ERRMAP[p&&p.reason]||'Приглашение недействительно')}</span>`;
+    f.insertBefore(box,f.children[1])}catch(e){}}
+/* Экран «нет доступа / приглашение не сработало» в оформлении страницы входа */
+function showNoAccess(title,text,o={}){
+  if(typeof hideSplash==='function')hideSplash();
+  $('#app').hidden=true;const a=$('#auth');a.hidden=false;a.className='auth';
+  a.innerHTML=`<div class="auth-box">${pitch()}<div class="auth-form"><h2>${esc(title)}</h2><p class="mut" style="margin:0">${esc(text)}</p>${(o.others||[]).map(b=>`<button class="btn pri" style="justify-content:center" data-act="switchBiz" data-id="${b.business_id}">Открыть «${esc(b.name)}»</button>`).join('')}${o.create?'<button class="btn pri" style="justify-content:center" data-act="startNew">Создать свою компанию</button>':''}<button class="btn" style="justify-content:center" data-act="logout">Выйти из аккаунта</button></div></div>`}
+A.startNew=()=>onboarding();
+A.switchBiz=b=>{$('#mePop').hidden=true;switchBusiness(b.dataset.id).catch(e=>toast('Не удалось открыть компанию: '+errText(e)))};
+A.newBiz=()=>{$('#mePop').hidden=true;
+  modal({title:'Новая компания',body:`<div class="form">${fld('nb_n','Название компании','',{full:1,ph:'ООО «Ромашка»'})}</div><p class="tk-hint">Вы станете её владельцем. Данные компаний полностью раздельны: сотрудники и клиенты не пересекаются.</p><div class="err" id="nberr"></div>`,
+    foot:[{label:'Отмена',fn:closeModal},{label:'Создать',cls:'pri',fn:async()=>{const n=val('nb_n');if(!n){$('#nberr').textContent='Укажите название';return}
+      const r=await sb.rpc('create_business',{p_name:n});if(r.error){$('#nberr').textContent=errText(r.error);return}
+      closeModal();try{BIZLIST=await fetchBizList();await switchBusiness(r.data);toast('Компания создана')}catch(e){toast(errText(e))}}}]})};
+
+/* Старое пространство (до командной версии): облачная запись crm_workspaces или локальная копия */
+async function migrateOld(uid){
+  let cloud=null;try{const r=await sb.from('crm_workspaces').select('data').eq('user_id',uid).maybeSingle();cloud=r.data&&r.data.data||null}catch(e){}
+  const ws=cloud&&cloud.workspace;
+  if(ws&&typeof ws==='object'&&ws.me&&ws.me.onboarded){
+    const r=await sb.rpc('migrate_legacy_workspace');
+    if(!r.error)return r.data;
+    if(!/already_migrated|no_legacy/.test(r.error.message||''))throw r.error}
+  const local=store.get('vexon-ws:'+uid);
+  if(local){try{const o=JSON.parse(local);if(o&&o.me&&o.me.onboarded&&o.lists){
+    const r=await sb.rpc('create_business',{p_name:o.me.company||'Моя компания'});if(r.error)throw r.error;ADOPT_LOCAL=local;return r.data}}catch(e){if(e&&e.message)throw e}}
+  return null}
 async function openSession(user,name='',company=''){
-  const uid=user.id,email=user.email||'';CUR=uid;cloudWorkspaceData={};
-  const ws=store.get('vexon-ws:'+uid);
-  if(!ws){const meta=user.user_metadata||{};resetME({login:email,email,name:name||meta.full_name||email,phone:meta.phone||'',company:company||meta.company||'Моя компания',user_id:uid});emptyWorkspace();flush();
-    /* Новое устройство: если в облаке уже есть настроенное пространство, мастер настройки не нужен */
-    try{const r=await sb.from('crm_workspaces').select('data').eq('user_id',uid).maybeSingle();if(r.data?.data?.workspace?.me?.onboarded)ME.onboarded=true}catch(e){console.warn('cloud precheck',e)}}
-  else{restore(ws);ME.login=email;ME.email=ME.email||email;ME.user_id=uid;if(name)ME.name=name;if(company)ME.company=company;flush()}
-  ME.onboarded?startApp():onboarding();
+  const uid=user.id,email=user.email||'',meta=user.user_metadata||{};CUR=uid;BIZ=null;let note='',prefer=null;
+  try{
+    const pr=await sb.rpc('ensure_profile');if(pr.error)throw pr.error;const p=pr.data||{};
+    resetME({login:email,email,name:(p.full_name&&p.full_name!==email?p.full_name:'')||name||meta.full_name||email,phone:p.phone||meta.phone||'',position:p.position||'',user_id:uid});
+    const tok=getInvite();
+    if(tok){const r=await sb.rpc('accept_invite',{p_token:tok});
+      if(r.error){note=errText(r.error);if(errKnown(r.error))clearInvite()}
+      else{prefer=r.data;clearInvite();note='ok'}}
+    BIZLIST=await fetchBizList();
+    if(!BIZLIST.length){const id=await migrateOld(uid);if(id){BIZLIST=await fetchBizList();prefer=id}}
+    const active=BIZLIST.filter(b=>b.status==='active');
+    if(!active.length){
+      if(BIZLIST.length)return showNoAccess('Доступ заблокирован','Ваш аккаунт заблокирован в компании «'+BIZLIST[0].name+'». Обратитесь к владельцу или администратору.');
+      if(note&&note!=='ok')return showNoAccess('Не удалось принять приглашение',note,{create:true});
+      return onboarding()}
+    const last=store.get('vexon-biz:'+uid);
+    BIZ=(active.find(b=>b.business_id===prefer)||active.find(b=>b.business_id===last)||active[0]).business_id;
+    store.set('vexon-biz:'+uid,BIZ);
+    await startApp();
+    if(note==='ok')toast('Вы присоединились к компании «'+BIZNAME+'»');else if(note)toast(note)
+  }catch(e){
+    console.error('alfa+ open session:',e);
+    showNoAccess('Не удалось открыть рабочее пространство',errText(e)+'. Проверьте соединение и попробуйте войти снова. Если вы ещё не применили миграцию 003 в Supabase, сделайте это (supabase/migrations/003_multi_tenant_teams.sql).')}
 }
-async function startApp(){await loadClientsCloud();if(typeof afterLoad==='function')afterLoad();$('#auth').hidden=true;document.getElementById('cookieBanner')?.remove();$('#app').hidden=false;paintShell();drawNav();go(location.hash.slice(1)||'home');if(typeof hideSplash==='function')hideSplash()}
-A.logout=async()=>{flush();const {error}=await sb.auth.signOut();if(error){toast('Не удалось выйти: '+authMessage(error));return}CUR=null;cloudVersion=null;cloudConflict=false;$('#mePop').hidden=true;showAuth('login')};
+async function startApp(o={}){
+  if(!o.skipLoad)await loadClientsCloud();
+  $('#auth').hidden=true;document.getElementById('cookieBanner')?.remove();$('#app').hidden=false;paintShell();drawNav();go(location.hash.slice(1)||'home');if(typeof hideSplash==='function')hideSplash()}
+A.logout=async()=>{try{await saveWorkspaceCloud(true)}catch(e){}flush();const {error}=await sb.auth.signOut();if(error){toast('Не удалось выйти: '+authMessage(error));return}
+  stopPoll();CUR=null;BIZ=null;BIZLIST=[];cloudReady=false;cloudVersion=null;cloudConflict=false;clearLists();$('#mePop').hidden=true;showAuth('login')};
 /* Мастер настройки */
 let OB;
 function onboarding(){OB={step:0,emps:[{n:'',r:'',e:''}],src:[...SOURCES],cats:CATS.join(', '),chv:{}};drawOB()}
@@ -2102,7 +2308,7 @@ function drawOB(){
   $('#app').hidden=true;const a=$('#auth');a.hidden=false;a.className='auth';const s=OB.step,T=['О вашем бизнесе','Вы и ваша команда','Источники и товары','Каналы связи'];
   const body=[
    `<div class="form">${fld('ob_co','Название компании',ME.company,{full:1})}${fld('ob_ind','Сфера деятельности',ME.industry||INDS[0],{type:'select',opts:INDS})}${fld('ob_size','Размер команды',ME.size||SIZES[1],{type:'select',opts:SIZES})}${fld('ob_city','Город',ME.city,{ph:'Москва'})}${fld('ob_ph','Телефон компании',ME.cphone,{ph:'+7 ___ ___-__-__'})}${fld('ob_site','Сайт',ME.site,{full:1,ph:'company.ru'})}</div>`,
-   `<div class="form">${fld('ob_pos','Ваша должность',ME.position)}${fld('ob_em','Ваша почта',ME.email,{type:'email'})}</div><p class="mut" style="margin:6px 0">Добавьте сотрудников, которые будут работать в CRM. Это можно сделать позже в разделе «Сотрудники».</p><div style="display:flex;flex-direction:column;gap:8px" id="emps">${OB.emps.map(x=>`<div class="emprow"><input placeholder="Имя и фамилия" value="${esc(x.n)}" aria-label="Имя"><input placeholder="Должность" value="${esc(x.r)}" aria-label="Должность"><input placeholder="Почта" value="${esc(x.e)}" aria-label="Почта"></div>`).join('')}</div>${OB.emps.length<8?'<button type="button" class="btn sm" style="margin-top:10px" id="addEmp">+ Ещё сотрудник</button>':''}`,
+   `<div class="form">${fld('ob_pos','Ваша должность',ME.position)}${fld('ob_em','Ваша почта',ME.email,{type:'email'})}</div><p class="mut" style="margin:6px 0">Добавьте сотрудников, которые будут работать в CRM. Это можно сделать позже в разделе «Сотрудники». Чтобы дать коллегам собственный вход в CRM, пригласите их потом в Настройки → Команда.</p><div style="display:flex;flex-direction:column;gap:8px" id="emps">${OB.emps.map(x=>`<div class="emprow"><input placeholder="Имя и фамилия" value="${esc(x.n)}" aria-label="Имя"><input placeholder="Должность" value="${esc(x.r)}" aria-label="Должность"><input placeholder="Почта" value="${esc(x.e)}" aria-label="Почта"></div>`).join('')}</div>${OB.emps.length<8?'<button type="button" class="btn sm" style="margin-top:10px" id="addEmp">+ Ещё сотрудник</button>':''}`,
    `<p class="mut" style="margin:0 0 8px">Откуда к вам приходят клиенты? Отметьте источники.</p><div class="chips">${SRC_ALL.concat(OB.src.filter(x=>!SRC_ALL.includes(x))).map(x=>`<button type="button" class="chip ${OB.src.includes(x)?'on':''}" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="form" style="margin-top:16px">${fld('ob_cats','Категории ваших товаров или услуг (через запятую)',OB.cats,{full:1})}</div>`,
    `<p class="mut" style="margin:0 0 6px">Подключите каналы, чтобы вести переписку с клиентами в одном окне. Можно пропустить и сделать позже в настройках.</p>${['tg','wa','mail'].map(k=>`<div class="chrow"><span class="chb" style="background:${CH[k].c};width:28px;height:28px;font-size:13px">${CH[k].l}</span><input data-k="${k}" placeholder="${CHINFO[k].ph}" value="${esc(OB.chv[k]||'')}" aria-label="${CHINFO[k].lb}"><span class="mut" style="font-size:12px;grid-column:2/-1">${CHINFO[k].lb}</span></div>`).join('')}`][s];
   a.innerHTML=`<div class="auth-box">${pitch()}<form class="auth-form" id="ob" novalidate><div class="steps">${T.map((_,i)=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div><small class="mut">Шаг ${s+1} из ${T.length}</small><h2>${T[s]}</h2>${body}<div class="err" id="aerr"></div><div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap">${s?'<button type="button" class="btn" id="obBack">Назад</button>':'<span></span>'}<button class="btn pri">${s===3?'Открыть CRM':'Далее'}</button></div></form></div>`;
@@ -2113,28 +2319,39 @@ function drawOB(){
     if(s===3){for(const k of ['tg','wa','mail'])if((OB.chv[k]||'').trim()){const er=connectCh(k,OB.chv[k]);if(er){$('#aerr').textContent=CHINFO[k].n+': '+er;return}}finishOB()}
     else{OB.step++;drawOB()}};
 }
-function finishOB(){
-  setList(SOURCES,OB.src.length?OB.src:SRC0);const c=OB.cats.split(',').map(x=>x.trim()).filter(Boolean);setList(CATS,c.length?c:CAT0);
-  setList(staff,[owner()]);OB.emps.filter(x=>x.n).forEach(x=>staff.push({id:++nid,name:x.n,role:x.r||'Сотрудник',dept:'Продажи',email:x.e,phone:'',plan:0,sales:0,status:'Не в сети',color:COLORS[nid%8]}));
-  ME.onboarded=true;flush();if(cloudReady)scheduleWorkspaceSync();startApp();toast('Готово! Добавьте первого клиента');
+async function finishOB(){
+  if(OB.busy)return;OB.busy=true;const btn=$('#ob button.pri');if(btn){btn.disabled=true;btn.textContent='Создаём компанию…'}
+  const wiz={};SEC_COMPANY_KEYS.forEach(k=>{wiz[k]=ME[k]});const pos=ME.position,em=ME.email;
+  try{
+    if(!OB.bizId){const r=await sb.rpc('create_business',{p_name:wiz.company||'Моя компания'});if(r.error)throw r.error;OB.bizId=r.data}
+    BIZLIST=await fetchBizList();BIZ=OB.bizId;store.set('vexon-biz:'+CUR,BIZ);
+    await loadBusiness(BIZ,{keepPersonal:true});
+    Object.assign(ME,wiz);ME.company=BIZNAME;ME.position=pos||'Руководитель';ME.email=em;
+    setList(SOURCES,OB.src.length?OB.src:SRC0);const c=OB.cats.split(',').map(x=>x.trim()).filter(Boolean);setList(CATS,c.length?c:CAT0);
+    setList(staff,[owner()]);OB.emps.filter(x=>x.n).forEach(x=>staff.push({id:++nid,name:x.n,role:x.r||'Сотрудник',dept:'Продажи',email:x.e,phone:'',plan:0,sales:0,status:'Не в сети',color:COLORS[nid%8]}));
+    ME.onboarded=true;flush();
+    if(!await saveWorkspaceCloud(false))throw new Error('Не удалось сохранить данные компании на сервере');
+    OB.busy=false;await startApp({skipLoad:true});toast('Готово! Добавьте первого клиента');
+  }catch(e){OB.busy=false;console.error(e);drawOB();$('#aerr').textContent='Не удалось создать компанию: '+errText(e)}
 }
 /* Резервная копия */
 A.backup=()=>{try{download(`alfa-backup-${iso(0)}.json`,snap(),'application/json');toast('Резервная копия скачана')}catch(e){toast('Не удалось создать файл резервной копии')}};
 A.restoreFile=()=>$('#rfile').click();
 /* Запуск */
 async function init(){
+  readInviteFromUrl();
   initLegalUi();
   $('#themeBtn').onclick=()=>setTheme(theme==='dark'?'light':'dark');
   $('#menuBtn').onclick=openSide;$('#scrim').onclick=closeSide;
   $('#bellBtn').onclick=e=>{e.stopPropagation();drawBell();const p=$('#bellPop');p.hidden=!p.hidden};
   $('#meBtn').onclick=e=>{e.stopPropagation();const p=$('#mePop');p.hidden=!p.hidden};
   $('#gs').oninput=e=>gsearch(e.target.value);$('#gs').onfocus=e=>gsearch(e.target.value);
-  $('#rfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.lists)throw 0;const lg=ME.login,em=ME.email;restore(r.result);resetME({...ME,login:lg,onboarded:true});flush();paintShell();drawNav();toast('Данные восстановлены');go('home')}catch(x){toast('Файл не похож на резервную копию alfa+')}};r.readAsText(f);e.target.value=''};
+  $('#rfile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(!can('settings.manage')){toast('Восстановление из файла доступно владельцу и администраторам');e.target.value='';return}const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.lists)throw 0;const keep={login:ME.login,user_id:CUR,name:ME.name,phone:ME.phone,position:ME.position,email:ME.email,seen:ME.seen,company:ME.company},linked=staff.filter(x=>x.uid).map(x=>({...x}));restore(r.result);resetME({...ME,...keep,onboarded:true});setList(staff,[...linked,...staff.filter(x=>!x.uid&&!linked.some(l=>l.id===x.id))]);nid=seedNid();persist();paintShell();drawNav();toast('Данные восстановлены');go('home')}catch(x){toast('Файл не похож на резервную копию alfa+')}};r.readAsText(f);e.target.value=''};
   window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&h!==cur&&!$('#app').hidden)go(h)});
   ['home','analytics','staff','finance'].forEach(k=>{const f=V[k];V[k]=()=>{recompute();f()}});
   window.addEventListener('pagehide',flush);
   setTheme(theme);
-  try{const {data,error}=await sb.auth.getSession();if(error)throw error;if(data.session?.user)openSession(data.session.user);else showAuth('login')}catch(e){showAuth('login','Не удалось подключиться к Supabase: '+authMessage(e))}
+  try{const {data,error}=await sb.auth.getSession();if(error)throw error;if(data.session?.user)openSession(data.session.user);else showAuth(getInvite()?'reg':'login')}catch(e){showAuth('login','Не удалось подключиться к Supabase: '+authMessage(e))}
 }
 
 </script>
@@ -2231,13 +2448,13 @@ function bucket(ser,n=12){
 }
 
 /* ---------- Роли и права ----------
-   ВАЖНО: сейчас в систему входит только владелец аккаунта; остальные сотрудники — записи
-   в справочнике без собственных учётных записей. Проверка can() скрывает недоступные действия
-   в интерфейсе. Принудительная проверка на сервере (RLS по ролям) требует многопользовательской
-   схемы — supabase/migrations/002_team_workspaces.sql (этап 2, не подключено к интерфейсу). */
+   Роль пользователя в компании хранится на сервере (business_members) и приходит при входе (MYROLE).
+   Таблица прав PERMS загружается с сервера из role_permissions — это тот же источник, который использует
+   база данных. Здесь can() только скрывает недоступные действия; реальную проверку выполняют RLS и
+   серверные функции (supabase/migrations/003_multi_tenant_teams.sql), поэтому обойти её из консоли браузера нельзя. */
 const ROLES={
-  owner:{n:'Владелец',d:'Полный доступ, включая удаление рабочего пространства и управление ролями'},
-  admin:{n:'Администратор',d:'Всё, кроме управления владельцем и удаления рабочего пространства'},
+  owner:{n:'Владелец',d:'Полный доступ: данные, команда и роли, настройки и тариф компании, передача прав владельца'},
+  admin:{n:'Администратор',d:'Все рабочие разделы, настройки компании, приглашение и управление сотрудниками (кроме владельца и других администраторов)'},
   head:{n:'Руководитель',d:'Видит данные всей команды, финансы и аналитику; не меняет настройки пространства'},
   manager:{n:'Менеджер',d:'Работает со своими клиентами, сделками и задачами'},
   staff:{n:'Сотрудник',d:'Ограниченный доступ: свои задачи и просмотр клиентов'}
@@ -2258,7 +2475,8 @@ const PERMS={
   'audit.view':['owner','admin','head'],
   'trash.purge':['owner','admin']
 };
-const actor=()=>staff.find(s=>s.id===1)||staff[0]||{id:1,access:'owner'};
+/* Текущий пользователь: карточка сотрудника, привязанная к его аккаунту; роль берётся с сервера, а не из карточки */
+const actor=()=>{const r=staff.find(s=>s.uid&&s.uid===CUR)||staff.find(s=>s.id===1)||staff[0]||{id:1};return {...r,access:BIZ?MYROLE:(r.access||'owner')}};
 const can=(perm,who=actor())=>(PERMS[perm]||[]).includes(who.access||(who.id===1?'owner':'manager'));
 const accessName=a=>(ROLES[a]||ROLES.manager).n;
 
@@ -2509,7 +2727,7 @@ const DW=[
  {id:'funnel',t:'Воронка продаж',s:2,r:()=>{
    const st=STAGES.filter(s=>s.id!=='lost'),cnt=st.map(s=>deals.filter(d=>d.stage===s.id)),base=Math.max(1,...cnt.map(c=>c.length));
    return `<div class="card"><h3>Воронка продаж<button class="btn sm" data-go="deals">Открыть</button></h3>${deals.length?`<div class="funnel">${st.map((s,i)=>`<div><span>${esc(s.name)}</span><div class="b" style="width:${Math.max(Math.round(cnt[i].length/base*100),8)}%;background:${s.c}">${cnt[i].length} · ${kfmt(sum(cnt[i],d=>d.sum))} ₽</div></div>`).join('')}</div>`:emptyState('deal','Сделок пока нет','Создайте первую сделку, чтобы увидеть воронку.')}</div>`}},
- {id:'activity',t:'Последние действия',s:2,r:()=>`<div class="card"><h3>Последние действия сотрудников<button class="btn sm" data-go="activity">Журнал</button></h3><div class="list">${activity.length?activity.slice(0,7).map(a=>`<div class="row">${av(a.mgr)}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400"><b style="display:inline">${esc(mgrOf(a.mgr).name.split(' ')[0])}</b> ${esc(a.t)}</b><small>${a.at?esc(relTime(a.at)):esc(a.ago||'')}</small></div></div>`).join(''):emptyState('log','Пока тихо','Здесь появятся действия команды.')}</div></div>`},
+ {id:'activity',t:'Последние действия',s:2,r:()=>`<div class="card"><h3>Последние действия сотрудников<button class="btn sm" data-go="activity">Журнал</button></h3><div class="list">${activity.length?activity.slice(0,7).map(a=>`<div class="row">${a.mgr?av(a.mgr):''}<div class="grow" style="white-space:normal"><b style="white-space:normal;font-weight:400"><b style="display:inline">${esc((mgrOf(a.mgr).name==='—'&&a.who?a.who:mgrOf(a.mgr).name).split(' ')[0])}</b> ${esc(a.t)}</b><small>${a.at?esc(relTime(a.at)):esc(a.ago||'')}</small></div></div>`).join(''):emptyState('log','Пока тихо','Здесь появятся действия команды.')}</div></div>`},
  {id:'todayTasks',t:'Задачи на сегодня',s:2,r:()=>{const l=[...M.overdueTasks(),...M.todayTasks()].slice(0,7);
    return `<div class="card"><h3>Задачи на сегодня<button class="btn sm" data-go="tasks">Все</button></h3><div class="list">${l.length?l.map(t=>`<div class="row"><button class="chk" data-act="tcheck" data-id="${t.id}" aria-label="Выполнить"></button><div class="grow"><b>${esc(t.title)}</b><small class="${t.due<iso(0)?'down':''}">${t.due<iso(0)?'Просрочено · ':''}${tkDate(t.due)} · ${esc(mgrOf(t.mgr).name)}</small></div>${ppill(t.prio)}</div>`).join(''):emptyState('check','На сегодня задач нет','Просроченных тоже нет.')}</div></div>`}},
  {id:'recentClients',t:'Новые клиенты (список)',s:2,r:()=>{const l=[...clients].sort((a,b)=>(b.added||'').localeCompare(a.added||'')||b.id-a.id).slice(0,6);
@@ -3090,7 +3308,7 @@ const FILE_MAX=10*1024*1024;
 async function cUpload(cid,f){
   if(!can('clients.edit'))return toast('Недостаточно прав');
   if(f.size>FILE_MAX)return toast('Файл больше 10 МБ');
-  const id=++nid,safe=f.name.replace(/[^\w.\-а-яА-ЯёЁ ]+/g,'_').slice(-80),path=`${CUR}/${cid}/${id}-${encodeURIComponent(safe).replace(/%/g,'')}`;
+  const id=++nid,safe=f.name.replace(/[^\w.\-а-яА-ЯёЁ ]+/g,'_').slice(-80),path=`${BIZ}/${cid}/${id}-${encodeURIComponent(safe).replace(/%/g,'')}`;
   toast('Загрузка…');
   try{
     const r=await sb.storage.from('client-files').upload(path,f,{upsert:false,contentType:f.type||'application/octet-stream'});
@@ -3800,14 +4018,14 @@ A.whSupDel=b=>{
    на сервере появится после подключения многопользовательской схемы (миграция 002, этап 2).
    ========================================================================== */
 const ST={tab:'team'};
-const PERM_NAMES={'clients.view':'Просмотр клиентов','clients.edit':'Изменение клиентов','clients.delete':'Удаление клиентов','deals.edit':'Работа со сделками','tasks.edit':'Работа с задачами','finance.view':'Просмотр финансов','finance.edit':'Изменение финансов','stock.edit':'Изменение склада','staff.manage':'Управление сотрудниками','settings.manage':'Настройки пространства','export':'Экспорт данных','ai.use':'Alfa AI','audit.view':'Журнал действий','trash.purge':'Безвозвратное удаление'};
+const PERM_NAMES={'team.manage':'Приглашение и управление сотрудниками','business.manage':'Компания и тариф, передача прав владельца','trash.restore':'Восстановление из корзины','clients.view':'Просмотр клиентов','clients.edit':'Изменение клиентов','clients.delete':'Удаление клиентов','deals.edit':'Работа со сделками','tasks.edit':'Работа с задачами','finance.view':'Просмотр финансов','finance.edit':'Изменение финансов','stock.edit':'Изменение склада','staff.manage':'Управление сотрудниками','settings.manage':'Настройки пространства','export':'Экспорт данных','ai.use':'Alfa AI','audit.view':'Журнал действий','trash.purge':'Безвозвратное удаление'};
 const stStats=s=>{const m=periodRange('30d');return {act:deals.filter(d=>d.mgr===s.id&&!['won','lost'].includes(d.stage)),won:M.dealsWon(m).filter(d=>d.mgr===s.id),open:tasks.filter(t=>t.mgr===s.id&&t.status!=='Выполнена'),late:tasks.filter(t=>t.mgr===s.id&&tkLate(t)),cl:clients.filter(c=>c.mgr===s.id)}};
 
 V.staff=()=>{
   const tabs=[['team','Команда'],['roles','Роли и права']];
   $('#view').innerHTML=`<div class="ph"><div><h1>Сотрудники</h1><p>${staff.length} в команде</p></div><div class="acts">${can('staff.manage')?`<button class="btn pri" data-act="newStaff">${ico('plus')}Добавить сотрудника</button>`:''}</div></div>
   <div class="tools"><div class="seg">${tabs.map(t=>`<button data-act="stTab" data-t="${t[0]}" class="${ST.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}</div></div>
-  <div class="cm-note">${ico('shield')}<span>Сейчас в систему входит только владелец аккаунта. Остальные сотрудники — записи для назначения клиентов, сделок и задач: собственных входов у них пока нет. Роли скрывают действия в интерфейсе; серверная проверка по ролям появится вместе с командными учётными записями (supabase/migrations/002_team_workspaces.sql, пока не подключена).</span></div>
+  <div class="cm-note">${ico('shield')}<span>Сотрудники с собственным входом приглашаются и получают роли в «Настройки → Команда»: их права проверяет сервер. Остальные карточки — справочник для назначения клиентов, сделок и задач без входа в систему.</span></div>
   <div id="stBody"></div>`;
   stDraw();
 };
@@ -3825,7 +4043,7 @@ function stDraw(){
    <div class="mut" style="font-size:12.5px;line-height:1.7">${esc(s.dept||'')}${s.email?'<br>'+esc(s.email):''}${s.phone?'<br>'+esc(s.phone):''}</div>
    <div class="st-k"><div><small>Сделок в работе</small><b>${k.act.length}</b></div><div><small>Выиграно за 30 дн.</small><b>${k.won.length}</b></div><div><small>Клиентов</small><b>${k.cl.length}</b></div><div><small>Задач открыто</small><b class="${k.late.length?'down':''}">${k.open.length}${k.late.length?` (${k.late.length} проср.)`:''}</b></div></div>
    ${s.plan?`<div class="mut" style="font-size:12px;margin-top:10px">План на 30 дней: ${rub(sum(k.won,d=>d.sum))} из ${rub(s.plan)} · <b class="${pl>=100?'up':''}">${pl}%</b><div class="bar"><i style="width:${Math.min(pl,100)}%"></i></div></div>`:''}
-   <div class="tools" style="margin:12px 0 0"><button class="btn sm" data-act="stLog" data-id="${s.id}">${ico('log')}Действия</button>${can('staff.manage')?`<button class="btn sm" data-act="editStaff" data-id="${s.id}">${ico('edit')}Изменить</button>${s.id!==1?`<button class="ibtn" style="width:32px;height:32px" data-act="delStaff" data-id="${s.id}" aria-label="Удалить">${ico('trash')}</button>`:''}`:''}</div></div>`}).join('')}</div>`;
+   <div class="tools" style="margin:12px 0 0"><button class="btn sm" data-act="stLog" data-id="${s.id}">${ico('log')}Действия</button>${can('staff.manage')?`<button class="btn sm" data-act="editStaff" data-id="${s.id}">${ico('edit')}Изменить</button>${s.id!==1&&!s.uid?`<button class="ibtn" style="width:32px;height:32px" data-act="delStaff" data-id="${s.id}" aria-label="Удалить">${ico('trash')}</button>`:''}`:''}</div></div>`}).join('')}</div>`;
 }
 A.stTab=b=>{ST.tab=b.dataset.t;V.staff()};
 A.stLog=b=>{AC.mgr=String(b.dataset.id);AC.per='all';go('activity')};
@@ -3837,17 +4055,18 @@ function staffForm(id){
   if(!s)return;
   const roleOpts=Object.keys(ROLES).filter(r=>r!=='owner'||s.id===1).map(r=>[r,ROLES[r].n]);
   modal({title:id?'Сотрудник':'Новый сотрудник',body:`<form class="form" onsubmit="return false">${fld('s_n','Имя и фамилия',s.name,{full:1})}${fld('s_r','Должность',s.role)}${fld('s_d','Отдел',s.dept,{type:'select',opts:['Руководство','Продажи','Финансы','Склад','Маркетинг']})}
-   ${fld('s_a','Роль',s.access||'manager',{type:'select',opts:roleOpts,dis:s.id===1})}${fld('s_pl','План продаж на 30 дней, ₽',s.plan||0,{type:'number'})}${fld('s_e','Почта',s.email,{type:'email'})}${fld('s_p','Телефон',s.phone)}</form><p class="tk-hint">Для сотрудника не создаётся вход в систему. Роль определяет, какие действия ему доступны в интерфейсе после появления командных учётных записей.</p>`,
+   ${fld('s_a','Роль',s.access||'manager',{type:'select',opts:roleOpts,dis:s.id===1||!!s.uid})}${fld('s_pl','План продаж на 30 дней, ₽',s.plan||0,{type:'number'})}${fld('s_e','Почта',s.email,{type:'email'})}${fld('s_p','Телефон',s.phone)}</form><p class="tk-hint">${s.uid?'У сотрудника есть собственный аккаунт: роль меняется в «Настройки → Команда».':'Для этой карточки не создаётся вход в систему. Чтобы дать доступ, пригласите сотрудника в «Настройки → Команда».'}</p>`,
    foot:[{label:'Отмена',fn:closeModal},{label:id?'Сохранить':'Добавить',cls:'pri',fn:()=>{
      if(!val('s_n')){toast('Укажите имя');return}
-     const o={name:val('s_n'),role:val('s_r')||'Сотрудник',dept:val('s_d'),email:val('s_e'),phone:val('s_p'),plan:Math.max(0,+val('s_pl')||0),access:s.id===1?'owner':val('s_a')};
-     if(id){Object.assign(s,o);if(s.id===1){ME.name=o.name;ME.position=o.role;paintShell()}log(`изменил(а) профиль сотрудника «${s.name}»`,{ent:'staff'})}
+     const o={name:val('s_n'),role:val('s_r')||'Сотрудник',dept:val('s_d'),email:val('s_e'),phone:val('s_p'),plan:Math.max(0,+val('s_pl')||0),access:(s.uid||s.id===1)?s.access:val('s_a')};
+     if(id){Object.assign(s,o);if(s.uid===CUR){ME.name=o.name;ME.position=o.role;paintShell()}log(`изменил(а) профиль сотрудника «${s.name}»`,{ent:'staff'})}
      else{o.id=++nid;o.sales=0;o.status='В сети';o.color=COLORS[nid%8];staff.push(o);log(`добавил(а) сотрудника «${o.name}»`,{ent:'staff'})}
      persist();closeModal();toast('Сохранено');V.staff()}}]});
 }
 A.delStaff=b=>{
   if(!can('staff.manage'))return toast('Недостаточно прав');
   const s=staff.find(x=>x.id==b.dataset.id);if(!s||s.id===1)return;
+  if(s.uid)return toast('У сотрудника есть аккаунт: удалите его в «Настройки → Команда»');
   const k=stStats(s),nc=clients.filter(c=>c.mgr===s.id).length,nd=deals.filter(d=>d.mgr===s.id).length,nt=tasks.filter(t=>t.mgr===s.id&&t.status!=='Выполнена').length;
   confirmBox(`Удалить сотрудника «${esc(s.name)}»? Его клиенты (${nc}), сделки (${nd}) и открытые задачи (${nt}) будут переданы владельцу. Запись можно восстановить из корзины, но назначения не вернутся.`,()=>{
     clients.forEach(c=>{if(c.mgr===s.id)c.mgr=1});deals.forEach(d=>{if(d.mgr===s.id)d.mgr=1});tasks.forEach(t=>{if(t.mgr===s.id&&t.status!=='Выполнена')t.mgr=1});
@@ -3861,7 +4080,7 @@ A.delStaff=b=>{
    comms.js — коммуникационный центр: «Сообщения» (V.messages) и «Звонки» (V.phone)
    Честная модель: переписка и звонки ВНОСЯТСЯ вручную и сохраняются в CRM/историю клиента.
    Автоматической отправки в Telegram/WhatsApp/почту нет (нужны ключи и сервер).
-   Внутреннего чата сотрудников нет: см. supabase/migrations/002_team_workspaces.sql (этап 2).
+   Внутреннего чата сотрудников нет: см. supabase/migrations/003_multi_tenant_teams.sql (этап 2).
    ========================================================================== */
 if(!CH.other)CH.other={n:'Другое',c:'#8e8e93',l:'•'};
 const cm={q:'',flt:'all',ch:'',tab:'dlg',draft:{}};
@@ -3924,7 +4143,7 @@ function cmFiltered(){
 V.messages=()=>{
   const unread=dialogs.reduce((a,d)=>a+(d.unread||0),0);
   const head=`<div class="ph"><div><h1>Сообщения</h1><p>Переписка с клиентами в одном окне. Входящие вносятся вручную, всё сохраняется в карточке клиента.</p></div><div class="acts"><button class="btn" data-act="cmTab" data-t="${cm.tab==='tpl'?'dlg':'tpl'}">${ico(cm.tab==='tpl'?'msg':'file')}${cm.tab==='tpl'?'Диалоги':'Шаблоны'}</button><button class="btn pri" data-act="newDlg">${ico('plus')}Новый диалог</button></div></div>`;
-  const note=`<div class="cm-note">${ico('users')}<span>Командный чат сотрудников появится с многопользовательской схемой (<code>supabase/migrations/002_team_workspaces.sql</code>, этап 2). Сейчас в систему входит только владелец, остальные сотрудники — записи без учётных записей.</span></div>`;
+  const note=`<div class="cm-note">${ico('users')}<span>Командный чат сотрудников появится с многопользовательской схемой (<code>supabase/migrations/003_multi_tenant_teams.sql</code>, этап 2). Сейчас в систему входит только владелец, остальные сотрудники — записи без учётных записей.</span></div>`;
   if(cm.tab==='tpl'){$('#view').innerHTML=head+cmDuePanel()+cmTplView()+note;return}
   if(!dialogs.length){$('#view').innerHTML=head+cmDuePanel()+`<div class="card">${emptyState('msg','Диалогов пока нет','Создайте диалог с клиентом — подключать канал связи не нужно, канал это просто метка. Историю можно вести вручную.',`<button class="btn pri" data-act="newDlg">${ico('plus')}Новый диалог</button>`)}</div>`+note;return}
   if(!dialogs.find(d=>d.id===curDlg))curDlg=dialogs[0].id;
@@ -4230,6 +4449,7 @@ function auLastContact(c){
 }
 function autoTick(){
   if(!Array.isArray(autos)||!autos.length||!clients)return 0;
+  if(!can('settings.manage')||!cloudReady)return 0;   // общий запуск: иначе каждый сотрудник создал бы дубликаты задач
   const today=iso(0);let ran=0;
   autos.filter(a=>a.on&&a.trig===AU_TRIG_NOFB).forEach(a=>{
     const N=Math.max(1,+(a.tp&&a.tp.days)||3);a.fired=a.fired||{};
@@ -4548,16 +4768,17 @@ function acDraw(){
   const l=acList(),box=$('#acList');
   $('#acCount').textContent=`Записей: ${l.length}`;
   box.innerHTML=l.length?`<div class="card nt-card">${l.slice(0,300).map(a=>{
-    const s=mgrOf(a.mgr),v=ENT_VIEW[a.ent];
-    return `<div class="ac-row">${av(a.mgr,1)}<div class="nt-b"><b><span class="ac-who">${esc(s.name)}</span> ${esc(a.t)}</b><small>${a.at?esc(fdt(a.at))+' · '+esc(relTime(a.at)):esc(a.ago||'')}</small></div>${v?`<button class="btn sm" data-go="${v}">Открыть раздел</button>`:''}</div>`}).join('')}${l.length>300?`<div class="nt-more">Показаны 300 из ${l.length}. Остальные — в экспорте.</div>`:''}</div>`
+    const s=mgrOf(a.mgr),v=ENT_VIEW[a.ent],nm=(s.name==='—'&&a.who)?a.who:s.name;
+    return `<div class="ac-row">${a.mgr&&s.name!=='—'?av(a.mgr,1):`<span class="av s" style="background:#666">${esc(ini(nm||'?'))}</span>`}<div class="nt-b"><b><span class="ac-who">${esc(nm)}</span> ${esc(a.t)}</b><small>${a.at?esc(fdt(a.at))+' · '+esc(relTime(a.at)):esc(a.ago||'')}</small></div>${v?`<button class="btn sm" data-go="${v}">Открыть раздел</button>`:''}</div>`}).join('')}${l.length>300?`<div class="nt-more">Показаны 300 из ${l.length}. Остальные — в экспорте.</div>`:''}</div>`
    :`<div class="card">${emptyState('log','Записей нет','Измените период или фильтр. Действия появляются здесь по мере работы в CRM.')}</div>`;
 }
 V.activity=()=>{
   $('#view').innerHTML=`<div class="ph"><div><h1>Журнал действий</h1><p id="acCount"></p></div><div class="acts">${typeof exportButtons==='function'?exportButtons('activity'):''}</div></div>
   <div class="tools"><input id="acQ" type="search" placeholder="Поиск по журналу" value="${esc(AC.q)}" aria-label="Поиск"><select id="acM" aria-label="Сотрудник"><option value="">Все сотрудники</option>${staff.map(s=>`<option value="${s.id}" ${AC.mgr==s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
   <select id="acP" aria-label="Период">${PERIODS.map(p=>`<option value="${p[0]}" ${AC.per===p[0]?'selected':''}>${p[1]}</option>`).join('')}</select></div>
-  <div id="acList"></div><p class="nt-note">Журнал хранится в вашем рабочем пространстве и записывается приложением. Это не неизменяемый аудит: владелец может его очистить. Защищённый серверный аудит предусмотрен схемой этапа 2 (supabase/migrations/002_team_workspaces.sql).</p>`;
+  <div id="acList"></div><p class="nt-note">Журнал записывает сервер (таблица activity_log): пользователь, время и тип действия фиксируются на стороне базы данных. Записи нельзя изменить или удалить из приложения; видят их владелец, администраторы и руководители.</p>`;
   $('#acQ').oninput=e=>{AC.q=e.target.value;acDraw()};$('#acM').onchange=e=>{AC.mgr=e.target.value;acDraw()};$('#acP').onchange=e=>{AC.per=e.target.value;acDraw()};acDraw();
+  if(typeof actLoad==='function')actLoad().then(()=>{if(cur==='activity'&&$('#acList'))acDraw()});
 };
 
 /* ==========================================================================
@@ -4577,10 +4798,11 @@ function trDraw(){
   $('#trList').innerHTML=l.length?`<div class="card nt-card">${l.map(t=>{
     const left=Math.max(0,Math.ceil((t.at+TR_DAYS*864e5-Date.now())/864e5)),extra=t.extra?[(t.extra.deals||[]).length&&`сделок: ${t.extra.deals.length}`,(t.extra.files||[]).length&&`файлов: ${t.extra.files.length}`].filter(Boolean).join(', '):'';
     return `<div class="ac-row"><span class="nt-ic">${ico('trash')}</span><div class="nt-b"><b>${esc(t.label)}</b><small>${esc(TRASHKIND[t.kind]||'Запись')} · удалил(а) ${esc(t.by||'—')}, ${esc(relTime(t.at))}${extra?' · вместе с ним: '+esc(extra):''} · хранится ещё ${left} дн.</small></div>
-     <div class="acts"><button class="btn sm pri" data-act="trRestore" data-id="${t.id}">${ico('undo')}Восстановить</button>${canP?`<button class="btn sm dng" data-act="trPurge" data-id="${t.id}">Удалить навсегда</button>`:''}</div></div>`}).join('')}</div>`
+     <div class="acts">${can('trash.restore')?`<button class="btn sm pri" data-act="trRestore" data-id="${t.id}">${ico('undo')}Восстановить</button>`:''}${canP?`<button class="btn sm dng" data-act="trPurge" data-id="${t.id}">Удалить навсегда</button>`:''}</div></div>`}).join('')}</div>`
    :`<div class="card">${emptyState('trash','Корзина пуста','Удалённые клиенты, сделки, задачи, товары и операции можно будет восстановить отсюда.')}</div>`;
 }
 A.trRestore=b=>{
+  if(!can('trash.restore'))return toast('Восстанавливать из корзины могут руководитель и выше');
   const id=+b.dataset.id;if(!trashRestore(id))return;
   if(typeof afterLoad==='function')afterLoad();
   persist();drawNav();trDraw();toast('Запись восстановлена');
@@ -4632,7 +4854,7 @@ const EXSETS={
     ['Себестоимость',p=>p.cost,'m',14],['Остаток',p=>p.qty,'i',10],['Минимум',p=>p.min,'i',10],['Единица',p=>p.unit||'шт','s',10],
     ['Поставщик',p=>exNameOf(suppliers,p.sup),'s',24]]},
   activity:{label:'журнал действий',sheet:'Журнал действий',rows:()=>activity,cols:[
-    ['Дата и время',a=>a.at,'dt',18],['Сотрудник',a=>exMgr(a.mgr),'s',22],['Действие',a=>a.t,'s',70]]},
+    ['Дата и время',a=>a.at,'dt',18],['Сотрудник',a=>(a.who&&!a.mgr)?a.who:exMgr(a.mgr),'s',22],['Действие',a=>a.t,'s',70]]},
   trash:{label:'корзина',sheet:'Корзина',rows:()=>trash,cols:[
     ['Тип',t=>TRASHKIND[t.kind]||t.kind,'s',14],['Название',t=>t.label,'s',34],['Удалено',t=>t.at,'dt',18],['Кто удалил',t=>t.by,'s',22]]}
 };
@@ -5130,7 +5352,7 @@ A.aiMode=()=>{
    ========================================================================== */
 const SETS={tab:'company'};
 const THEMES=[['system','Как в системе'],['light','Светлая'],['dark','Тёмная']];
-const SETTABS=[['company','Рабочее пространство'],['profile','Профиль'],['look','Внешний вид'],['notif','Уведомления'],['integr','Каналы связи'],['data','Данные и копии']];
+const SETTABS=[['company','Рабочее пространство'],['team','Команда'],['profile','Профиль'],['look','Внешний вид'],['notif','Уведомления'],['integr','Каналы связи'],['data','Данные и копии']];
 
 V.settings=()=>{
   const ok=can('settings.manage');
@@ -5138,7 +5360,8 @@ V.settings=()=>{
   const P={
    company:`<div class="form">${fld('c_n','Название компании',ME.company,{full:1,dis:!ok})}${fld('c_ind','Сфера деятельности',ME.industry||INDS[0],{type:'select',opts:INDS,dis:!ok})}${fld('c_i','ИНН',ME.inn,{dis:!ok})}${fld('c_c','Город',ME.city,{dis:!ok})}${fld('c_ph','Телефон компании',ME.cphone,{dis:!ok})}${fld('c_m','Почта компании',ME.cemail,{dis:!ok})}${fld('c_s','Сайт',ME.site,{dis:!ok})}${fld('c_a','Адрес',ME.addr,{full:1,dis:!ok})}</div>${ok?`<div style="margin-top:16px"><button class="btn pri" data-act="saveSet">Сохранить</button></div>
      <h4 style="margin:24px 0 8px">Источники клиентов и категории товаров</h4><div class="form">${fld('c_src','Источники (через запятую)',SOURCES.join(', '),{full:1})}${fld('c_cat','Категории товаров (через запятую)',CATS.join(', '),{full:1})}</div><div style="margin-top:16px"><button class="btn pri" data-act="saveLists">Сохранить списки</button></div>`:''}`,
-   profile:`<div class="form">${fld('u_l','Электронная почта (логин)',ME.login,{dis:1})}${fld('u_n','Имя и фамилия',ME.name)}${fld('u_r','Должность',ME.position)}${fld('u_e','Контактная почта',ME.email,{type:'email'})}${fld('u_p','Телефон',ME.phone)}</div><div style="margin-top:16px"><button class="btn pri" data-act="saveSet">Сохранить</button> <button class="btn" data-act="chPw">Сменить пароль</button></div>`,
+   team:'<div id="tmBody"></div>',
+   profile:`<div class="form">${fld('u_l','Электронная почта (логин)',ME.login,{dis:1})}${fld('u_n','Имя и фамилия',ME.name)}${fld('u_r','Должность',ME.position)}${fld('u_e','Контактная почта',ME.email,{type:'email'})}${fld('u_p','Телефон',ME.phone)}</div><p class="mut" style="margin:14px 0 0">Компания: <b>${esc(BIZNAME)}</b> · ваша роль: <b>${esc(accessName(MYROLE))}</b>. Роль назначает владелец или администратор. Профиль и личные настройки относятся только к вам.</p><div style="margin-top:16px"><button class="btn pri" data-act="saveSet">Сохранить</button> <button class="btn" data-act="chPw">Сменить пароль</button></div>`,
    look:`<div class="row"><div class="grow"><b>Тема интерфейса</b><small>«Как в системе» следует настройке вашего устройства</small></div><div class="seg">${THEMES.map(t=>`<button data-act="th" data-t="${t[0]}" class="${theme===t[0]?'on':''}">${t[1]}</button>`).join('')}</div></div>
      <p class="mut" style="margin-top:14px">Анимации автоматически отключаются, если в системе включена настройка «уменьшить движение».</p>`,
    notif:`<div class="list">${sw('ntToast','Всплывающие уведомления','Короткое сообщение при новых событиях (клиенты, сделки, платежи, сценарии)',ME.ntToast!==false)}</div>
@@ -5146,15 +5369,16 @@ V.settings=()=>{
    integr:`<div>${['tg','wa','mail'].map(k=>{const c=ME.ch[k];return `<div class="chrow"><span class="chb" style="background:${CH[k].c};width:30px;height:30px;font-size:14px">${CH[k].l}</span><div style="min-width:0"><b>${CHINFO[k].n}</b> <span class="pill ${c.on?'ok':'gray'}">${c.on?'Отмечен как используемый':'Не отмечен'}</span><div class="mut" style="font-size:12px;margin-top:2px">${c.on?esc(c.v):CHINFO[k].hint}</div>${c.on?'':`<input id="ch_${k}" placeholder="${CHINFO[k].ph}" style="margin-top:8px" aria-label="${CHINFO[k].lb}">`}</div>${c.on?`<button class="btn sm dng" data-act="chOff" data-k="${k}">Убрать</button>`:`<button class="btn sm pri" data-act="chOn" data-k="${k}">Отметить</button>`}</div>`}).join('')}</div>
      <p class="mut"><b>Это не интеграция.</b> Здесь вы лишь отмечаете, каким каналом ведёте переписку: она записывается вручную в карточку клиента. Отправка и приём сообщений через Telegram, WhatsApp или почту в приложении не работают — для этого нужны ключи API и серверная часть. Токены и пароли не сохраняются.</p>`,
    data:`<div class="list">
-     <div class="row"><div class="grow"><b>Аккаунт: ${esc(ME.login)}</b><small>Вход защищён Supabase Auth</small></div><button class="btn" data-act="logout">Выйти</button></div>
-     <div class="row"><div class="grow"><b>Синхронизация</b><small id="syncState">${cloudConflict?'Конфликт версий — перезагрузите страницу':cloudReady?'Данные сохраняются в вашей облачной записи Supabase и в этом браузере':'Облако недоступно — данные хранятся только в этом браузере'}</small></div></div>
+     <div class="row"><div class="grow"><b>Аккаунт: ${esc(ME.login)}</b><small>Компания «${esc(BIZNAME)}» · роль: ${esc(accessName(MYROLE))} · вход защищён Supabase Auth</small></div><button class="btn" data-act="logout">Выйти</button></div>
+     <div class="row"><div class="grow"><b>Синхронизация</b><small id="syncState">${cloudConflict?'Конфликт версий — загрузите актуальные данные':cloudReady?'Данные общие для всей команды: хранятся в Supabase, правки коллег подтягиваются автоматически; копия — в этом браузере':'Облако недоступно — показана локальная копия, сохранение отключено'}</small></div></div>
      <div class="row"><div class="grow"><b>Резервная копия</b><small>Скачайте файл со всеми данными рабочего пространства</small></div><button class="btn" data-act="backup">${ico('down')}Скачать</button></div>
-     <div class="row"><div class="grow"><b>Восстановить из файла</b><small>Заменит текущие данные содержимым файла</small></div><button class="btn" data-act="restoreFile">Выбрать файл</button></div>
-     <div class="row"><div class="grow"><b>Облачные версии</b><small>Автоматические снимки (не чаще раза в час). Требует миграции 001.</small></div><button class="btn" data-act="snapList">Показать</button></div>
+     <div class="row"><div class="grow"><b>Восстановить из файла</b><small>Заменит текущие данные компании содержимым файла (для всей команды). Только владелец и администраторы</small></div><button class="btn" data-act="restoreFile">Выбрать файл</button></div>
+     <div class="row"><div class="grow"><b>Облачные версии</b><small>Автоматические снимки разделов (не чаще раза в час). Владелец и администраторы</small></div>${can('settings.manage')?'<button class="btn" data-act="snapList">Показать</button>':''}</div>
      <div class="row"><div class="grow"><b>Корзина</b><small>Удалённые записи хранятся 30 дней</small></div><button class="btn" data-go="trash">Открыть</button></div>
-     ${can('settings.manage')?`<div class="row"><div class="grow"><b>Очистить все данные</b><small>Удалит клиентов, сделки, задачи, товары и остальное. Аккаунт останется. Сначала скачайте копию.</small></div><button class="btn dng" data-act="askClear">Очистить</button></div>`:''}</div>`
+     ${can('business.manage')?`<div class="row"><div class="grow"><b>Очистить все данные</b><small>Удалит клиентов, сделки, задачи, товары и остальное у всей компании. Аккаунты сотрудников останутся. Только владелец. Сначала скачайте копию.</small></div><button class="btn dng" data-act="askClear">Очистить</button></div>`:''}</div>`
   };
-  $('#view').innerHTML=`<div class="ph"><div><h1>Настройки</h1><p>Рабочее пространство, профиль и данные</p></div></div><div class="card"><div class="tabs">${SETTABS.map(t=>`<button data-act="stab" data-t="${t[0]}" class="${SETS.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}</div><div style="max-width:760px">${P[SETS.tab]}</div></div>`;
+  $('#view').innerHTML=`<div class="ph"><div><h1>Настройки</h1><p>Рабочее пространство, профиль и данные</p></div></div><div class="card"><div class="tabs">${SETTABS.map(t=>`<button data-act="stab" data-t="${t[0]}" class="${SETS.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}</div><div style="max-width:${SETS.tab==='team'?'100%':'760px'}">${P[SETS.tab]}</div></div>`;
+  if(SETS.tab==='team')tmLoad();
 };
 A.stab=b=>{SETS.tab=b.dataset.t;V.settings()};
 A.sw=b=>{if(b.dataset.k==='ntToast')ME.ntToast=ME.ntToast===false;persist();V.settings()};
@@ -5162,31 +5386,170 @@ A.th=b=>{setTheme(b.dataset.t);V.settings()};
 A.chOn=b=>{const er=connectCh(b.dataset.k,val('ch_'+b.dataset.k));if(er){toast(er);return}persist();toast(CHINFO[b.dataset.k].n+' отмечен');V.settings()};
 A.chOff=b=>{ME.ch[b.dataset.k]={on:false,v:''};persist();toast('Отметка снята');V.settings()};
 A.saveSet=()=>{
-  if($('#c_n')){if(!can('settings.manage'))return toast('Недостаточно прав');if(!val('c_n')){toast('Укажите название компании');return}Object.assign(ME,{company:val('c_n'),industry:val('c_ind'),inn:val('c_i'),city:val('c_c'),cphone:val('c_ph'),cemail:val('c_m'),site:val('c_s'),addr:val('c_a')})}
-  if($('#u_n')){if(!val('u_n')){toast('Укажите имя');return}const em=val('u_e');if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){toast('Проверьте формат почты');return}Object.assign(ME,{name:val('u_n'),position:val('u_r'),phone:val('u_p'),email:em});const o=staff.find(s=>s.id===1);if(o){o.name=ME.name;o.role=ME.position;o.phone=ME.phone;o.email=ME.email}}
+  if($('#c_n')){if(!can('settings.manage'))return toast('Недостаточно прав');if(!val('c_n')){toast('Укажите название компании');return}const nm=val('c_n');Object.assign(ME,{company:nm,industry:val('c_ind'),inn:val('c_i'),city:val('c_c'),cphone:val('c_ph'),cemail:val('c_m'),site:val('c_s'),addr:val('c_a')});
+    if(nm!==BIZNAME)sb.rpc('rename_business',{p_business:BIZ,p_name:nm}).then(r=>{if(r.error){toast('Не удалось переименовать компанию: '+errText(r.error));ME.company=BIZNAME}else{BIZNAME=nm;const b=BIZLIST.find(x=>x.business_id===BIZ);if(b)b.name=nm}paintShell()})}
+  if($('#u_n')){if(!val('u_n')){toast('Укажите имя');return}const em=val('u_e');if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){toast('Проверьте формат почты');return}Object.assign(ME,{name:val('u_n'),position:val('u_r'),phone:val('u_p'),email:em});const o=staff.find(s=>s.uid===CUR)||(MYROLE==='owner'?staff.find(s=>s.id===1):null);if(o){o.name=ME.name;o.role=ME.position;o.phone=ME.phone;o.email=ME.email}}
   log('обновил(а) настройки',{ent:'settings'});persist();paintShell();toast('Сохранено')};
 A.saveLists=()=>{if(!can('settings.manage'))return toast('Недостаточно прав');const sp=s=>[...new Set(s.split(',').map(x=>x.trim()).filter(Boolean))],a=sp(val('c_src')),b=sp(val('c_cat'));if(!a.length||!b.length){toast('Списки не должны быть пустыми');return}setList(SOURCES,a);setList(CATS,b);persist();toast('Списки сохранены')};
 A.askClear=()=>{
-  if(!can('settings.manage'))return toast('Недостаточно прав');
-  modal({title:'Очистить все данные?',body:`<p>Будут удалены клиенты, сделки, задачи, товары, финансы, переписка и остальные данные рабочего пространства. Аккаунт останется. <b>Это действие нельзя отменить</b> (облачные версии могут помочь, если применена миграция 001).</p><p>Для подтверждения введите слово <b>ОЧИСТИТЬ</b>.</p><div class="form">${fld('cl_w','Подтверждение','',{full:1})}</div><div class="err" id="clerr"></div>`,
+  if(!can('business.manage'))return toast('Очистить данные компании может только владелец');
+  modal({title:'Очистить все данные?',body:`<p>Будут удалены клиенты, сделки, задачи, товары, финансы, переписка и остальные данные компании — <b>у всех сотрудников</b>. Аккаунты и роли останутся. <b>Это действие нельзя отменить</b> (облачные версии разделов могут помочь).</p><p>Для подтверждения введите слово <b>ОЧИСТИТЬ</b>.</p><div class="form">${fld('cl_w','Подтверждение','',{full:1})}</div><div class="err" id="clerr"></div>`,
    foot:[{label:'Отмена',fn:closeModal},{label:'Скачать копию',fn:()=>A.backup()},{label:'Очистить',cls:'dng',fn:()=>{if(val('cl_w').trim().toUpperCase()!=='ОЧИСТИТЬ'){$('#clerr').textContent='Введите слово ОЧИСТИТЬ';return}
-     emptyWorkspace();persist();closeModal();paintShell();drawNav();toast('Данные очищены');go('home')}}]});
+     const keep=staff.filter(x=>x.uid).map(x=>({...x}));emptyWorkspace();setList(staff,keep.length?keep:[owner()]);nid=seedNid();persist();closeModal();paintShell();drawNav();toast('Данные очищены');go('home')}}]});
 };
 
-/* ---------- Облачные версии (таблица crm_workspace_history из миграции 001) ---------- */
+</script>
+<script>
+/* Встроенный файл: assets/js/team.js */
+/* ==========================================================================
+   team.js — «Команда»: сотрудники с собственными аккаунтами, приглашения по ссылке,
+   смена ролей, блокировка и удаление, журнал действий с сервера.
+   Все действия выполняются серверными функциями (RPC) с проверкой роли в базе данных:
+   кнопки в интерфейсе лишь скрываются для тех, кому действие недоступно.
+   ========================================================================== */
+const TM={rows:[],inv:[],q:'',role:'',status:'',loading:false,err:''};
+const tmDate=t=>t?new Date(t).toLocaleDateString('ru-RU'):'—';
+const INV_ST={pending:['info','Ожидает'],expired:['warn','Истекло'],accepted:['ok','Принято'],cancelled:['gray','Отменено']};
+const MEM_ST={active:['ok','Активен'],blocked:['bad','Заблокирован']};
+/* Те же правила, что в серверной функции _manage_check: интерфейс только повторяет их для удобства */
+const tmManageable=r=>can('team.manage')&&!r.is_me&&r.role!=='owner'&&!(MYROLE==='admin'&&r.role==='admin');
+const tmAssignable=()=>MYROLE==='owner'?['admin','head','manager','staff']:['head','manager','staff'];
+const tmLink=tok=>location.href.split(/[?#]/)[0]+'?invite='+tok;
+
+async function tmLoad(){
+  if(!BIZ)return;TM.loading=true;TM.err='';tmDraw();
+  try{
+    const t=await sb.rpc('list_team',{p_business:BIZ});if(t.error)throw t.error;TM.rows=t.data||[];
+    if(can('team.manage')){const i=await sb.rpc('list_invites',{p_business:BIZ});if(i.error)throw i.error;TM.inv=i.data||[]}else TM.inv=[];
+  }catch(e){TM.err=errText(e)}
+  TM.loading=false;tmDraw();
+}
+function tmDraw(){
+  const b=$('#tmBody');if(!b)return;
+  if(TM.err){b.innerHTML=`<div class="card">${emptyState('alert','Команда недоступна',TM.err,'<button class="btn" data-act="tmReload">Повторить</button>')}</div>`;return}
+  if(TM.loading&&!TM.rows.length){b.innerHTML=skeleton(4,52);return}
+  if(!$('#tmTb')){
+    const mg=can('team.manage');
+    b.innerHTML=`<div class="tools" id="tmTb"><input id="tmQ" type="search" placeholder="Поиск по имени и почте" value="${esc(TM.q)}" aria-label="Поиск сотрудников">
+      <select id="tmR" aria-label="Роль"><option value="">Все роли</option>${Object.keys(ROLES).map(k=>`<option value="${k}" ${TM.role===k?'selected':''}>${esc(ROLES[k].n)}</option>`).join('')}</select>
+      <select id="tmS" aria-label="Статус"><option value="">Любой статус</option><option value="active" ${TM.status==='active'?'selected':''}>Активные</option><option value="blocked" ${TM.status==='blocked'?'selected':''}>Заблокированные</option></select>
+      <span style="flex:1"></span>${mg?`<button class="btn pri" data-act="tmInvite">${ico('plus')}Пригласить сотрудника</button>`:''}</div>
+      <div id="tmTable"></div><div id="tmInv"></div>
+      <p class="nt-note">Роль определяет доступ к данным компании, и проверяет её сервер, а не интерфейс. Владелец управляет всеми ролями и передаёт права владельца; администратор — всеми, кроме владельца и других администраторов.</p>`;
+    $('#tmQ').oninput=e=>{TM.q=e.target.value;tmFill()};$('#tmR').onchange=e=>{TM.role=e.target.value;tmFill()};$('#tmS').onchange=e=>{TM.status=e.target.value;tmFill()};
+  }
+  tmFill();
+}
+function tmFill(){
+  const q=norm(TM.q),rows=TM.rows.filter(r=>(!TM.role||r.role===TM.role)&&(!TM.status||r.status===TM.status)&&(!q||norm((r.full_name||'')+' '+(r.email||'')).includes(q)));
+  const mg=can('team.manage');
+  $('#tmTable').innerHTML=rows.length?`<div class="tw"><table><thead><tr><th>Сотрудник</th><th>Email</th><th>Роль</th><th>Статус</th><th>Присоединился</th><th></th></tr></thead><tbody>${rows.map((r,i)=>{
+    const nm=r.full_name||r.email||'—',st=MEM_ST[r.status]||['gray',r.status],can_=tmManageable(r);
+    const roleCell=can_?`<select class="tm-role" data-uid="${r.user_id}" aria-label="Роль: ${esc(nm)}">${tmAssignable().map(k=>`<option value="${k}" ${k===r.role?'selected':''}>${esc(ROLES[k].n)}</option>`).join('')}</select>`:`<span class="pill ${r.role==='owner'?'':'gray'}">${esc(ROLES[r.role]?ROLES[r.role].n:r.role)}</span>`;
+    const acts=can_?`<button class="btn sm" data-act="tmBlock" data-uid="${r.user_id}" data-st="${r.status==='blocked'?'active':'blocked'}">${r.status==='blocked'?'Разблокировать':'Заблокировать'}</button>${MYROLE==='owner'&&r.status==='active'?`<button class="btn sm" data-act="tmTransfer" data-uid="${r.user_id}">Передать права</button>`:''}<button class="ibtn" style="width:32px;height:32px" data-act="tmRemove" data-uid="${r.user_id}" aria-label="Удалить из команды">${ico('trash')}</button>`
+      :(r.is_me&&r.role!=='owner'?`<button class="btn sm dng" data-act="tmLeave">Покинуть компанию</button>`:'');
+    return `<tr><td><span class="cell"><span class="av s" style="background:${COLORS[i%8]}">${esc(ini(nm))}</span><span><b>${esc(nm)}</b>${r.is_me?' <span class="mut">(вы)</span>':''}</span></span></td><td class="mut">${esc(r.email||'—')}</td><td>${roleCell}</td><td><span class="pill ${st[0]}">${st[1]}</span></td><td class="mut">${tmDate(r.joined_at)}</td><td><div class="acts" style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">${acts}</div></td></tr>`}).join('')}</tbody></table></div>`
+    :`<div class="card">${emptyState('user','Никого не найдено','Измените поиск или фильтры.')}</div>`;
+  $$('.tm-role').forEach(s=>{s.onchange=()=>tmSetRole(s)});
+  const inv=$('#tmInv');
+  inv.innerHTML=mg&&TM.inv.length?`<h4 style="margin:22px 0 10px">Приглашения</h4><div class="tw"><table><thead><tr><th>Почта</th><th>Роль</th><th>Статус</th><th>Отправлено</th><th>Действует до</th><th></th></tr></thead><tbody>${TM.inv.map(i=>{const st=INV_ST[i.status]||['gray',i.status],open=i.status==='pending'||i.status==='expired';
+    return `<tr><td>${esc(i.email)}</td><td><span class="pill gray">${esc(ROLES[i.role]?ROLES[i.role].n:i.role)}</span></td><td><span class="pill ${st[0]}">${st[1]}</span></td><td class="mut">${tmDate(i.last_sent_at)}${i.send_count>1?' · раз: '+i.send_count:''}</td><td class="mut">${tmDate(i.expires_at)}</td>
+      <td><div class="acts" style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">${open?`<button class="btn sm" data-act="tmResend" data-id="${i.id}">Отправить снова</button><button class="btn sm dng" data-act="tmCancel" data-id="${i.id}">Отменить</button>`:''}</div></td></tr>`}).join('')}</tbody></table></div>`:'';
+}
+A.tmReload=()=>tmLoad();
+async function tmAfter(msg){toast(msg);await tmLoad();pollRemote()}
+async function tmSetRole(sel){
+  const uid=sel.dataset.uid,to=sel.value,row=TM.rows.find(r=>r.user_id===uid);if(!row||row.role===to)return;
+  const r=await sb.rpc('set_member_role',{p_business:BIZ,p_user:uid,p_role:to});
+  if(r.error){toast(errText(r.error));tmFill();return}
+  tmAfter('Роль изменена: '+ROLES[to].n)}
+A.tmBlock=b=>{
+  const uid=b.dataset.uid,st=b.dataset.st,row=TM.rows.find(r=>r.user_id===uid);if(!row)return;
+  const run=async()=>{const r=await sb.rpc('set_member_status',{p_business:BIZ,p_user:uid,p_status:st});if(r.error)return toast(errText(r.error));tmAfter(st==='blocked'?'Сотрудник заблокирован':'Доступ возвращён')};
+  if(st==='active')return run();
+  confirmBox(`Заблокировать «${esc(row.full_name||row.email)}»? Он сразу потеряет доступ к данным компании, но останется в списке, и доступ можно вернуть.`,()=>run(),'Заблокировать')};
+A.tmRemove=b=>{
+  const uid=b.dataset.uid,row=TM.rows.find(r=>r.user_id===uid);if(!row)return;
+  confirmBox(`Удалить «${esc(row.full_name||row.email)}» из команды? Доступ к компании закроется сразу. Клиенты, сделки и задачи сотрудника останутся в компании; позже его можно пригласить снова.`,async()=>{
+    const r=await sb.rpc('remove_member',{p_business:BIZ,p_user:uid});if(r.error)return toast(errText(r.error));tmAfter('Сотрудник удалён из команды')},'Удалить')};
+A.tmTransfer=b=>{
+  const uid=b.dataset.uid,row=TM.rows.find(r=>r.user_id===uid);if(!row)return;
+  confirmBox(`Передать права владельца сотруднику «${esc(row.full_name||row.email)}»? Он получит полный контроль над компанией, включая управление командой, а вы станете администратором. Вернуть права сможет только новый владелец.`,async()=>{
+    const r=await sb.rpc('transfer_ownership',{p_business:BIZ,p_new_owner:uid});if(r.error)return toast(errText(r.error));
+    try{BIZLIST=await fetchBizList();await loadBusiness(BIZ);paintShell();drawNav();toast('Права владельца переданы');V.settings()}catch(e){toast(errText(e))}},'Передать права')};
+A.tmLeave=()=>confirmBox(`Покинуть компанию «${esc(BIZNAME)}»? Доступ к её данным закроется. Вернуться можно только по новому приглашению.`,async()=>{
+  const r=await sb.rpc('leave_business',{p_business:BIZ});if(r.error)return toast(errText(r.error));
+  try{BIZLIST=await fetchBizList()}catch(e){}accessLost('removed')},'Покинуть');
+A.tmInvite=()=>{
+  modal({title:'Пригласить сотрудника',body:`<form class="form" onsubmit="return false">${fld('iv_e','Электронная почта сотрудника','',{type:'email',full:1,ph:'name@company.ru'})}${fld('iv_r','Роль','manager',{type:'select',opts:tmAssignable().map(k=>[k,ROLES[k].n]),full:1})}</form>
+    <p class="tk-hint" id="ivHint">${esc(ROLES.manager.d)}</p>
+    <p class="tk-hint">Мы создадим персональную ссылку на 7 дней. Сотрудник откроет её, зарегистрируется или войдёт под этой почтой, и сразу попадёт в вашу компанию с выбранной ролью. Ссылку можно отправить письмом или скопировать.</p><div class="err" id="iverr"></div>`,
+    foot:[{label:'Отмена',fn:closeModal},{label:'Создать приглашение',cls:'pri',fn:async()=>{
+      const email=val('iv_e').toLowerCase(),role=val('iv_r');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){$('#iverr').textContent='Введите корректную почту';return}
+      const r=await sb.rpc('invite_member',{p_business:BIZ,p_email:email,p_role:role});
+      if(r.error){$('#iverr').textContent=errText(r.error);return}
+      tmShowLink(email,role,r.data.token,r.data.expires_at);tmLoad()}}]});
+  $('#iv_r').onchange=()=>{$('#ivHint').textContent=(ROLES[val('iv_r')]||{}).d||''}};
+function tmShowLink(email,role,tok,exp){
+  const link=tmLink(tok),co=BIZNAME,subj='Приглашение в CRM alfa+ — '+co,
+    body=`Здравствуйте!\n\nВас приглашают в рабочее пространство «${co}» в alfa+ CRM (роль: ${(ROLES[role]||{}).n}).\n\nПерейдите по ссылке, зарегистрируйтесь или войдите с этой почтой — доступ откроется автоматически:\n${link}\n\nСсылка действует до ${tmDate(exp)}.`;
+  modal({title:'Приглашение создано',body:`<p>Приглашение для <b>${esc(email)}</b> (роль: ${esc((ROLES[role]||{}).n)}) действует до ${tmDate(exp)}.</p><div class="fld full"><label for="iv_link">Персональная ссылка</label><input id="iv_link" readonly value="${esc(link)}" onclick="this.select()"></div>
+    <p class="tk-hint">Эта версия не отправляет письма с сервера: скопируйте ссылку или откройте готовое письмо в своей почтовой программе. Ссылка одноразовая, работает только для этой почты и показывается один раз; потеряв её, нажмите «Отправить снова».</p>`,
+    foot:[{label:'Закрыть',fn:closeModal},{label:'Открыть письмо',fn:()=>{location.href='mailto:'+email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body)}},
+      {label:'Копировать ссылку',cls:'pri',fn:async()=>{try{await navigator.clipboard.writeText(link);toast('Ссылка скопирована')}catch(e){$('#iv_link').select();toast('Выделите ссылку и скопируйте вручную')}}}]})}
+A.tmResend=async b=>{
+  const r=await sb.rpc('resend_invite',{p_invite:b.dataset.id});if(r.error)return toast(errText(r.error));
+  const i=TM.inv.find(x=>x.id===b.dataset.id)||{};tmShowLink(i.email||'',i.role||'staff',r.data.token,r.data.expires_at);tmLoad()};
+A.tmCancel=b=>confirmBox('Отменить приглашение? Ссылка перестанет работать.',async()=>{
+  const r=await sb.rpc('cancel_invite',{p_invite:b.dataset.id});if(r.error)return toast(errText(r.error));tmAfter('Приглашение отменено')},'Отменить приглашение');
+
+/* ---------- Журнал действий: записи формирует сервер ---------- */
+const ENT_ACC={client:'клиента',deal:'сделку',task:'задачу',finance:'операцию',product:'товар',staff:'карточку сотрудника',automation:'сценарий',supplier:'поставщика'};
+const ENT_MAP={finance:'fin',automation:'auto',supplier:'product',member:'staff',trash:'trash',export:'export'};
+function actText(r){
+  const [e,op]=String(r.action).split('.'),acc=ENT_ACC[e],s=r.summary||'',d=r.details||{};
+  if(acc&&['create','update','delete'].includes(op))return `${{create:'создал(а)',update:'изменил(а)',delete:'удалил(а)'}[op]} ${op==='update'&&e==='client'?'данные клиента':acc}${s?' «'+s+'»':''}`;
+  if(acc&&/^bulk_/.test(op))return `${{bulk_create:'добавил(а)',bulk_update:'изменил(а)',bulk_delete:'удалил(а)'}[op]||'изменил(а)'}: ${s}`;
+  switch(r.action){
+    case 'member.invite':return `пригласил(а) сотрудника ${s} (роль: ${accessName(d.role)})`;
+    case 'member.invite_resend':return `повторно отправил(а) приглашение для ${s}`;
+    case 'member.invite_cancel':return `отменил(а) приглашение для ${s}`;
+    case 'member.join':return `присоединился(ась) к команде (роль: ${accessName(d.role)})`;
+    case 'member.role_change':return `изменил(а) роль сотрудника ${s}: ${accessName(d.from)} → ${accessName(d.to)}`;
+    case 'member.block':return `заблокировал(а) сотрудника ${s}`;
+    case 'member.unblock':return `разблокировал(а) сотрудника ${s}`;
+    case 'member.remove':return `удалил(а) сотрудника ${s} из команды`;
+    case 'member.leave':return 'покинул(а) компанию';
+    case 'owner.transfer':return `передал(а) права владельца: ${s}`;
+    case 'business.create':return `создал(а) компанию «${s}»`;
+    case 'business.rename':return `переименовал(а) компанию в «${s}»`;
+    case 'business.migrate':return `перенёс(ла) данные компании «${s}» из прежней версии`;
+    case 'workspace.restore':return `восстановил(а) версию раздела «${s}»`;
+    case 'trash.remove':return `удалил(а) из корзины «${s}»`;
+    case 'export':return `выгрузил(а) данные: ${s}`}
+  return `${r.action} ${s}`.trim()}
+async function actLoad(){
+  if(!BIZ||!can('audit.view')){setList(activity,[]);return}
+  const r=await sb.from('activity_log').select('id,user_id,user_name,action,entity,summary,details,created_at').eq('business_id',BIZ).order('id',{ascending:false}).limit(500);
+  if(r.error){console.warn('activity:',r.error);return}
+  const byUid={};staff.forEach(s=>{if(s.uid)byUid[s.uid]=s.id});
+  setList(activity,r.data.map(x=>({mgr:byUid[x.user_id]||0,who:x.user_name||'—',t:actText(x),at:Date.parse(x.created_at),ent:ENT_MAP[x.entity]||x.entity})))}
+
+/* ---------- Облачные версии разделов (workspace_history) ---------- */
 A.snapList=async()=>{
+  if(!can('settings.manage'))return toast('Недостаточно прав');
   modal({title:'Облачные версии',body:'<div id="snapBox">'+skeleton(3,48)+'</div>',foot:[{label:'Закрыть',cls:'pri',fn:closeModal}]});
   try{
-    const r=await sb.from('crm_workspace_history').select('id,saved_at,bytes,reason').order('saved_at',{ascending:false}).limit(30);
+    const r=await sb.from('workspace_history').select('id,section,saved_at,bytes,reason').eq('business_id',BIZ).order('id',{ascending:false}).limit(40);
     if(r.error)throw r.error;
-    $('#snapBox').innerHTML=r.data.length?`<div class="list">${r.data.map(s=>`<div class="row"><div class="grow"><b>${esc(fdt(Date.parse(s.saved_at)))}</b><small>${s.reason==='before_restore'?'Перед восстановлением':'Автоснимок'} · ${fileSize(s.bytes)}</small></div><button class="btn sm" data-act="snapRestore" data-id="${s.id}">Восстановить</button></div>`).join('')}</div>`:emptyState('clock','Снимков пока нет','Первый снимок создаётся при очередном изменении данных, не чаще раза в час.');
-  }catch(e){$('#snapBox').innerHTML=emptyState('alert','Версии недоступны',(e.message||'Ошибка запроса')+'. Вероятно, миграция 001 ещё не применена в вашем проекте Supabase.')}
+    $('#snapBox').innerHTML=r.data.length?`<div class="list">${r.data.map(s=>`<div class="row"><div class="grow"><b>${esc((ACL[s.section]||{}).label||s.section)} · ${esc(fdt(Date.parse(s.saved_at)))}</b><small>${s.reason==='before_restore'?'Перед восстановлением':'Автоснимок'} · ${fileSize(s.bytes)}</small></div><button class="btn sm" data-act="snapRestore" data-id="${s.id}">Восстановить</button></div>`).join('')}</div>`:emptyState('clock','Снимков пока нет','Снимок раздела создаётся при очередном изменении, не чаще раза в час.');
+  }catch(e){$('#snapBox').innerHTML=emptyState('alert','Версии недоступны',errText(e))}
 };
-A.snapRestore=b=>confirmBox('Заменить текущие данные выбранной версией? Текущее состояние будет сохранено как отдельный снимок «Перед восстановлением». Страница перезагрузится.',async()=>{
-  try{const r=await sb.rpc('restore_workspace_from_history',{history_id:+b.dataset.id});if(r.error)throw r.error;
-    try{localStorage.removeItem('vexon-ws:'+CUR)}catch(e){}
-    toast('Версия восстановлена. Перезагрузка…');setTimeout(()=>location.reload(),900)}
-  catch(e){toast('Не удалось восстановить: '+(e.message||'ошибка'))}},'Восстановить');
+A.snapRestore=b=>confirmBox('Заменить выбранный раздел его прежней версией? Текущая версия сохранится отдельным снимком «Перед восстановлением». Изменение затронет всю команду.',async()=>{
+  try{await saveWorkspaceCloud(true);const r=await sb.rpc('restore_snapshot',{p_id:+b.dataset.id});if(r.error)throw r.error;
+    await loadBusiness(BIZ);repaintSoft();toast('Версия раздела восстановлена')}
+  catch(e){toast('Не удалось восстановить: '+errText(e))}},'Восстановить');
 
 </script>
 <script>
